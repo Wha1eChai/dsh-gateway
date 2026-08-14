@@ -98,8 +98,12 @@ model.
 Phases 0–6 are complete / GO. The official rc.6 `llm-pi-ai` path,
 managed/external runtime, provider bridge, device OAuth, optional
 failure-isolated SQLite analytics, native six-route App, packed Browser, HMR,
-security, real CPA, and clean-checkout gates have passed. GitHub preview
-artifacts are prepared; npm publication remains out of scope.
+security, real CPA, clean-checkout, and public-URL install gates have passed.
+The [v0.1.0 preview](https://github.com/Wha1eChai/dsh-gateway/releases/tag/v0.1.0)
+is public; feedback is tracked in the
+[project Discussion](https://github.com/Wha1eChai/dsh-gateway/discussions/1)
+and the [DeepSeek Harness showcase](https://github.com/deepseek-ai/deepseek-harness/discussions/1480).
+npm publication remains out of scope.
 
 ## Deferred
 

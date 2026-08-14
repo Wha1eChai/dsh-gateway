@@ -8,8 +8,8 @@ native dsh-webpage App without modifying DeepSeek Harness.
 
 ## Current Phase
 
-Phases 0–6 are complete / GO. The v0.1.0 preview prerelease is public;
-Discussion publication is in progress.
+Phases 0–6 are complete / GO. The v0.1.0 preview prerelease and both project
+and upstream DeepSeek Harness Discussions are public.
 
 ## Completed
 
@@ -90,7 +90,8 @@ Discussion publication is in progress.
 
 ## Pending
 
-1. Open the public Discussion. Do not publish npm packages.
+1. Monitor release feedback and reproduce concrete reports before expanding
+   scope. Do not publish npm packages without a new release decision.
 
 ## Decisions / Constraints
 
@@ -140,11 +141,12 @@ Discussion publication is in progress.
 
 ## Next Step
 
-Open the public feedback Discussion and link the preview release:
+Monitor the public feedback threads:
 
 ```text
 cd D:\coding\programs\dsh\dsh-gateway
-https://github.com/Wha1eChai/dsh-gateway/releases/tag/v0.1.0
+https://github.com/Wha1eChai/dsh-gateway/discussions/1
+https://github.com/deepseek-ai/deepseek-harness/discussions/1480
 ```
 
 Recovery state: the Phase 6 gate is committed on public `origin/main`. The
@@ -161,7 +163,7 @@ running.
 - The trusted server-derived origin seam for local callback remains absent;
   device flow is the supported path.
 - Browser, HMR, clean checkout, aggregate, and public URL installation
-  evidence are green. The public Discussion is the remaining external action.
+  evidence are green. No v0.1 implementation or publication action remains.
 - Pricing is intentionally unpriced until a trusted immutable snapshot with
   provenance is selected; token metrics remain valid.
 - Phase 2A is recoverable from public commit `4e4485c`. Phase 2B tests clean up
