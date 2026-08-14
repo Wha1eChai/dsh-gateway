@@ -87,7 +87,7 @@ function run(command, args) {
 
 function verifySupplyChain() {
   const workspace = readFileSync(resolve(root, 'pnpm-workspace.yaml'), 'utf8')
-  assert(/allowBuilds:\r?\n\s+'@google\/genai': false\r?\n\s+protobufjs: false/u.test(workspace), 'pnpm allowBuilds denylist drift')
+  assert(/allowBuilds:\r?\n\s+'@deepseek-ai\/dsh-subprocess-local': true\r?\n\s+'@google\/genai': false\r?\n\s+node-pty: true\r?\n\s+protobufjs: false/u.test(workspace), 'pnpm allowBuilds allowlist/denylist drift')
   assert(existsSync(resolve(root, 'pnpm-lock.yaml')), 'pnpm-lock.yaml is missing')
 
   for (const { path, data } of workspaceManifests()) {

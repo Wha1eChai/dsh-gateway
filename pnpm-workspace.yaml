@@ -5,11 +5,13 @@ packages:
 
 autoInstallPeers: false
 
-# pnpm 11 denies dependency lifecycle scripts unless reviewed here. These two
-# transitive pi-ai packages ship no-op/advisory scripts that the Gateway does
-# not need, so they remain explicitly denied.
+# pnpm 11 denies dependency lifecycle scripts unless reviewed here. The DSH
+# subprocess provider and node-pty are exact runtime dependencies whose native
+# build is required; the two pi-ai scripts remain explicitly denied.
 allowBuilds:
+  '@deepseek-ai/dsh-subprocess-local': true
   '@google/genai': false
+  node-pty: true
   protobufjs: false
 
 minimumReleaseAgeExclude:
@@ -78,3 +80,4 @@ minimumReleaseAgeExclude:
   - '@deepseek-ai/dsh-user-approval@0.1.0-rc.6'
   - '@deepseek-ai/dsh-user-questions@0.1.0-rc.6'
   - '@deepseek-ai/dsh-workspace@0.1.0-rc.6'
+  - '@deepseek-ai/dsh-subprocess-local@0.1.0-rc.6'

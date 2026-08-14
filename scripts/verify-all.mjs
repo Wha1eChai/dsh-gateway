@@ -26,6 +26,7 @@ for (const script of [
   'test:unit',
   'test:public-api',
   'test:llm-compat',
+  'test:integration',
   'test:supply-chain',
   'pack:verify',
   'test:security',

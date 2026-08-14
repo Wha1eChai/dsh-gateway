@@ -8,8 +8,7 @@ native dsh-webpage App without modifying DeepSeek Harness.
 
 ## Current Phase
 
-Phases 0, 1, and 2A are complete / GO. Runtime and typed CPA client Phase 2B
-is next.
+Phases 0–2B are complete / GO. Provider bridge and OAuth Phase 3 are next.
 
 ## Completed
 
@@ -35,11 +34,18 @@ is next.
 - The official built `dsh-llm-pi-ai` rc.6 Loader path passed text, tool
   round-trip, ordered streaming, explicit image opt-in, and abort against the
   fake CPA without a custom adapter.
+- `ctx.cpaRuntime` now owns one managed/external runtime per Cordis fiber,
+  including verified install, state/lock/process lifecycle, credential
+  re-resolution, and secret cleanup.
+- The typed CPA client exposes only frozen real routes and resolves proxy or
+  management credentials separately for each operation.
+- A real Windows CPA v7.2.131 process passed health, models, auth-files, usage
+  queue, termination, and port-release smoke through DSH subprocess-local.
 
 ## Pending
 
-1. Commit and push the accepted Phase 2A Gate.
-2. Implement the minimal managed/external runtime and typed CPA client.
+1. Commit and push the accepted Phase 2B Gate.
+2. Implement model discovery/provider settings and Codex device OAuth.
 
 ## Decisions / Constraints
 
@@ -78,13 +84,13 @@ is next.
 - Evidence is generated under `.staging/release/v0.1.0/` and
   `.staging/reports/phase1-packed-install.log`; these generated artifacts are
   intentionally ignored by Git.
-- Phase 2A evidence is recorded in `docs/evidence/phase-2a.md`; Phases 2B–6
+- Phase 2A and 2B evidence is recorded under `docs/evidence/`; Phases 3–6
   remain planned and unverified.
 
 ## Next Step
 
-Commit and push Phase 2A, then begin the Phase 2B runtime state machine and
-typed CPA client without changing the proven official LLM transport path.
+Commit and push Phase 2B, then begin the Phase 3 provider bridge and subprocess
+device OAuth without changing the proven official LLM transport path.
 
 ## Risks / Rollback
 
@@ -92,6 +98,6 @@ typed CPA client without changing the proven official LLM transport path.
   lock every public import against installed rc.6 declarations and exports.
 - OAuth and remote administration are security gates, not implied by a working
   model endpoint.
-- Phase 1 is recoverable from public commit `1eb3ca1`. Phase 2A has no runtime
-  activation side effects; generated release/cache data is under ignored
+- Phase 2A is recoverable from public commit `4e4485c`. Phase 2B tests clean up
+  all runtime processes and private configs; generated release/cache data is under ignored
   `.staging/` and `packages/platform/*/vendor/` paths.

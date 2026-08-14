@@ -37,6 +37,7 @@ const REQUIRED_PACKAGES = Object.freeze({
   '@deepseek-ai/dsh-settings': RC6,
   '@deepseek-ai/dsh-settings-file': RC6,
   '@deepseek-ai/dsh-subprocess': RC6,
+  '@deepseek-ai/dsh-subprocess-local': RC6,
   '@deepseek-ai/dsh-timeout': RC6,
   '@deepseek-ai/schemastery': '3.18.1',
 })

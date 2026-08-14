@@ -1,3 +1,4 @@
-/** Host lifecycle entry. Phase 1 freezes package shape without product logic. */
-export function apply(): void {}
+export * from './host/cpa-client/index.js';
 
+/** Host lifecycle entry remains intentionally empty during the bounded Phase 2B slice. */
+export function apply(): void {}

@@ -64,6 +64,8 @@ Models, Requests, Playground, and Settings subroutes.
 - [v0.1 execution plan](./docs/plan/phase-0.1-gateway.md)
 - [Testing strategy](./docs/testing.md)
 - [Phase 1 evidence](./docs/evidence/phase-1.md)
+- [Phase 2A evidence](./docs/evidence/phase-2a.md)
+- [Phase 2B evidence](./docs/evidence/phase-2b.md)
 - [Current handoff](./HANDOFF.md)
 
 ## Current status
@@ -73,8 +75,10 @@ six-platform supply chain, release rewriting, public API probes, clean-checkout
 verification, and repository-external one-Pack installation passed their Gate.
 Phase 2A is also complete: the official rc.6 `llm-pi-ai` path passed text,
 tools, ordered streaming, explicit image opt-in, and abort against the fake
-CPA. Runtime Phase 2B is next. No public installable Gateway release exists
-yet.
+CPA. Phase 2B is complete with managed/external runtime, typed CPA client,
+Cordis lifecycle, per-operation credentials, and a real Windows CPA smoke.
+Provider bridge and OAuth Phase 3 are next. No public installable Gateway
+release exists yet.
 
 ## Deferred
 

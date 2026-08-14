@@ -4,8 +4,8 @@
 
 | Item | Decision |
 | --- | --- |
-| Plan status | **Phases 0–2A — Complete / GO**; Phase 2B runtime/client implementation is next. |
-| Code status | The Phase 1 foundation and Phase 2A official `llm-pi-ai` compatibility probe are implemented. Product runtime behavior has not started. |
+| Plan status | **Phases 0–2B — Complete / GO**; Phase 3 provider/OAuth implementation is next. |
+| Code status | The foundation, official `llm-pi-ai` compatibility, runtime lifecycle, typed CPA client, and real Windows process smoke are implemented. |
 | Release shape | Public, out-of-tree DSH Bundle/Pack preview composed from ordinary DSH Plugins; no DeepSeek Harness source changes and no npm publication in this preview. |
 | Pinned compatibility | DeepSeek Harness `0.1.0-rc.6`; dsh-webpage `0.1.0`; CLIProxyAPI `7.2.131`; CPA-Manager-Plus `1.12.0-rc.2` as a reference only. |
 | Toolchain | Node `^22.19.0 || >=24.0.0`; pnpm `11.7.0`; Windows 11 is the primary release verification environment. Managed-platform policy is Linux `no-plugin` only; Windows/macOS use standard upstream executable names with dynamic plugins disabled by configuration. |
@@ -163,7 +163,7 @@ coerced into zero or a fabricated quota.
 | 0. Documentation baseline | **Complete / GO** | Approved scope and dsh-webpage preflight | Scope boundary, architecture/design links, dependency map, package topology, ADR decisions, this phased plan, testing contract, acceptance matrix, evidence template, and HANDOFF update by the main thread | **GO** only after main-thread review accepts the docs as internally consistent. **STOP** on an unresolved public API, capability, licensing, security, or upstream-change contract. This pass does not commit or push. |
 | 1. Workspace and supply chain | **Complete / GO** | Phase 0 GO | pnpm workspace; exact manifests and exports; public rc.6 API probe; package allowlists; platform binary provenance and upstream licenses; reproducible install/build scaffolding | **GO** when frozen install, public-only rc.6 imports/exports, typecheck, lint, build, package payload, provenance, and supply-chain checks pass. **STOP** on a private/local rc.5 import, floating DSH dependency, adjacent-checkout dependency, broad install-script approval, missing license/digest, or unreviewed executable. |
 | 2A. `llm-pi-ai` compatibility hard gate | **Complete / GO** | Phase 1 GO | Real built official `@deepseek-ai/dsh-llm-pi-ai` public-contract probe against fake/external CPA: text, tools, stream, explicit image opt-in, and abort | **GO** only when all five behaviors pass on the same real path. **STOP before Phase 2B and all runtime/client investment** on any failure; no adapter fallback. |
-| 2B. Runtime and client | Planned | Phase 2A GO | Managed/external runtime state machine; process supervisor; readiness/health; settings and three-path credential handoff; DSH client installation; real `ctx.llm` request path | **GO** when all state transitions, disposal/restart behavior, and real rc.6 Loader/client lifecycle pass. **STOP** on shell execution, shell-interpreted argv, implicit process fields, leaked secret, duplicate lifecycle, or private API. |
+| 2B. Runtime and client | **Complete / GO** | Phase 2A GO | Managed/external runtime state machine; process supervisor; readiness/health; settings and three-path credential handoff; DSH client installation; real `ctx.llm` request path | **GO** when all state transitions, disposal/restart behavior, and real rc.6 Loader/client lifecycle pass. **STOP** on shell execution, shell-interpreted argv, implicit process fields, leaked secret, duplicate lifecycle, or private API. |
 | 3. Provider and OAuth | Planned | Phase 2B GO | Model discovery and explicit capability registry; provider/account status; Codex device login; fail-closed localhost callback gate; host-side credential resolution; provider refresh/failover handoff; generated remote contract for these operations | **GO** when device flow is bounded, local callback is disabled without the trusted server-origin seam, cancellation/error states are deterministic, no token reaches the browser/SQLite/logs, model image support is explicit, and the provider request reaches the same `ctx.llm` path. **STOP** on browser-held secrets, client-origin authority, inferred image support, or gateway-owned provider lifecycle that duplicates CPA. |
 | 4. Analytics | Planned | Phase 3 GO | Optional SQLite plugin; migrations/schema; request, token, cost, latency, account-health, and quota records; redaction and retention policy; query/read remotes; failure isolation | **GO** when migration, concurrent writes, aggregation, restart, redaction, and disabled-analytics behavior pass without changing model delivery. **STOP** if prompts, images, model output, credentials, auth files, or management keys can be persisted or if analytics failure breaks `ctx.llm`. |
 | 5. dsh-webpage App | Planned | Phases 2–4 GO; provider/OAuth and analytics contracts | Native App package; launcher/settings/runtime/provider/OAuth/analytics views; full-path Playground using `ctx.llm`; unavailable/degraded states; generated Typert Remotes mounted by `ctx.remote.$mount()`; no browser proxy | **GO** when the App loads through the existing dsh-webpage slot/route contract, exercises the complete stream/tool/image path, preserves conversation state, and every action is an allowlisted generated remote. **STOP** on a second transport, secret-bearing client state, route takeover, or App behavior that cannot be covered by the remotes contract. |
@@ -253,14 +253,14 @@ Commit/push: this record is included in the Phase 2A Gate commit pushed to the p
 
 ```text
 Phase: 2B
-Status: Planned / Unverified
-Implementation refs: <runtime state machine, supervisor, client/Loader integration>
-Evidence refs: <state transition report, real Loader log, process/credential report>
-Commands: pnpm test:unit; pnpm test:integration; pnpm test:hmr; pnpm typecheck; pnpm lint; pnpm build
-Observed result: <PLANNED / UNVERIFIED>
-Open risks/decisions: <three credential paths and exact subprocess fields remain future gates>
-Gate decision: STOP until Phase 2A is GO and runtime/client lifecycle evidence is complete
-Commit/push: <record hash and remote only after GO>
+Status: Complete / GO
+Implementation refs: packages/runtime/src/index.ts; packages/gateway/src/host/cpa-client; packages/gateway/src/index.ts; scripts/verify-real-cpa.mjs
+Evidence refs: docs/evidence/phase-2b.md; focused runtime/client tests; real CPA PASS record
+Commands: pnpm test:unit; pnpm test:integration; pnpm test:public-api; pnpm typecheck; pnpm lint; pnpm build; pnpm test:supply-chain; pnpm test:security
+Observed result: 28 workspace tests passed; CPA v7.2.131 started through DSH subprocess-local and passed health/models/auth-files/usage/termination; public API, build, supply chain, and security checks passed
+Open risks/decisions: provider settings mutation and device OAuth intentionally remain Phase 3; no custom adapter or generic management proxy was introduced
+Gate decision: GO on 2026-08-14
+Commit/push: this record is included in the Phase 2B Gate commit pushed to the public repository
 ```
 
 ```text

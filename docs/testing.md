@@ -173,6 +173,11 @@ record the exact diagnostic and do not add an adapter fallback.
 
 ### Phase 2B — runtime and client
 
+Status on 2026-08-14: Complete / GO. Unit coverage, Cordis lifecycle tests,
+and `pnpm test:integration` passed; the integration lane starts the bundled
+CPA v7.2.131 through official DSH subprocess-local and tears it down cleanly.
+See `docs/evidence/phase-2b.md`.
+
 Model the runtime as an explicit state machine. The minimum states are
 `disabled`, `starting`, `ready`, `degraded`, `stopping`, `stopped`, and
 `failed`; external mode may enter `ready` only after endpoint health and
@@ -190,8 +195,8 @@ Required scenarios:
 - readiness timeout, malformed health response, child exit, explicit stop,
   Plugin disposal, and bounded restart/backoff;
 - stale process and duplicate-start prevention;
-- settings revision conflict using
-  `ctx.settings.mutate(settingsNamespace('llm-pi-ai'), ops, revision)`;
+- provider settings revision conflict remains part of Phase 3, where the
+  `llm-pi-ai` provider section is actually written;
 - three independent credential paths: `llm-pi-ai` proxy credential ref/request
   for model traffic, Gateway management credential ref/operation for
   allowlisted management, and managed-child explicit env construction from
@@ -201,8 +206,8 @@ Required scenarios:
 - the Phase 2A result is consumed without re-registering or falling back to a
   custom LLM adapter.
 
-Phase 2B cannot begin until Phase 2A is GO. Runtime/client failures stop the
-phase and preserve the exact evidence status.
+Phase 2B began after Phase 2A GO and is now complete. Later provider work must
+consume these services rather than create a second runtime or transport.
 
 ### Phase 3 — provider and OAuth
 
@@ -349,7 +354,7 @@ this lane green.
 | --- | --- | --- | --- | --- |
 | T-01 | Public rc.6 API boundary | public-api, integration | Imports/exports and runtime seams resolve from installed rc.6 only; private/local/rc.5 resolution fails | COMPLETED for Phase 1; later integration extends it |
 | T-02 | Reproducible one-install supply chain | supply-chain, pack | Clean outside-checkout install from immutable GitHub tarballs plus hashed local generated-file overrides; URL/version/SHA, no npm/runtime download | COMPLETED for Phase 1 |
-| T-03 | Phase 2B runtime state and spawn contract | unit, integration, HMR, security | Valid/invalid transitions, readiness, stop/dispose, child exit, bounded restart, exact argv/cwd/stdio/graceMs/scrubbed env, no shell interpretation | PLANNED / UNVERIFIED |
+| T-03 | Phase 2B runtime state and spawn contract | unit, integration, HMR, security | Valid/invalid transitions, readiness, stop/dispose, child exit, bounded restart, exact argv/cwd/stdio/graceMs/scrubbed env, no shell interpretation | COMPLETED / GO for unit and real integration; HMR remains Phase 6 |
 | T-04 | Phase 2A `llm-pi-ai` hard gate | llm-compat, public-api | Real built official package plus fake/external CPA proves text, tools, ordered stream, explicit image opt-in, and abort on one public rc.6 path; failure STOPs before 2B; no adapter fallback | COMPLETED / GO |
 | T-05 | Explicit model capability | unit, integration, security | `/v1/models` cannot infer image support; explicit opt-in succeeds and unsupported/inferred capability is rejected before attachment dispatch | PLANNED / UNVERIFIED |
 | T-06 | Three credential paths | unit, integration, security | Proxy ref/request, management ref/operation, and managed-child explicit env resolve independently; no cross-fallback or value exposure | PLANNED / UNVERIFIED |
