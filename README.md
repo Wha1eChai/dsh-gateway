@@ -63,14 +63,16 @@ Models, Requests, Playground, and Settings subroutes.
 - [Dependency map](./docs/design/dependency-map.md)
 - [v0.1 execution plan](./docs/plan/phase-0.1-gateway.md)
 - [Testing strategy](./docs/testing.md)
+- [Phase 1 evidence](./docs/evidence/phase-1.md)
 - [Current handoff](./HANDOFF.md)
 
 ## Current status
 
-Phase 0 is complete and independently reviewed. The architecture, security,
-analytics, package, and test contracts are frozen; Phase 1 workspace and
-supply-chain implementation is next. No installable Gateway release exists
-yet.
+Phase 0 and Phase 1 are complete and independently reviewed. The workspace,
+six-platform supply chain, release rewriting, public API probes, clean-checkout
+verification, and repository-external one-Pack installation passed their Gate.
+Phase 2A compatibility work is next. No public installable Gateway release
+exists yet.
 
 ## Deferred
 

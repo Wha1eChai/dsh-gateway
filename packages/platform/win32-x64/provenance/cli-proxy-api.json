@@ -1,0 +1,33 @@
+{
+  "schemaVersion": 1,
+  "package": {
+    "name": "@wha1echai/dsh-gateway-platform-win32-x64",
+    "version": "0.1.0"
+  },
+  "upstream": {
+    "repository": "router-for-me/CLIProxyAPI",
+    "tag": "v7.2.131",
+    "releaseUrl": "https://github.com/router-for-me/CLIProxyAPI/releases/download/v7.2.131",
+    "asset": "CLIProxyAPI_7.2.131_windows_amd64.zip",
+    "assetUrl": "https://github.com/router-for-me/CLIProxyAPI/releases/download/v7.2.131/CLIProxyAPI_7.2.131_windows_amd64.zip",
+    "sourceCommit": null,
+    "sourceCommitSuppliedByRelease": false,
+    "assetSha256": "99cc6a185012f01396e2bad3f3ba902bf1455e82fa1630d652ab818b77ed2384"
+  },
+  "target": {
+    "os": "win32",
+    "cpu": "x64"
+  },
+  "executable": {
+    "path": "vendor/cli-proxy-api.exe",
+    "upstreamName": "cli-proxy-api.exe",
+    "sha256": "05f0c7bc700c54e0b031838c52b753a052e3ce167fdb7b47b99c3b1ee4d26f34"
+  },
+  "managedConfiguration": {
+    "plugins.enabled": false
+  },
+  "platformPolicy": "Windows and macOS use the literal standard upstream release asset with dynamic plugins disabled by configuration.",
+  "licenseFiles": [
+    "LICENSE"
+  ]
+}

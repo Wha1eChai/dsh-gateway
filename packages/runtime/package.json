@@ -1,0 +1,44 @@
+{
+  "name": "@wha1echai/dsh-gateway-runtime",
+  "description": "Managed CLIProxyAPI runtime lifecycle for dsh-gateway",
+  "version": "0.1.0",
+  "type": "module",
+  "main": "lib/index.js",
+  "types": "lib/types/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./lib/types/index.d.ts",
+      "import": "./lib/index.js",
+      "default": "./lib/index.js"
+    },
+    "./package.json": "./package.json"
+  },
+  "files": ["lib/index.js", "lib/types/**/*.d.ts", "README.md", "LICENSE"],
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Wha1eChai/dsh-gateway.git",
+    "directory": "packages/runtime"
+  },
+  "dependencies": {
+    "@wha1echai/dsh-gateway": "workspace:*"
+  },
+  "peerDependencies": {
+    "@deepseek-ai/cordis": "4.0.1",
+    "@deepseek-ai/dsh-home-paths": "0.1.0-rc.6",
+    "@deepseek-ai/dsh-subprocess": "0.1.0-rc.6"
+  },
+  "optionalDependencies": {
+    "@wha1echai/dsh-gateway-platform-win32-x64": "workspace:*",
+    "@wha1echai/dsh-gateway-platform-win32-arm64": "workspace:*",
+    "@wha1echai/dsh-gateway-platform-darwin-x64": "workspace:*",
+    "@wha1echai/dsh-gateway-platform-darwin-arm64": "workspace:*",
+    "@wha1echai/dsh-gateway-platform-linux-x64": "workspace:*",
+    "@wha1echai/dsh-gateway-platform-linux-arm64": "workspace:*"
+  },
+  "scripts": {
+    "build": "tsc -b tsconfig.json && tsdown",
+    "typecheck": "tsc -b tsconfig.json"
+  }
+}
+

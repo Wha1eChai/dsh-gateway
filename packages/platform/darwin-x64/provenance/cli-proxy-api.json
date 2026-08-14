@@ -1,0 +1,33 @@
+{
+  "schemaVersion": 1,
+  "package": {
+    "name": "@wha1echai/dsh-gateway-platform-darwin-x64",
+    "version": "0.1.0"
+  },
+  "upstream": {
+    "repository": "router-for-me/CLIProxyAPI",
+    "tag": "v7.2.131",
+    "releaseUrl": "https://github.com/router-for-me/CLIProxyAPI/releases/download/v7.2.131",
+    "asset": "CLIProxyAPI_7.2.131_darwin_amd64.tar.gz",
+    "assetUrl": "https://github.com/router-for-me/CLIProxyAPI/releases/download/v7.2.131/CLIProxyAPI_7.2.131_darwin_amd64.tar.gz",
+    "sourceCommit": null,
+    "sourceCommitSuppliedByRelease": false,
+    "assetSha256": "3626c427ba0526f6d25d83063195bc418f5b242b108de0778d887e0b8de3323f"
+  },
+  "target": {
+    "os": "darwin",
+    "cpu": "x64"
+  },
+  "executable": {
+    "path": "vendor/cli-proxy-api",
+    "upstreamName": "cli-proxy-api",
+    "sha256": "e92dcbfc0145b79bb86fbbe56432e21605742c94764ea96328e6e04fa5129306"
+  },
+  "managedConfiguration": {
+    "plugins.enabled": false
+  },
+  "platformPolicy": "Windows and macOS use the literal standard upstream release asset with dynamic plugins disabled by configuration.",
+  "licenseFiles": [
+    "LICENSE"
+  ]
+}

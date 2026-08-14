@@ -1,0 +1,10 @@
+- insert:
+    - id: webpage
+      name: '@wha1echai/dsh-webpage'
+    - id: gateway
+      name: '@wha1echai/dsh-gateway'
+    - id: gateway-runtime
+      name: '@wha1echai/dsh-gateway-runtime'
+    - id: gateway-analytics
+      name: '@wha1echai/dsh-gateway-analytics'
+

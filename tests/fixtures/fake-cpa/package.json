@@ -1,0 +1,25 @@
+{
+  "name": "@dsh-gateway/fake-cpa",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Private deterministic CLIProxyAPI-compatible HTTP fixture for dsh-gateway tests.",
+  "type": "module",
+  "engines": {
+    "node": "^22.19.0 || >=24.0.0"
+  },
+  "exports": {
+    ".": "./index.js",
+    "./cli": "./cli.js"
+  },
+  "bin": {
+    "fake-cpa": "./cli.js"
+  },
+  "scripts": {
+    "test": "node --test"
+  },
+  "files": [
+    "index.js",
+    "cli.js",
+    "package.json"
+  ]
+}

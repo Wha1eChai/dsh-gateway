@@ -8,9 +8,8 @@ native dsh-webpage App without modifying DeepSeek Harness.
 
 ## Current Phase
 
-Phase 0 documentation baseline is complete and has a GO review. No code or
-package scaffolding has been created; Phase 1 is ready to start after the root
-commit and public remote are created.
+Phase 0 and Phase 1 are complete with independent GO reviews. Phase 2A is next:
+prove the official `llm-pi-ai` path before investing in runtime Phase 2B.
 
 ## Completed
 
@@ -21,12 +20,23 @@ commit and public remote are created.
 - The local dsh-gateway repository was initialized on `main`.
 - Phase 0 architecture, security, analytics, topology, plan, testing, and ADR
   documents were frozen; the final focused Sol re-review returned GO.
+- Docs-only root commit `27090af` is pushed to the public repository:
+  `https://github.com/Wha1eChai/dsh-gateway`.
+- The pnpm workspace now contains Gateway, Runtime, Analytics, Pack, six
+  platform packages, and a deterministic fake CPA fixture.
+- Public and local-verification release generators rewrite every workspace
+  edge to immutable GitHub URLs or explicit `file:` tarballs and emit a
+  URL/version/SHA-256 manifest.
+- A repository-external temporary DSH profile installed the single local Pack
+  with offline mode and an invalid registry, resolved both packed client
+  exports, and produced all four expected `dump-config` rows.
+- A clean committed source snapshot with a fresh pnpm store rebuilt all pinned
+  upstream assets, reran the nested aggregate, and remained Git-clean.
 
 ## Pending
 
-1. Commit the docs-only baseline and create the public GitHub repository.
-2. Begin Phase 1 workspace and supply-chain implementation.
-3. Run the Phase 2A `llm-pi-ai` compatibility gate before runtime Phase 2B.
+1. Commit and push the accepted Phase 1 Gate.
+2. Run Phase 2A `llm-pi-ai` compatibility before runtime Phase 2B.
 
 ## Decisions / Constraints
 
@@ -59,12 +69,18 @@ commit and public remote are created.
 - CLIProxyAPI v7.2.131 six-platform asset names and SHA-256 values were checked
   against the upstream release `checksums.txt`.
 - All initial and follow-up Sol STOP findings were resolved; final result: GO.
-- Phase 1–6 implementation commands remain planned and unverified.
+- Phase 1 frozen install, typecheck, lint, build, fake CPA tests, public API
+  probe, six-platform supply-chain verification, and packed external-profile
+  install passed locally on Windows x64, Node 24.11.1, pnpm 11.7.0, DSH rc.6.
+- Evidence is generated under `.staging/release/v0.1.0/` and
+  `.staging/reports/phase1-packed-install.log`; these generated artifacts are
+  intentionally ignored by Git.
+- Phase 2A–6 behavior remains planned and unverified.
 
 ## Next Step
 
-Create and push the docs-only root commit, then start the Phase 1 workspace and
-supply-chain gate.
+Commit and push Phase 1, then replace the intentional `test:llm-compat` Phase
+2A stop with the real official `llm-pi-ai` compatibility probe.
 
 ## Risks / Rollback
 
@@ -72,5 +88,6 @@ supply-chain gate.
   lock every public import against installed rc.6 declarations and exports.
 - OAuth and remote administration are security gates, not implied by a working
   model endpoint.
-- Until the public remote is created, rollback is simply removing the new
-  repository; no Gateway runtime or package state exists.
+- Phase 0 is recoverable from public commit `27090af`. Phase 1 has no runtime
+  activation side effects; generated release/cache data is under ignored
+  `.staging/` and `packages/platform/*/vendor/` paths.

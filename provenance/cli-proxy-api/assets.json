@@ -1,0 +1,71 @@
+{
+  "schemaVersion": 1,
+  "upstream": {
+    "repository": "router-for-me/CLIProxyAPI",
+    "tag": "v7.2.131",
+    "releaseUrl": "https://github.com/router-for-me/CLIProxyAPI/releases/download/v7.2.131",
+    "checksumsUrl": "https://github.com/router-for-me/CLIProxyAPI/releases/download/v7.2.131/checksums.txt"
+  },
+  "assets": [
+    {
+      "packageName": "@wha1echai/dsh-gateway-platform-win32-x64",
+      "directory": "packages/platform/win32-x64",
+      "os": "win32",
+      "cpu": "x64",
+      "asset": "CLIProxyAPI_7.2.131_windows_amd64.zip",
+      "format": "zip",
+      "sha256": "99cc6a185012f01396e2bad3f3ba902bf1455e82fa1630d652ab818b77ed2384",
+      "binaryPath": "vendor/cli-proxy-api.exe"
+    },
+    {
+      "packageName": "@wha1echai/dsh-gateway-platform-win32-arm64",
+      "directory": "packages/platform/win32-arm64",
+      "os": "win32",
+      "cpu": "arm64",
+      "asset": "CLIProxyAPI_7.2.131_windows_aarch64.zip",
+      "format": "zip",
+      "sha256": "a1e0023009493218a202e3e17cb7c51ae836e44b5ae67d0041f835e869477bfe",
+      "binaryPath": "vendor/cli-proxy-api.exe"
+    },
+    {
+      "packageName": "@wha1echai/dsh-gateway-platform-darwin-x64",
+      "directory": "packages/platform/darwin-x64",
+      "os": "darwin",
+      "cpu": "x64",
+      "asset": "CLIProxyAPI_7.2.131_darwin_amd64.tar.gz",
+      "format": "tar.gz",
+      "sha256": "3626c427ba0526f6d25d83063195bc418f5b242b108de0778d887e0b8de3323f",
+      "binaryPath": "vendor/cli-proxy-api"
+    },
+    {
+      "packageName": "@wha1echai/dsh-gateway-platform-darwin-arm64",
+      "directory": "packages/platform/darwin-arm64",
+      "os": "darwin",
+      "cpu": "arm64",
+      "asset": "CLIProxyAPI_7.2.131_darwin_aarch64.tar.gz",
+      "format": "tar.gz",
+      "sha256": "ec63a4f99da029ed04d8373c17152274d85f524c92c1b2da36b9c70cbadd0afe",
+      "binaryPath": "vendor/cli-proxy-api"
+    },
+    {
+      "packageName": "@wha1echai/dsh-gateway-platform-linux-x64",
+      "directory": "packages/platform/linux-x64",
+      "os": "linux",
+      "cpu": "x64",
+      "asset": "CLIProxyAPI_7.2.131_linux_amd64_no-plugin.tar.gz",
+      "format": "tar.gz",
+      "sha256": "a7e1127d10e908f37fa7bb5f5f4a9aebb26e5baca17c7bd92987df3a0bda9043",
+      "binaryPath": "vendor/cli-proxy-api"
+    },
+    {
+      "packageName": "@wha1echai/dsh-gateway-platform-linux-arm64",
+      "directory": "packages/platform/linux-arm64",
+      "os": "linux",
+      "cpu": "arm64",
+      "asset": "CLIProxyAPI_7.2.131_linux_aarch64_no-plugin.tar.gz",
+      "format": "tar.gz",
+      "sha256": "c82bd3dfb62da2ff567930d928c8aaf33f384917bdfc197f28ddbf7ff50509f3",
+      "binaryPath": "vendor/cli-proxy-api"
+    }
+  ]
+}

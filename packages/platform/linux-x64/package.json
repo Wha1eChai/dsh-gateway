@@ -1,0 +1,22 @@
+{
+  "name": "@wha1echai/dsh-gateway-platform-linux-x64",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Pinned CLIProxyAPI v7.2.131 no-plugin data asset for Linux x64.",
+  "license": "MIT",
+  "os": ["linux"],
+  "cpu": ["x64"],
+  "files": [
+    "vendor/cli-proxy-api",
+    "provenance/cli-proxy-api.json",
+    "config/managed.yaml",
+    "README.md",
+    "LICENSE"
+  ],
+  "wha1echaiPlatform": {
+    "binary": "vendor/cli-proxy-api",
+    "provenance": "provenance/cli-proxy-api.json",
+    "managedConfig": "config/managed.yaml",
+    "upstreamAsset": "CLIProxyAPI_7.2.131_linux_amd64_no-plugin.tar.gz"
+  }
+}

@@ -1,0 +1,22 @@
+{
+  "name": "@wha1echai/dsh-gateway-platform-win32-arm64",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Pinned CLIProxyAPI v7.2.131 data asset for Windows arm64.",
+  "license": "MIT",
+  "os": ["win32"],
+  "cpu": ["arm64"],
+  "files": [
+    "vendor/cli-proxy-api.exe",
+    "provenance/cli-proxy-api.json",
+    "config/managed.yaml",
+    "README.md",
+    "LICENSE"
+  ],
+  "wha1echaiPlatform": {
+    "binary": "vendor/cli-proxy-api.exe",
+    "provenance": "provenance/cli-proxy-api.json",
+    "managedConfig": "config/managed.yaml",
+    "upstreamAsset": "CLIProxyAPI_7.2.131_windows_aarch64.zip"
+  }
+}

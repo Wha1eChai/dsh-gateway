@@ -3,10 +3,10 @@
 ## Purpose and evidence status
 
 This document defines the executable verification contract for the six
-implementation phases after the documentation baseline. It does not claim
-that any future implementation command has passed. The repository has no
-workspace or test scripts yet; the documentation-only Phase 0 gate is
-**Complete / GO**.
+implementation phases after the documentation baseline. It distinguishes
+phase-scoped evidence from future product/release claims. The documentation
+Phase 0 gate is **Complete / GO**; Phase 1 implementation verification has
+passed locally and awaits independent Gate acceptance.
 
 Use these labels exactly:
 
@@ -48,20 +48,22 @@ not marked verified by a future plan, code inspection, or a passing mock.
 
 ## Root command contract
 
-Phase 1 establishes these root scripts. Until then they are planned commands,
-not runnable evidence. Focused selectors may be recorded in addition to the
-root command, but a mocked substitute does not satisfy the corresponding
-lane.
+Phase 1 established the root scripts below. Commands for later phases use an
+explicit non-zero “intentionally unavailable until Phase N” sentinel until
+their real lane replaces it; such a sentinel is neither a skip nor a pass.
+Focused selectors may be recorded in addition to the root command, but a
+mocked substitute does not satisfy the corresponding lane.
 
 | Command | Purpose | Required phases | Status |
 | --- | --- | --- | --- |
-| `pnpm install --frozen-lockfile` | Reproducible dependency installation from the release envelope; no registry/runtime download | 1, 6 | PLANNED / UNVERIFIED |
-| `pnpm test:public-api` | Verify imports/exports and runtime seams against installed public rc.6 only, including the packed `./client` export | 1, 2A, 2B, 3, 6 | PLANNED / UNVERIFIED |
-| `pnpm test:supply-chain` | Verify lockfile policy, package allowlists, provenance, licenses, digests, and install-script policy | 1, 6 | PLANNED / UNVERIFIED |
-| `pnpm typecheck` | Type and public-contract checks | 1–6 | PLANNED / UNVERIFIED |
-| `pnpm lint` | Source, manifest, generated-file, and policy lint | 1–6 | PLANNED / UNVERIFIED |
-| `pnpm build` | Build all owned packages and generated client/remote artifacts | 1–6 | PLANNED / UNVERIFIED |
-| `pnpm test:unit` | Pure contracts, validators, state transitions, redaction, and read models | 2–5 | PLANNED / UNVERIFIED |
+| `pnpm install --frozen-lockfile` | Reproducible dependency installation from the release envelope; no registry/runtime download | 1, 6 | COMPLETED for Phase 1 |
+| `pnpm test:public-api` | Verify imports/exports and runtime seams against installed public rc.6 only, including the packed `./client` export | 1, 2A, 2B, 3, 6 | COMPLETED for Phase 1; later phases extend it |
+| `pnpm test:supply-chain` | Verify lockfile policy, package allowlists, provenance, licenses, digests, and install-script policy | 1, 6 | COMPLETED for Phase 1 |
+| `pnpm test:clean-checkout` | Export a clean committed source snapshot with a fresh pnpm store and rerun the Phase 1 aggregate | 1, 6 | COMPLETED for Phase 1 |
+| `pnpm typecheck` | Type and public-contract checks | 1–6 | COMPLETED for Phase 1; later phases extend it |
+| `pnpm lint` | Source, manifest, generated-file, and policy lint | 1–6 | COMPLETED for Phase 1; later phases extend it |
+| `pnpm build` | Build all owned packages and generated client/remote artifacts | 1–6 | COMPLETED for Phase 1; later phases extend it |
+| `pnpm test:unit` | Pure contracts, validators, state transitions, redaction, and read models | 2–5 | PARTIAL: fake CPA fixture has 11 passing tests; product units begin in Phase 2 |
 | `pnpm test:integration` | Real rc.6 Loader, DSH client, runtime, provider, OAuth, analytics, and Pack composition after the 2A gate | 2B–6 | PLANNED / UNVERIFIED |
 | `pnpm test:llm-compat` | Phase 2A real built official `llm-pi-ai` plus fake/external CPA text/tools/stream/image-opt-in/abort gate | 2A, 5, 6 | PLANNED / UNVERIFIED |
 | `pnpm test:oauth` | Device and localhost callback login lifecycle | 3, 5, 6 | PLANNED / UNVERIFIED |
@@ -69,17 +71,17 @@ lane.
 | `pnpm test:quota` | Fixed Codex quota adapter, immutable pricing snapshot, strict projection, unsupported/unavailable states, and no generic `/api-call` | 3–6 | PLANNED / UNVERIFIED |
 | `pnpm test:browser` | Real root-path App, Playground, remotes, negative cases, and security-visible behavior | 5, 6 | PLANNED / UNVERIFIED |
 | `pnpm test:hmr` | Client replacement, disposal, duplicate prevention, and crash containment | 2B, 5, 6 | PLANNED / UNVERIFIED |
-| `pnpm test:security` | Host/browser boundary, callback, redaction, process, path, and package security checks | 1–6 | PLANNED / UNVERIFIED |
-| `pnpm pack:verify` | Exact tarballs and repository-external DSH rc.6 profile install/load | 1, 6 | PLANNED / UNVERIFIED |
-| `pnpm verify` | Aggregate every required lane; skipped required lanes fail the release gate | 1–6 | PLANNED / UNVERIFIED |
+| `pnpm test:security` | Host/browser boundary, callback, redaction, process, path, and package security checks | 1–6 | COMPLETED for the Phase 1 package/provenance boundary; later phases extend it |
+| `pnpm pack:verify` | Exact tarballs and repository-external DSH rc.6 profile install/load | 1, 6 | COMPLETED for Phase 1; Phase 6 adds real product behavior |
+| `pnpm verify` | Aggregate every lane required by the current implemented phase; skipped implemented lanes fail, and the Phase 6 release gate expands it to all lanes | 1–6 | COMPLETED for Phase 1; final release aggregate remains planned |
 
 ## Required verification lanes
 
 | Lane | Command(s) | Minimum evidence | Status |
 | --- | --- | --- | --- |
-| Environment and frozen install | `node --version`; `pnpm --version`; `pnpm install --frozen-lockfile` | Versions, OS, frozen/offline-install log, URL/version/SHA manifest, lockfile result | PLANNED / UNVERIFIED |
-| Public rc.6 API | `pnpm test:public-api`; `pnpm test:integration` | Import/export report and real rc.6 Loader/profile proof; no private/local source resolution; packed `./client` resolves | PLANNED / UNVERIFIED |
-| Workspace and supply chain | `pnpm test:supply-chain`; `pnpm typecheck`; `pnpm lint`; `pnpm build`; `pnpm pack:verify` | Lockfile policy, one-install envelope, exact payloads, local generated-file overrides, no install/runtime download, licenses, provenance URLs/platform/architecture/SHA-256 | PLANNED / UNVERIFIED |
+| Environment and frozen install | `node --version`; `pnpm --version`; `pnpm install --frozen-lockfile` | Versions, OS, frozen/offline-install log, URL/version/SHA manifest, lockfile result | COMPLETED for Phase 1 on Windows x64, Node 24.11.1, pnpm 11.7.0 |
+| Public rc.6 API | `pnpm test:public-api`; `pnpm pack:verify`; later `pnpm test:integration` | Import/export report and real rc.6 Loader/profile proof; no private/local source resolution; packed `./client` handoff executes | COMPLETED for Phase 1; product integration remains planned |
+| Workspace and supply chain | `pnpm test:supply-chain`; `pnpm typecheck`; `pnpm lint`; `pnpm build`; `pnpm pack:verify` | Lockfile policy, one-install envelope, exact payloads, local generated-file overrides, no install/runtime download, licenses, provenance URLs/platform/architecture/SHA-256 | COMPLETED for Phase 1 |
 | Phase 2A `llm-pi-ai` hard gate | `pnpm test:public-api`; `pnpm test:llm-compat` | Real built official package plus fake/external CPA proves text/tools/ordered stream/explicit image opt-in/abort; any failure stops before 2B | PLANNED / UNVERIFIED |
 | Runtime state machine | `pnpm test:unit`; `pnpm test:integration`; `pnpm test:hmr` | Transition matrix for managed/external modes, readiness, failure, stop/dispose, restart, replacement, exact spawn spec, and unrelated-Plugin survival | PLANNED / UNVERIFIED |
 | Credential paths | `pnpm test:unit`; `pnpm test:integration`; `pnpm test:security` | Independent proof for proxy ref/request, management ref/operation, managed-child explicit env; no fallback or value exposure | PLANNED / UNVERIFIED |
@@ -90,9 +92,9 @@ lane.
 | Pricing and quota | `pnpm test:quota`; `pnpm test:analytics`; `pnpm test:security` | Immutable bundled pricing snapshot; fixed internal Codex payload/projection; strict size/schema; unsupported/unavailable valid; raw response and generic `/api-call` absent | PLANNED / UNVERIFIED |
 | Native dsh-webpage App | `pnpm test:integration`; `pnpm test:browser`; `pnpm test:llm-compat` | Real App/Loader composition, frozen ID/routes, packed `./client` export, full `ctx.llm` Playground, degraded/unavailable states, conversation preservation | PLANNED / UNVERIFIED |
 | Browser and HMR | `pnpm test:browser`; `pnpm test:hmr` | Root-path navigation, direct/reload/degraded/error cases, no secret DOM/storage, HMR replacement without reload/duplicates/stale slots, crash containment | PLANNED / UNVERIFIED |
-| Security | `pnpm test:security`; `pnpm test:browser`; `pnpm test:supply-chain` | Boundary report for secrets, OAuth callbacks, shell/process, path traversal, HTML/navigation, logs/SQLite/tarballs, dependency and binary provenance | PLANNED / UNVERIFIED |
-| Packed public preview | `pnpm pack:verify`; `pnpm verify` | Exact tarballs, clean repository-external DSH rc.6 profile/Loader/CLI, one Pack composition, browser/HMR/security artifacts | PLANNED / UNVERIFIED |
-| Aggregate release gate | `pnpm verify` | Output linking every required lane; any skipped required lane fails the gate | PLANNED / UNVERIFIED |
+| Security | `pnpm test:security`; `pnpm test:browser`; `pnpm test:supply-chain` | Boundary report for secrets, OAuth callbacks, shell/process, path traversal, HTML/navigation, logs/SQLite/tarballs, dependency and binary provenance | PARTIAL: Phase 1 package/provenance boundary passed; runtime/browser security remains planned |
+| Packed public preview | `pnpm pack:verify`; `pnpm verify` | Exact tarballs, clean repository-external DSH rc.6 profile/Loader/CLI, one Pack composition, browser/HMR/security artifacts | PARTIAL: Phase 1 package/profile subset passed; Phase 6 browser/HMR/security remains planned |
+| Aggregate release gate | `pnpm verify` | Output linking every required lane for the implemented phase; Phase 6 expands to all release lanes | COMPLETED for Phase 1; final release aggregate remains planned |
 
 ## Phase test strategy and scenarios
 
@@ -103,9 +105,17 @@ Markdown link, fence, trailing-whitespace, fenced-JSON, and secret-pattern
 checks; independently inspected the pinned CPA asset names/checksums; and
 resolved every blocking finding from two Sol review passes. The final focused
 re-review returned GO. No runtime or package claim belongs to that evidence;
-all Phase 1–6 lanes below remain `PLANNED / UNVERIFIED`.
+all Phase 2A–6 product lanes below remain `PLANNED / UNVERIFIED` until their
+own phases run.
 
 ### Phase 1 — workspace and supply chain
+
+Status on 2026-08-14: Complete / GO. The aggregate passed on Windows x64 with
+Node 24.11.1, pnpm 11.7.0, and DSH 0.1.0-rc.6, and independent Luna/Sol reviews
+accepted the Gate. Generated evidence lives under ignored
+`.staging/release/v0.1.0/` and
+`.staging/reports/phase1-packed-install.log`; the executable evidence is the
+tracked generator and verifier that reproduce those artifacts.
 
 Required scenarios:
 
@@ -333,8 +343,8 @@ this lane green.
 
 | ID | Scenario | Lane(s) | Minimum assertion/artifact | Status |
 | --- | --- | --- | --- | --- |
-| T-01 | Public rc.6 API boundary | public-api, integration | Imports/exports and runtime seams resolve from installed rc.6 only; private/local/rc.5 resolution fails | PLANNED / UNVERIFIED |
-| T-02 | Reproducible one-install supply chain | supply-chain, pack | Clean outside-checkout install from immutable GitHub tarballs plus hashed local generated-file overrides; URL/version/SHA, no npm/runtime download | PLANNED / UNVERIFIED |
+| T-01 | Public rc.6 API boundary | public-api, integration | Imports/exports and runtime seams resolve from installed rc.6 only; private/local/rc.5 resolution fails | COMPLETED for Phase 1; later integration extends it |
+| T-02 | Reproducible one-install supply chain | supply-chain, pack | Clean outside-checkout install from immutable GitHub tarballs plus hashed local generated-file overrides; URL/version/SHA, no npm/runtime download | COMPLETED for Phase 1 |
 | T-03 | Phase 2B runtime state and spawn contract | unit, integration, HMR, security | Valid/invalid transitions, readiness, stop/dispose, child exit, bounded restart, exact argv/cwd/stdio/graceMs/scrubbed env, no shell interpretation | PLANNED / UNVERIFIED |
 | T-04 | Phase 2A `llm-pi-ai` hard gate | llm-compat, public-api | Real built official package plus fake/external CPA proves text, tools, ordered stream, explicit image opt-in, and abort on one public rc.6 path; failure STOPs before 2B; no adapter fallback | PLANNED / UNVERIFIED; hard STOP on failure |
 | T-05 | Explicit model capability | unit, integration, security | `/v1/models` cannot infer image support; explicit opt-in succeeds and unsupported/inferred capability is rejected before attachment dispatch | PLANNED / UNVERIFIED |

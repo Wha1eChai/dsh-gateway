@@ -1,0 +1,46 @@
+{
+  "name": "@wha1echai/dsh-gateway-pack",
+  "description": "One-install DSH Bundle for dsh-gateway",
+  "version": "0.1.0",
+  "type": "module",
+  "main": "lib/index.js",
+  "types": "lib/types/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./lib/types/index.d.ts",
+      "import": "./lib/index.js",
+      "default": "./lib/index.js"
+    },
+    "./cordis.patch.yml": "./cordis.patch.yml",
+    "./package.json": "./package.json"
+  },
+  "dsh": {
+    "bundle": {
+      "patch": "./cordis.patch.yml"
+    }
+  },
+  "files": [
+    "lib/index.js",
+    "lib/types/**/*.d.ts",
+    "cordis.patch.yml",
+    "README.md",
+    "LICENSE"
+  ],
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Wha1eChai/dsh-gateway.git",
+    "directory": "packages/pack"
+  },
+  "dependencies": {
+    "@wha1echai/dsh-webpage": "https://github.com/Wha1eChai/dsh-webpage/releases/download/v0.1.0/wha1echai-dsh-webpage-0.1.0.tgz",
+    "@wha1echai/dsh-gateway": "workspace:*",
+    "@wha1echai/dsh-gateway-runtime": "workspace:*",
+    "@wha1echai/dsh-gateway-analytics": "workspace:*"
+  },
+  "scripts": {
+    "build": "tsc -b tsconfig.json && tsdown",
+    "typecheck": "tsc -b tsconfig.json"
+  }
+}
+

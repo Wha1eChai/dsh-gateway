@@ -25,20 +25,21 @@ dsh-gateway/
 │   ├── runtime/                         # @wha1echai/dsh-gateway-runtime
 │   ├── analytics/                       # @wha1echai/dsh-gateway-analytics
 │   ├── pack/                            # @wha1echai/dsh-gateway-pack
-│   ├── platform-win32-x64/              # pinned CPA asset
-│   ├── platform-win32-arm64/            # pinned CPA asset
-│   ├── platform-darwin-x64/             # pinned CPA asset
-│   ├── platform-darwin-arm64/           # pinned CPA asset
-│   ├── platform-linux-x64/              # pinned CPA asset
-│   └── platform-linux-arm64/            # pinned CPA asset
-├── fixtures/
-│   └── fake-cpa/                        # private deterministic HTTP fixture
+│   └── platform/
+│       ├── win32-x64/                   # pinned CPA asset
+│       ├── win32-arm64/                 # pinned CPA asset
+│       ├── darwin-x64/                  # pinned CPA asset
+│       ├── darwin-arm64/                # pinned CPA asset
+│       ├── linux-x64/                   # pinned CPA asset
+│       └── linux-arm64/                 # pinned CPA asset
+├── tests/
+│   └── fixtures/fake-cpa/               # private deterministic HTTP fixture
 └── docs/
     └── design/
 ```
 
 The six platform directories are package artifacts, not six alternative
-implementations. `fixtures/fake-cpa` is a test fixture and is never a DSH
+implementations. `tests/fixtures/fake-cpa` is a test fixture and is never a DSH
 plugin, release asset, registry, or runtime fallback.
 
 ## Package roles and boundaries

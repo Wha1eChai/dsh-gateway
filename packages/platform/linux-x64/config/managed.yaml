@@ -1,0 +1,3 @@
+# Managed CLIProxyAPI configuration fragment.
+plugins:
+  enabled: false

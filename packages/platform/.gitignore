@@ -1,0 +1,4 @@
+.cache/
+.staging/
+*/vendor/cli-proxy-api
+*/vendor/cli-proxy-api.exe

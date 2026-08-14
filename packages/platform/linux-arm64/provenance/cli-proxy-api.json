@@ -1,0 +1,33 @@
+{
+  "schemaVersion": 1,
+  "package": {
+    "name": "@wha1echai/dsh-gateway-platform-linux-arm64",
+    "version": "0.1.0"
+  },
+  "upstream": {
+    "repository": "router-for-me/CLIProxyAPI",
+    "tag": "v7.2.131",
+    "releaseUrl": "https://github.com/router-for-me/CLIProxyAPI/releases/download/v7.2.131",
+    "asset": "CLIProxyAPI_7.2.131_linux_aarch64_no-plugin.tar.gz",
+    "assetUrl": "https://github.com/router-for-me/CLIProxyAPI/releases/download/v7.2.131/CLIProxyAPI_7.2.131_linux_aarch64_no-plugin.tar.gz",
+    "sourceCommit": null,
+    "sourceCommitSuppliedByRelease": false,
+    "assetSha256": "c82bd3dfb62da2ff567930d928c8aaf33f384917bdfc197f28ddbf7ff50509f3"
+  },
+  "target": {
+    "os": "linux",
+    "cpu": "arm64"
+  },
+  "executable": {
+    "path": "vendor/cli-proxy-api",
+    "upstreamName": "cli-proxy-api",
+    "sha256": "9f67b891e652e3d369d98c439b5fa3bb8004b329b4d22789458a8b90057acc49"
+  },
+  "managedConfiguration": {
+    "plugins.enabled": false
+  },
+  "platformPolicy": "Linux uses only the literal upstream no-plugin release asset.",
+  "licenseFiles": [
+    "LICENSE"
+  ]
+}

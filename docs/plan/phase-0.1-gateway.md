@@ -4,8 +4,8 @@
 
 | Item | Decision |
 | --- | --- |
-| Plan status | **Phase 0 — Complete / GO**; Phase 1 is the next implementation phase. |
-| Code status | No workspace, package manifest, binary, runtime, or product code exists yet. No implementation evidence is claimed. |
+| Plan status | **Phases 0–1 — Complete / GO**; Phase 2A compatibility implementation is next. |
+| Code status | The Phase 1 workspace, package/release scaffolding, deterministic fake CPA, six-platform supply chain, and executable evidence exist. Phase 2A product behavior has not started. |
 | Release shape | Public, out-of-tree DSH Bundle/Pack preview composed from ordinary DSH Plugins; no DeepSeek Harness source changes and no npm publication in this preview. |
 | Pinned compatibility | DeepSeek Harness `0.1.0-rc.6`; dsh-webpage `0.1.0`; CLIProxyAPI `7.2.131`; CPA-Manager-Plus `1.12.0-rc.2` as a reference only. |
 | Toolchain | Node `^22.19.0 || >=24.0.0`; pnpm `11.7.0`; Windows 11 is the primary release verification environment. Managed-platform policy is Linux `no-plugin` only; Windows/macOS use standard upstream executable names with dynamic plugins disabled by configuration. |
@@ -160,8 +160,8 @@ coerced into zero or a fabricated quota.
 
 | Phase | Status | Depends on | Deliverables | Stop/go gate |
 | --- | --- | --- | --- | --- |
-| 0. Documentation baseline | **In Progress** | Approved scope and dsh-webpage preflight | Scope boundary, architecture/design links, dependency map, package topology, ADR decisions, this phased plan, testing contract, acceptance matrix, evidence template, and HANDOFF update by the main thread | **GO** only after main-thread review accepts the docs as internally consistent. **STOP** on an unresolved public API, capability, licensing, security, or upstream-change contract. This pass does not commit or push. |
-| 1. Workspace and supply chain | Planned | Phase 0 GO | pnpm workspace; exact manifests and exports; public rc.6 API probe; package allowlists; platform binary provenance and upstream licenses; reproducible install/build scaffolding | **GO** when frozen install, public-only rc.6 imports/exports, typecheck, lint, build, package payload, provenance, and supply-chain checks pass. **STOP** on a private/local rc.5 import, floating DSH dependency, adjacent-checkout dependency, broad install-script approval, missing license/digest, or unreviewed executable. |
+| 0. Documentation baseline | **Complete / GO** | Approved scope and dsh-webpage preflight | Scope boundary, architecture/design links, dependency map, package topology, ADR decisions, this phased plan, testing contract, acceptance matrix, evidence template, and HANDOFF update by the main thread | **GO** only after main-thread review accepts the docs as internally consistent. **STOP** on an unresolved public API, capability, licensing, security, or upstream-change contract. This pass does not commit or push. |
+| 1. Workspace and supply chain | **Complete / GO** | Phase 0 GO | pnpm workspace; exact manifests and exports; public rc.6 API probe; package allowlists; platform binary provenance and upstream licenses; reproducible install/build scaffolding | **GO** when frozen install, public-only rc.6 imports/exports, typecheck, lint, build, package payload, provenance, and supply-chain checks pass. **STOP** on a private/local rc.5 import, floating DSH dependency, adjacent-checkout dependency, broad install-script approval, missing license/digest, or unreviewed executable. |
 | 2A. `llm-pi-ai` compatibility hard gate | Planned | Phase 1 GO | Real built official `@deepseek-ai/dsh-llm-pi-ai` public-contract probe against fake/external CPA: text, tools, stream, explicit image opt-in, and abort | **GO** only when all five behaviors pass on the same real path. **STOP before Phase 2B and all runtime/client investment** on any failure; no adapter fallback. |
 | 2B. Runtime and client | Planned | Phase 2A GO | Managed/external runtime state machine; process supervisor; readiness/health; settings and three-path credential handoff; DSH client installation; real `ctx.llm` request path | **GO** when all state transitions, disposal/restart behavior, and real rc.6 Loader/client lifecycle pass. **STOP** on shell execution, shell-interpreted argv, implicit process fields, leaked secret, duplicate lifecycle, or private API. |
 | 3. Provider and OAuth | Planned | Phase 2B GO | Model discovery and explicit capability registry; provider/account status; Codex device login; fail-closed localhost callback gate; host-side credential resolution; provider refresh/failover handoff; generated remote contract for these operations | **GO** when device flow is bounded, local callback is disabled without the trusted server-origin seam, cancellation/error states are deterministic, no token reaches the browser/SQLite/logs, model image support is explicit, and the provider request reaches the same `ctx.llm` path. **STOP** on browser-held secrets, client-origin authority, inferred image support, or gateway-owned provider lifecycle that duplicates CPA. |
@@ -229,14 +229,14 @@ Commit/push: this record is included in the repository's docs-only root phase co
 
 ```text
 Phase: 1
-Status: Planned / Unverified
-Implementation refs: <workspace, manifests, exports, provenance, supply-chain scripts>
-Evidence refs: <public API report, install log, package manifests/tarballs, license and digest report>
-Commands: pnpm install --frozen-lockfile; pnpm test:public-api; pnpm test:supply-chain; pnpm typecheck; pnpm lint; pnpm build; pnpm pack:verify
-Observed result: <PLANNED / UNVERIFIED>
-Open risks/decisions: <none recorded yet>
-Gate decision: STOP until the Phase 1 evidence is complete
-Commit/push: <record hash and remote only after GO>
+Status: Complete / GO
+Implementation refs: package.json; pnpm-workspace.yaml; packages/*; packages/platform/*; provenance/cli-proxy-api/assets.json; scripts/release/*; scripts/platform/*; tests/fixtures/fake-cpa
+Evidence refs: docs/evidence/phase-1.md; .staging/release/v0.1.0/github/release-manifest.json; .staging/release/v0.1.0/github/SHA256SUMS; .staging/reports/phase1-packed-install.log; .staging/reports/phase1-clean-checkout.log; scripts/verify-public-api.mjs; tests/public-api/contract.ts
+Commands: pnpm install --frozen-lockfile; pnpm test:public-api; pnpm test:supply-chain; pnpm typecheck; pnpm lint; pnpm build; pnpm pack:verify; pnpm test:security; pnpm test:clean-checkout; pnpm verify
+Observed result: frozen install, typecheck, lint, build, 11 fake-CPA tests, 20-package public API/Loader handoff probe, six-platform provenance verification, rewritten release tarballs, Phase 1 security, an offline/invalid-registry repository-external DSH Pack install, and a clean committed source snapshot with a fresh pnpm store all passed on Windows x64 with Node 24.11.1 and pnpm 11.7.0
+Open risks/decisions: Phase 2A is intentionally unavailable and must not be counted as skipped or passing
+Gate decision: GO; the complete aggregate and focused Luna/Sol reviews passed on 2026-08-14
+Commit/push: this record is included in the Phase 1 Gate commit pushed to the public repository
 ```
 
 ```text
@@ -315,8 +315,8 @@ Commit/push: <record hash, remote, and public-preview artifact only after GO>
 
 | ID | Acceptance outcome | Implementation surface | Required evidence | Status |
 | --- | --- | --- | --- | --- |
-| G-01 | All DSH integration uses only public DSH `0.1.0-rc.6` declarations/exports and runtime seams; no local rc.5 source or private import is required. | Workspace manifests, API probe, client/runtime installation | `pnpm test:public-api` report plus real rc.6 Loader/profile log | Planned / Unverified |
-| G-02 | One clean install outside the checkout is reproducible from immutable GitHub tarball dependencies and local generated-file overrides only; each dependency records URL, version, and SHA-256, with no npm/runtime download. | Pack envelope, manifests, generated artifacts, installer | Frozen/offline install, URL/version/SHA manifest, payload and install-script report | Planned / Unverified |
+| G-01 | All DSH integration uses only public DSH `0.1.0-rc.6` declarations/exports and runtime seams; no local rc.5 source or private import is required. | Workspace manifests, API probe, client/runtime installation | `pnpm test:public-api` report plus real rc.6 Loader/profile log | COMPLETED / GO for Phase 1 |
+| G-02 | One clean install outside the checkout is reproducible from immutable GitHub tarball dependencies and local generated-file overrides only; each dependency records URL, version, and SHA-256, with no npm/runtime download. | Pack envelope, manifests, generated artifacts, installer | Frozen/offline install, URL/version/SHA manifest, payload and install-script report | COMPLETED / GO for Phase 1 |
 | G-03 | Managed and external runtime modes have deterministic lifecycle states, readiness/health, stop/dispose, failure, and restart behavior; process launch uses exact argv/cwd/stdio/graceMs/scrubbed env and never shell-interpreted argv. | Runtime state machine and supervisor | Unit transition matrix plus real Loader/integration lifecycle log and spawn-spec assertion | Planned / Unverified |
 | G-04 | **Phase 2A hard gate:** the real built official `llm-pi-ai` package plus fake/external CPA proves text, tools, ordered streaming, explicit image opt-in, and abort on one public rc.6 path. Failure stops before Phase 2B and permits no adapter fallback. | Public rc.6 client/LLM path and deterministic CPA fixture | `pnpm test:llm-compat` CPA-observed real-path report | Planned / Unverified; hard STOP before Phase 2B |
 | G-05 | Model discovery does not infer vision from `/v1/models`; image input is enabled only by an explicit verified capability declaration. | Model registry and provider capability metadata | Provider fixture and negative model-capability test | Planned / Unverified |
@@ -327,7 +327,7 @@ Commit/push: <record hash, remote, and public-preview artifact only after GO>
 | G-10 | Pricing is an immutable bundled snapshot. The Host-internal Codex quota adapter uses only the fixed allowlisted `POST /v0/management/api-call` payload; other providers may return typed unsupported/unavailable and no generic `/api-call` remote exists. | Pricing asset, quota adapter, management allowlist, typed quota result | `pnpm test:quota` fixed-payload/schema/size/projection and no-generic-proxy report | Planned / Unverified |
 | G-11 | The native App uses ID `wha1echai.gateway`, base `/apps/wha1echai.gateway`, frozen subroutes, and the package `./package.json` `./client` export; it does not take over the shell or reset conversation state. | App manifest, `package.json` exports, route/slot composition | Packed import/export and browser route artifact, keyless snapshot | Planned / Unverified |
 | G-12 | Client HMR replaces gateway contributions exactly once, leaves unrelated Apps and conversation state alive, and contains render failure at the owning boundary. | DSH client lifecycle/HMR integration and App boundary | `pnpm test:hmr` before/after log and browser artifact | Planned / Unverified |
-| G-13 | A clean, repository-external DSH rc.6 profile loads the exact packed public preview with the Linux no-plugin / Windows-macOS standard-name-plus-disabled-plugin policy and all provenance requirements. | Pack descriptor, platform assets/config, profile setup, release scripts | `pnpm pack:verify` artifact plus `pnpm verify` aggregate | Planned / Unverified |
+| G-13 | A clean, repository-external DSH rc.6 profile loads the exact packed public preview with the Linux no-plugin / Windows-macOS standard-name-plus-disabled-plugin policy and all provenance requirements. | Pack descriptor, platform assets/config, profile setup, release scripts | `pnpm pack:verify` artifact plus `pnpm verify` aggregate | Phase 1 packaging subset passed; final Phase 6 acceptance remains planned |
 
 ## Stop conditions and required deviation record
 
