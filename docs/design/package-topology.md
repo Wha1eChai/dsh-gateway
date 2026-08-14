@@ -324,8 +324,13 @@ and an auditable version identity.
 The public preview Pack is installed with exactly:
 
 ```text
-dsh plugin --profile <name> add https://github.com/Wha1eChai/dsh-gateway/releases/download/v0.1.0/wha1echai-dsh-gateway-pack-0.1.0.tgz
+dsh plugin --profile <name> add https://github.com/Wha1eChai/dsh-gateway/releases/download/v0.1.0/wha1echai-dsh-gateway-pack-0.1.0.tgz --ignore-scripts --config.block-exotic-subdeps=false
 ```
+
+DSH Plugin profiles enable pnpm's `blockExoticSubdeps` safeguard. The explicit
+opt-in is limited to resolving the Pack's immutable GitHub Release URL
+subdependencies; their URLs and SHA-256 values are recorded in the release
+manifest, and lifecycle scripts remain disabled.
 
 Its release
 `./package.json` contains immutable GitHub Release asset URLs, never registry

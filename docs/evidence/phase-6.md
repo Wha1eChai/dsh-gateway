@@ -48,6 +48,11 @@ Observed results:
 - clean source checkout verification passed for 182 files. The durable log is
   `.staging/reports/phase1-clean-checkout.log`; packed-install evidence is
   `.staging/reports/phase1-packed-install.log`.
+- the published Pack URL returned HTTP 200 and installed into a fresh global
+  DSH profile when using the documented
+  `--ignore-scripts --config.block-exotic-subdeps=false` flags; `dump-config`
+  contained Webpage, Gateway, Runtime, and Analytics. Without the explicit
+  exotic-URL opt-in, DSH/pnpm correctly rejected URL subdependencies.
 
 The clean-checkout lane found and drove two portability fixes before GO: the
 browser image fixture is now embedded instead of borrowed from an adjacent

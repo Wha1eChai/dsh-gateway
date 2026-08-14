@@ -49,9 +49,14 @@ After the `v0.1.0` GitHub prerelease is available, install the ordinary Pack
 into a dedicated DSH profile:
 
 ```text
-dsh plugin --profile gateway-preview add https://github.com/Wha1eChai/dsh-gateway/releases/download/v0.1.0/wha1echai-dsh-gateway-pack-0.1.0.tgz
+dsh plugin --profile gateway-preview add https://github.com/Wha1eChai/dsh-gateway/releases/download/v0.1.0/wha1echai-dsh-gateway-pack-0.1.0.tgz --ignore-scripts --config.block-exotic-subdeps=false
 dsh --profile gateway-preview web
 ```
+
+DSH enables pnpm's `blockExoticSubdeps` protection for Plugin profiles. The
+scoped opt-in above is required because this Pack composes its fixed GitHub
+Release tarballs as URL subdependencies. Their exact URLs and SHA-256 values
+are listed in the attached `release-manifest.json`; no install scripts run.
 
 The first preview supports root-path deployment only, such as
 `https://host/apps/wha1echai.gateway`; reverse-proxy subpaths such as
