@@ -1,0 +1,13 @@
+{
+  "extends": "./tsconfig.base.json",
+  "compilerOptions": {
+    "noEmit": true
+  },
+  "files": [],
+  "references": [
+    { "path": "./packages/gateway" },
+    { "path": "./packages/runtime" },
+    { "path": "./packages/analytics" },
+    { "path": "./packages/pack" }
+  ]
+}

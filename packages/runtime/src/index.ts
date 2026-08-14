@@ -655,6 +655,13 @@ export interface RuntimeSnapshot {
   readonly updatedAt: number
 }
 
+/** Host-only launch facts for CPA's fixed device-login subprocess. */
+export interface DeviceLoginLaunchTarget {
+  readonly binaryPath: string
+  readonly configPath: string
+  readonly cwd: string
+}
+
 export type CredentialReferenceValidator = (references: CredentialReferences) => void | Promise<void>
 export type CredentialResolver = CredentialProvider['resolve']
 
@@ -759,6 +766,26 @@ export class GatewayRuntime {
       ...(this.installedRelease === undefined ? {} : { release: { ...this.installedRelease } }),
       ...(this.health === undefined ? {} : { health: { ...this.health, capabilities: { ...this.health.capabilities } } }),
       ...(this.lastError === undefined ? {} : { lastError: { ...this.lastError } }),
+    }
+  }
+
+  /**
+   * Resolve the managed binary and private active config for a sibling
+   * device-login process. These paths are Host-only and must never cross a
+   * Remote boundary.
+   */
+  deviceLoginTarget(): DeviceLoginLaunchTarget {
+    this.ensureNotDisposed()
+    if (this.config.mode !== 'managed') {
+      throw new RuntimeError('invalid_configuration', 'external mode does not own a device-login process')
+    }
+    if (this.state !== 'ready' || this.installedRelease === undefined) {
+      throw new RuntimeError('invalid_transition', 'managed runtime must be ready before device login')
+    }
+    return {
+      binaryPath: this.installedRelease.binaryPath,
+      configPath: this.paths.managedConfigFile,
+      cwd: this.installedRelease.directory,
     }
   }
 
@@ -1193,7 +1220,7 @@ export const RuntimeController = GatewayRuntime
 export const inject = ['subprocess', 'credentials']
 
 /** Compose one runtime service into the current Cordis plugin fiber. */
-export function apply(ctx: Context, config: RuntimeConfig): void {
+export function apply(ctx: Context, config: RuntimeConfig = { mode: 'managed' }): void {
   const paths = resolveRuntimePaths()
   const runtime = new GatewayRuntime({
     config,

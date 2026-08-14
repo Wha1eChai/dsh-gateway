@@ -4,6 +4,9 @@ settings:
   autoInstallPeers: false
   excludeLinksFromLockfile: false
 
+patchedDependencies:
+  '@deepseek-ai/dsh-typert-generator@0.1.0-rc.6': d38638db928db788c823eb0dfa62ffb514a748d25dcddf02b15c00c8c6090820
+
 importers:
 
   .:
@@ -92,6 +95,12 @@ importers:
       '@deepseek-ai/dsh-timeout':
         specifier: 0.1.0-rc.6
         version: 0.1.0-rc.6(@deepseek-ai/cordis@4.0.1)(@deepseek-ai/dsh-invariants@0.1.0-rc.6(@deepseek-ai/cordis@4.0.1))
+      '@deepseek-ai/dsh-typert-generator':
+        specifier: 0.1.0-rc.6
+        version: 0.1.0-rc.6(patch_hash=d38638db928db788c823eb0dfa62ffb514a748d25dcddf02b15c00c8c6090820)(@deepseek-ai/cordis@4.0.1)(@deepseek-ai/dsh-invariants@0.1.0-rc.6(@deepseek-ai/cordis@4.0.1))
+      '@deepseek-ai/dsh-typert-protocol':
+        specifier: 0.1.0-rc.6
+        version: 0.1.0-rc.6(@deepseek-ai/cordis@4.0.1)(@deepseek-ai/dsh-invariants@0.1.0-rc.6(@deepseek-ai/cordis@4.0.1))
       '@deepseek-ai/schemastery':
         specifier: 3.18.1
         version: 3.18.1
@@ -131,6 +140,9 @@ importers:
       vitest:
         specifier: 4.1.8
         version: 4.1.8(@opentelemetry/api@1.9.0)(@types/node@22.20.0)(@vitest/coverage-v8@4.1.8)(yaml@2.9.0)
+      zod:
+        specifier: 4.4.3
+        version: 4.4.3
 
   packages/analytics:
     dependencies:
@@ -138,7 +150,18 @@ importers:
         specifier: workspace:*
         version: link:../gateway
 
-  packages/gateway: {}
+  packages/gateway:
+    dependencies:
+      zod:
+        specifier: 4.4.3
+        version: 4.4.3
+    devDependencies:
+      '@wha1echai/dsh-gateway-runtime':
+        specifier: workspace:*
+        version: link:../runtime
+      '@wha1echai/dsh-webpage':
+        specifier: https://github.com/Wha1eChai/dsh-webpage/releases/download/v0.1.0/wha1echai-dsh-webpage-0.1.0.tgz
+        version: https://github.com/Wha1eChai/dsh-webpage/releases/download/v0.1.0/wha1echai-dsh-webpage-0.1.0.tgz(114a3ff679905a9a08540a54ec9b9fde)
 
   packages/pack:
     dependencies:
@@ -168,10 +191,6 @@ importers:
   packages/platform/win32-x64: {}
 
   packages/runtime:
-    dependencies:
-      '@wha1echai/dsh-gateway':
-        specifier: workspace:*
-        version: link:../gateway
     optionalDependencies:
       '@wha1echai/dsh-gateway-platform-darwin-arm64':
         specifier: workspace:*
@@ -794,6 +813,12 @@ packages:
       '@deepseek-ai/dsh-session': ^0.1.0-rc.6
       '@deepseek-ai/dsh-system-prompt': ^0.1.0-rc.6
       '@deepseek-ai/dsh-user-approval': ^0.1.0-rc.6
+
+  '@deepseek-ai/dsh-typert-generator@0.1.0-rc.6':
+    resolution: {integrity: sha512-zE9NvmTkjA1pJcyoDKnIlzF3V8IlslNZtrLWTfQBJyMi6ZLJkCtiC0kuQLeBxjUW5LpQKWIaWFilanWJpqevpQ==}
+    peerDependencies:
+      '@deepseek-ai/cordis': ^4.0.1
+      '@deepseek-ai/dsh-invariants': ^0.1.0-rc.6
 
   '@deepseek-ai/dsh-typert-protocol@0.1.0-rc.6':
     resolution: {integrity: sha512-weWzN8r01YCkoDCAM7BsKw2YhRrD4zL8N2SAZu9hovYtXSq8xHXsP4Zh8RLYIlYcuotjyff/6hic+0TJPd14YA==}
@@ -3251,6 +3276,13 @@ snapshots:
       '@deepseek-ai/dsh-session': 0.1.0-rc.6(3f90e600289906915756cc9ab1a4505c)
       '@deepseek-ai/dsh-user-approval': 0.1.0-rc.6(a5cd07455511daf6d6a360cda975410d)
       '@deepseek-ai/schemastery': 3.18.1
+
+  '@deepseek-ai/dsh-typert-generator@0.1.0-rc.6(patch_hash=d38638db928db788c823eb0dfa62ffb514a748d25dcddf02b15c00c8c6090820)(@deepseek-ai/cordis@4.0.1)(@deepseek-ai/dsh-invariants@0.1.0-rc.6(@deepseek-ai/cordis@4.0.1))':
+    dependencies:
+      '@deepseek-ai/cordis': 4.0.1(@deepseek-ai/cordis-plugin-loader@1.0.2)
+      '@deepseek-ai/dsh-invariants': 0.1.0-rc.6(@deepseek-ai/cordis@4.0.1)
+      '@jridgewell/gen-mapping': 0.3.13
+      typescript: 6.0.3
 
   '@deepseek-ai/dsh-typert-protocol@0.1.0-rc.6(@deepseek-ai/cordis@4.0.1)(@deepseek-ai/dsh-invariants@0.1.0-rc.6(@deepseek-ai/cordis@4.0.1))':
     dependencies:

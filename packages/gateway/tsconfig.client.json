@@ -1,0 +1,13 @@
+{
+  "extends": "../../tsconfig.base.json",
+  "compilerOptions": {
+    "rootDir": "src",
+    "outDir": "lib/types",
+    "jsx": "react-jsx",
+    "tsBuildInfoFile": "lib/.tsbuildinfo.client"
+  },
+  "include": ["src/client", "src/css-modules.d.ts"],
+  "references": [
+    { "path": "./tsconfig.json" }
+  ]
+}

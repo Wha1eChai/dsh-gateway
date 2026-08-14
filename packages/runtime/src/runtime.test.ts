@@ -310,6 +310,11 @@ describe('managed runtime lifecycle', () => {
 
     const started = await runtime.start()
     expect(started.state).toBe('ready')
+    expect(runtime.deviceLoginTarget()).toEqual({
+      binaryPath: started.release!.binaryPath,
+      configPath: paths.managedConfigFile,
+      cwd: started.release!.directory,
+    })
     expect(process.spec).toBeDefined()
     expect(Object.keys(process.spec!).sort()).toEqual(['argv', 'cwd', 'env', 'graceMs', 'stdio'])
     expect(process.spec!.argv).toEqual([process.spec!.argv[0], '-config', paths.managedConfigFile, '-local-model'])
@@ -331,6 +336,7 @@ describe('managed runtime lifecycle', () => {
     await expect(runtime.start()).rejects.toMatchObject({ code: 'duplicate_start' })
     await runtime.stop()
     expect(runtime.snapshot().state).toBe('stopped')
+    expect(() => runtime.deviceLoginTarget()).toThrow(/must be ready/)
     expect(process.handle.terminate).toHaveBeenCalledTimes(1)
   })
 
@@ -456,6 +462,7 @@ describe('external runtime probe', () => {
 
     const snapshot = await runtime.start()
     expect(snapshot.state).toBe('ready')
+    expect(() => runtime.deviceLoginTarget()).toThrow(/external mode/)
     expect(fetcher).toHaveBeenCalledTimes(2)
     expect(snapshot.health?.capabilities).toMatchObject({ models: 'available' })
   })

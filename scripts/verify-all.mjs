@@ -20,18 +20,26 @@ function pnpm(args) {
 
 pnpm(['install', '--frozen-lockfile'])
 for (const script of [
+  'build',
   'typecheck',
   'lint',
-  'build',
   'test:unit',
   'test:public-api',
   'test:llm-compat',
-  'test:integration',
   'test:supply-chain',
   'pack:verify',
   'test:security',
 ]) pnpm(['run', script])
 
+// The real CPA executable is an intentionally ignored, provenance-verified
+// release input. The outer aggregate runs the complete integration lane; the
+// source-only clean-checkout aggregate can only repeat the built Loader gate.
+if (process.env.DSH_GATEWAY_CLEAN_VERIFY === '1') {
+  pnpm(['exec', 'node', 'scripts/verify-phase3.mjs'])
+} else {
+  pnpm(['run', 'test:integration'])
+}
+
 if (process.env.DSH_GATEWAY_CLEAN_VERIFY !== '1') pnpm(['run', 'test:clean-checkout'])
 
-process.stdout.write('Phase 2A aggregate verification passed\n')
+process.stdout.write('Gateway aggregate verification passed\n')

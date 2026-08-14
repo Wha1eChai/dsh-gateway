@@ -5,6 +5,9 @@ packages:
 
 autoInstallPeers: false
 
+patchedDependencies:
+  '@deepseek-ai/dsh-typert-generator@0.1.0-rc.6': patches/dsh-typert-generator-0.1.0-rc.6.patch
+
 # pnpm 11 denies dependency lifecycle scripts unless reviewed here. The DSH
 # subprocess provider and node-pty are exact runtime dependencies whose native
 # build is required; the two pi-ai scripts remain explicitly denied.
@@ -81,3 +84,4 @@ minimumReleaseAgeExclude:
   - '@deepseek-ai/dsh-user-questions@0.1.0-rc.6'
   - '@deepseek-ai/dsh-workspace@0.1.0-rc.6'
   - '@deepseek-ai/dsh-subprocess-local@0.1.0-rc.6'
+  - '@deepseek-ai/dsh-typert-generator@0.1.0-rc.6'

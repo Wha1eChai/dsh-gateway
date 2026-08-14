@@ -1,7 +1,8 @@
 # dsh-gateway architecture
 
-Status: Phase 0 decision baseline. Compatibility target: DeepSeek Harness
-`0.1.0-rc.6`, `@wha1echai/dsh-webpage` `0.1.0`, and CLIProxyAPI `7.2.131`.
+Status: Phase 3 architecture baseline — Complete / GO. Compatibility target:
+DeepSeek Harness `0.1.0-rc.6`, `@wha1echai/dsh-webpage` `0.1.0`, and
+CLIProxyAPI `7.2.131`. Phase 4 Analytics is next.
 
 ## Decision summary
 
@@ -41,7 +42,7 @@ part of this design.
 | Child process | `@deepseek-ai/dsh-subprocess`, `SubprocessSpawnSpec`, `SubprocessRuntime`, `ctx.subprocess.spawn()` | The spawn spec is `argv`/`cwd`/`stdio`/`graceMs` plus a scrubbed explicit `env`. There is no subprocess `shell` field. The complete `argv` is passed directly and is never shell interpreted. The child receives only explicit managed bootstrap environment entries. |
 | User data root | `@deepseek-ai/dsh-home-paths`, `resolveDshHome()` | One gateway Host service resolves `resolveDshHome()/dsh-gateway/v1` once and passes derived paths to companion services. No plugin-private or current-working-directory data root is allowed. |
 | Host Remotes | `@deepseek-ai/dsh-typert-protocol`, `TypertRemoteContribution`, `TypertClientRemote`, `@Remote`, `@RemoteScope` | Host methods are generated Typert contributions and are mounted explicitly by the Client with `ctx.remote.$mount()`. The Client never discovers or calls CPA endpoints directly. |
-| Webpage | `@wha1echai/dsh-webpage`, `ctx.pages`, `webpage.app` | App ID is `wha1echai.gateway`, mounted at `/apps/wha1echai.gateway`, with exact routes `/`, `/accounts`, `/models`, `/requests`, `/playground`, and `/settings`. The Client contributes these views through Webpage slots; it is not the provider, a server, or an independently installable unit. |
+| Webpage | `@wha1echai/dsh-webpage`, `ctx.pages`, `webpage.app` | The Phase 3 foundation registers App ID `wha1echai.gateway` through the `webpage.app` slot at `/apps/wha1echai.gateway`, mounts the generated Remote, and renders sanitized status. The full route/view set (`/`, `/accounts`, `/models`, `/requests`, `/playground`, and `/settings`) remains a Phase 5 plan; the Client is not the provider, a server, or an independently installable unit. |
 
 The target release must verify these names against the installed rc.6
 declarations and exports. A local checkout from another DSH revision is
@@ -99,19 +100,19 @@ files, or raw Management API responses.
 
 ### Gateway App contribution
 
-The App is the Client contribution with exact ID `wha1echai.gateway`, mounted
-under `/apps/wha1echai.gateway`. Its exact routes are `/`, `/accounts`,
-`/models`, `/requests`, `/playground`, and `/settings`. It contributes those
-views through dsh-webpage slots; the routes do not create a second HTTP
-server. Its only Host authority is the exact generated Remote allowlist. It
-does not import a CPA SDK, call `fetch()` to a CPA management or data endpoint,
-receive a management key, or act as a second administration server.
+The Phase 3 App foundation is the Client contribution with exact ID
+`wha1echai.gateway`, mounted through the dsh-webpage `webpage.app` slot at
+`/apps/wha1echai.gateway`. It registers the descriptor, locale, and slot
+composition, mounts the generated Remote with `ctx.remote.$mount()`, and
+renders loading, unavailable, and sanitized runtime status. It does not import
+a CPA SDK, call `fetch()` to a CPA management or data endpoint, receive a
+management key, or act as a second administration server.
 
-The Playground necessarily sends a bounded prompt and optional DSH attachment
-refs through `probe.run`; the Host resolves refs and invokes `ctx.llm`. The
-result is returned only to the requesting Client. Prompt, attachment refs,
-and model output never enter operational Remotes, analytics, logs, the
-database, or any other persistence path.
+The full route/view set and Playground remain Phase 5 work. When that work is
+implemented, a bounded prompt and optional DSH attachment refs will cross only
+the typed `gateway.probe` flow; the Host will resolve refs and invoke
+`ctx.llm`. Prompt, attachment refs, and model output remain excluded from
+operational Remotes, analytics, logs, the database, and other persistence.
 
 ### Gateway Pack
 
@@ -185,11 +186,10 @@ must never race the same document.
    translates to the selected provider and owns provider account failover.
    The DSH adapter streams normalized chunks, propagates cancellation, and
    does not retry after output has started.
-2. **Setup and model persistence.** `gateway.setup` validates mode, endpoint,
-   route name, and separate proxy/management credential refs. `model.discover`
-   returns candidates without persistence. `model.apply` validates the chosen
-   model declaration and image opt-in, rejects a conflicting CPA provider name,
-   and applies only the required path operations with
+2. **Model discovery and persistence.** `gateway.models` returns candidates
+   without persistence. `gateway.applyModels` validates the chosen model
+   declaration and image opt-in, rejects a conflicting CPA provider name, and
+   applies only the required path operations with
    `ctx.settings.mutate(settingsNamespace('llm-pi-ai'), ops,
    expectedRevision)`. The `llm-pi-ai` schema validates the complete candidate
    and the next request observes the committed route.
@@ -198,19 +198,19 @@ must never race the same document.
    starts CPA with `ctx.subprocess.spawn()` and a complete argv, waits for
    bounded readiness, then applies the route. Stop, restart, and unload
    terminate and join the whole process tree before releasing or replacing it.
-4. **OAuth.** The App requests a typed Host operation. The Host talks to CPA's
-   documented local management surface using a Management credential resolved
-   from DSH credentials. Device flow is the default and always-supported OAuth
-   flow; it returns only verification instructions and a status handle. A
-   local callback is disabled unless the implementation proves both a
-   loopback-only listener and a trusted public origin derived by the server,
-   never from the Client's HTTP `Origin` or page-origin input. CPA retains auth
-   files and refresh tokens.
+4. **OAuth.** The App requests a typed Host operation. The Host launches the
+   bounded CPA Codex device-login subprocess with Host-owned binary/config/cwd
+   and explicit subprocess fields. Device flow is the default and
+   always-supported OAuth flow; it returns only verification instructions and a
+   status handle. A local callback is disabled unless the implementation proves
+   both a loopback-only listener and a trusted public origin derived by the
+   server, never from the Client's HTTP `Origin` or page-origin input. CPA
+   retains auth files and refresh tokens.
 5. **Operations and analytics.** The Host projects health, release identity,
    route state, allowed request metrics, quota, and account health into
    sanitized Remote results and optional analytics events. Content and secret
    fields do not enter that path.
-6. **Playground probe.** The App sends a closed `probe.run` request containing
+6. **Playground probe.** The App sends a closed `gateway.probe` request containing
    a route/model selection, bounded prompt, and optional DSH attachment refs.
    The Host resolves the refs and calls `ctx.llm`; it never calls CPA directly.
    The bounded model result returns only to the requesting Client. Prompt,
@@ -257,29 +257,27 @@ quota. There is no generic Management `/api-call` Remote.
 
 The gateway App mounts generated contributions explicitly. Names below use the
 Client `namespace.method` spelling; the generated wire endpoint is
-`namespace/method`. Every payload is a closed typed object. There is no
-arbitrary Management API proxy.
+`namespace/method`. The Phase 3 artifact contains exactly these 11 strict
+endpoints. Every payload is a closed typed object. There is no arbitrary
+Management API proxy.
 
 | Remote method | Effect | Typed result or restriction |
 | --- | --- | --- |
-| `gateway.status` | Read | Mode, readiness, endpoint classification, selected release, ownership, collector availability, health, and sanitized error codes. |
-| `gateway.setup` | Write | Closed mode/endpoint/route/port and separate credential-ref setup; no arbitrary YAML, URL adoption, header, or Management path. |
-| `runtime.install` | Write | Allowlisted release id only; no arbitrary URL, archive, or executable. |
-| `runtime.start` / `runtime.stop` / `runtime.restart` | Write | Managed lifecycle actions with bounded, sanitized status. |
-| `model.discover` | Read/probe | Candidate models from the configured endpoint; no persistence and no automatic image capability. |
-| `model.apply` | Write | Closed provider/model metadata plus `expectedRevision`; persists with the exact `llm-pi-ai` settings mutation and fails loud on provider conflict. |
-| `oauth.deviceStart` | Write | Default/remote flow: operation id, provider label, verification URI, user code, expiry, and poll interval. |
-| `oauth.localCallbackStart` | Write | Disabled unless the Host proves a loopback listener and a trusted server-derived public origin; never authorized by Client Origin. |
-| `oauth.status` / `oauth.cancel` | Read/write | Sanitized operation state or cancellation; never code, token, auth-file path, or raw CPA response. |
-| `analytics.summary` | Read | Aggregate requests, token categories, latency, and estimated cost. |
-| `analytics.trend` | Read | Bounded time buckets for the same allowed metrics. |
-| `analytics.requests` | Read | Paginated sanitized request metadata: hashed identities, model/provider/route, tokens, latency, and estimated cost. |
-| `analytics.quota` | Read | Only the strict Host projection from the internal Codex adapter; typed quota windows or `unsupported`/`unavailable`, never a raw Management response. |
-| `analytics.accountHealth` | Read | Sanitized account health keyed only by hashed identity. |
-| `probe.run` | Write/probe | Bounded prompt and DSH attachment refs enter `ctx.llm`; result returns only to the requesting Client and never to operational Remotes, analytics, logs, the database, or persistence. |
+| `gateway.status` | Read | Sanitized runtime state, endpoint, credential configuration state, and `localCallbackAvailable: false`; no secret values. |
+| `gateway.runtimeInstall` | Write | Host-owned runtime install and sanitized runtime view; no client URL, archive, or executable. |
+| `gateway.runtimeStart` | Write | Managed/external runtime start and sanitized runtime view. |
+| `gateway.runtimeStop` | Write | Runtime stop and sanitized runtime view. |
+| `gateway.runtimeRestart` | Write | Runtime restart and sanitized runtime view. |
+| `gateway.models` | Read/probe | Typed `/v1/models` discovery; returns model identity only and defaults `imageInput` to false. |
+| `gateway.applyModels` | Write | Closed model metadata plus `expectedRevision`; writes only the official `llm-pi-ai` `cpa` route and preserves explicit image capability. |
+| `gateway.oauthDeviceStart` | Write | Bounded Codex device-login start; returns only operation id, verification URI, user code, expiry, and poll interval. |
+| `gateway.oauthDeviceStatus` | Read | Sanitized operation state by operation id; no token, auth path, or raw subprocess output. |
+| `gateway.oauthDeviceCancel` | Write | Idempotent cancellation of the bounded device operation; no secret-bearing result. |
+| `gateway.probe` | Write/probe | Bounded prompt, optional DSH attachment ref, and tools reach the official `ctx.llm` path; only a sanitized result returns to the requesting Client. |
 
-When analytics is absent, its five methods return a typed `unavailable` result
-rather than making external mode unusable.
+Analytics methods, local-callback methods, generic management calls, and
+account actions are not in this Phase 3 allowlist; they remain Phase 4/5 plan
+items.
 
 The one-way event allowlist contains only a Host-projected status change, such
 as `gateway/status-changed`; raw CPA events are not forwarded. Adding a Remote

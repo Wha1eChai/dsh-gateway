@@ -15,6 +15,18 @@
       "types": "./lib/types/client/index.d.ts",
       "default": "./lib/client.js"
     },
+    "./contracts": {
+      "types": "./lib/types/host/contracts.d.ts",
+      "default": "./lib/types/host/contracts.js"
+    },
+    "./typert": {
+      "types": "./lib/typert.host.d.ts",
+      "default": "./lib/typert.host.js"
+    },
+    "./remote": {
+      "types": "./lib/typert.remote-client.d.ts",
+      "default": "./lib/typert.remote-client.js"
+    },
     "./package.json": "./package.json"
   },
   "dsh": {
@@ -31,11 +43,19 @@
   "files": [
     "lib/index.js",
     "lib/client.js",
+    "lib/types/host/contracts.js",
     "lib/types/**/*.d.ts",
+    "lib/typert.host.js",
+    "lib/typert.host.d.ts",
+    "lib/typert.remote-client.js",
+    "lib/typert.remote-client.d.ts",
     "README.md",
     "LICENSE"
   ],
   "license": "MIT",
+  "dependencies": {
+    "zod": "4.4.3"
+  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/Wha1eChai/dsh-gateway.git",
@@ -57,6 +77,10 @@
     "@deepseek-ai/dsh-llm": "0.1.0-rc.6",
     "@deepseek-ai/dsh-llm-pi-ai": "0.1.0-rc.6",
     "@deepseek-ai/dsh-settings": "0.1.0-rc.6",
+    "@deepseek-ai/dsh-subprocess": "0.1.0-rc.6",
+    "@deepseek-ai/dsh-typert-protocol": "0.1.0-rc.6",
+    "@deepseek-ai/schemastery": "3.18.1",
+    "@wha1echai/dsh-gateway-runtime": "0.1.0",
     "@wha1echai/dsh-webpage": "0.1.0",
     "react": "18.3.1",
     "react-dom": "18.3.1"
@@ -65,12 +89,19 @@
     "@deepseek-ai/dsh-llm-pi-ai": {
       "optional": true
     },
+    "@wha1echai/dsh-gateway-runtime": {
+      "optional": true
+    },
     "@wha1echai/dsh-webpage": {
       "optional": true
     }
   },
+  "devDependencies": {
+    "@wha1echai/dsh-gateway-runtime": "workspace:*",
+    "@wha1echai/dsh-webpage": "https://github.com/Wha1eChai/dsh-webpage/releases/download/v0.1.0/wha1echai-dsh-webpage-0.1.0.tgz"
+  },
   "scripts": {
-    "build": "tsc -b tsconfig.json && tsdown",
-    "typecheck": "tsc -b tsconfig.json"
+    "build": "tsc -b tsconfig.json && tsdown --env.DSH_BUILD_FACE=host && tsc -b tsconfig.client.json && tsdown --env.DSH_BUILD_FACE=client",
+    "typecheck": "tsc -b tsconfig.json && tsdown --env.DSH_BUILD_FACE=host && tsc -b tsconfig.client.json"
   }
 }

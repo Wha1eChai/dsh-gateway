@@ -10,7 +10,7 @@ import {
   type CpaFetch,
   isAllowedCpaEndpoint,
   normalizeCpaBaseUrl,
-} from '../../index.js';
+} from './index.js';
 
 interface FakeCpaServer {
   readonly url: string;

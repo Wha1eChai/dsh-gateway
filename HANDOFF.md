@@ -8,7 +8,7 @@ native dsh-webpage App without modifying DeepSeek Harness.
 
 ## Current Phase
 
-Phases 0–2B are complete / GO. Provider bridge and OAuth Phase 3 are next.
+Phases 0–3 are complete / GO. Phase 4 Analytics is next.
 
 ## Completed
 
@@ -41,11 +41,26 @@ Phases 0–2B are complete / GO. Provider bridge and OAuth Phase 3 are next.
   management credentials separately for each operation.
 - A real Windows CPA v7.2.131 process passed health, models, auth-files, usage
   queue, termination, and port-release smoke through DSH subprocess-local.
+- The Phase 3 provider bridge normalizes CPA models, preserves explicit image
+  capability only, writes the official `cpa` settings route, and keeps the
+  existing `ctx.llm` path.
+- Bounded Codex device OAuth matches CLIProxyAPI v7.2.131 labels, derives
+  15-minute/5-second limits, scrubs private output, and keeps local callback
+  capability fail-closed without a trusted server-derived origin.
+- Generated Typert Host/Remote artifacts expose exactly 11 `gateway.*`
+  endpoints; the strict Host BFF and minimal `wha1echai.gateway` App
+  foundation mount and dispose cleanly.
+- Phase 3 evidence passed: build/typecheck/lint; focused provider/OAuth/CPA
+  tests 35/35 after the terminal-process fix; clean-checkout unit (11 fake-CPA
+  plus 55 Vitest); the built Loader
+  verifier (2 models, official `cpa`, text probe, 11 Remotes, unload); and
+  external offline `pack:verify` (Host lifecycle and client import).
 
 ## Pending
 
-1. Commit and push the accepted Phase 2B Gate.
-2. Implement model discovery/provider settings and Codex device OAuth.
+1. Implement Phase 4 Analytics: SQLite schema/migrations, redacted event
+   pipeline, destructive-queue completeness state, and typed read surfaces.
+2. Keep Phase 4–6 claims planned until their own evidence gates pass.
 
 ## Decisions / Constraints
 
@@ -78,19 +93,36 @@ Phases 0–2B are complete / GO. Provider bridge and OAuth Phase 3 are next.
 - CLIProxyAPI v7.2.131 six-platform asset names and SHA-256 values were checked
   against the upstream release `checksums.txt`.
 - All initial and follow-up Sol STOP findings were resolved; final result: GO.
+- Phase 3 evidence is recorded in `docs/evidence/phase-3.md`; no browser, HMR,
+  full `pnpm verify`, analytics, or full App acceptance was run or claimed.
 - Phase 1 frozen install, typecheck, lint, build, fake CPA tests, public API
   probe, six-platform supply-chain verification, and packed external-profile
   install passed locally on Windows x64, Node 24.11.1, pnpm 11.7.0, DSH rc.6.
 - Evidence is generated under `.staging/release/v0.1.0/` and
   `.staging/reports/phase1-packed-install.log`; these generated artifacts are
   intentionally ignored by Git.
-- Phase 2A and 2B evidence is recorded under `docs/evidence/`; Phases 3–6
-  remain planned and unverified.
+- Phase 2A and 2B evidence is recorded under `docs/evidence/`; Phases 4–6
+  remain planned and unverified. The narrow
+  `patches/dsh-typert-generator-0.1.0-rc.6.patch` is a known rc.6 build-only
+  compatibility limitation for out-of-tree generation, not a runtime fork.
+- A bounded Luna Phase 3 review found and verified the fix for terminal OAuth
+  markers leaving a child alive; all parsed terminal states now terminate and
+  join exactly once, and disposal awaits the same idempotent join.
 
 ## Next Step
 
-Commit and push Phase 2B, then begin the Phase 3 provider bridge and subprocess
-device OAuth without changing the proven official LLM transport path.
+Next phase: Phase 4 Analytics. After implementing that phase, run exactly:
+
+```text
+cd D:\coding\programs\dsh\dsh-gateway
+corepack pnpm@11.7.0 run test:analytics
+```
+
+Recovery state: the shared worktree contains the uncommitted Phase 3
+implementation and this documentation update. Preserve unrelated worktree
+changes; do not revert or commit them during recovery. Read
+`docs/plan/phase-0.1-gateway.md`, `docs/testing.md`, and this file before
+continuing.
 
 ## Risks / Rollback
 
@@ -98,6 +130,10 @@ device OAuth without changing the proven official LLM transport path.
   lock every public import against installed rc.6 declarations and exports.
 - OAuth and remote administration are security gates, not implied by a working
   model endpoint.
+- The trusted server-derived origin seam for local callback remains absent;
+  device flow is the supported path.
+- Browser/HMR/full aggregate evidence, analytics, and the complete App remain
+  future gates; do not infer them from the Phase 3 Loader or packed checks.
 - Phase 2A is recoverable from public commit `4e4485c`. Phase 2B tests clean up
   all runtime processes and private configs; generated release/cache data is under ignored
   `.staging/` and `packages/platform/*/vendor/` paths.

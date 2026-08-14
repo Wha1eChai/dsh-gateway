@@ -39,6 +39,8 @@ const REQUIRED_PACKAGES = Object.freeze({
   '@deepseek-ai/dsh-subprocess': RC6,
   '@deepseek-ai/dsh-subprocess-local': RC6,
   '@deepseek-ai/dsh-timeout': RC6,
+  '@deepseek-ai/dsh-typert-generator': RC6,
+  '@deepseek-ai/dsh-typert-protocol': RC6,
   '@deepseek-ai/schemastery': '3.18.1',
 })
 
@@ -214,7 +216,7 @@ async function verifyVersionsAndResolution() {
 }
 
 async function verifyHostSymbols() {
-  const [cordis, loaderModule, home, settings, credentials, subprocess, remotes, gateway] = await Promise.all([
+  const [cordis, loaderModule, home, settings, credentials, subprocess, remotes, gateway, typert] = await Promise.all([
     import('@deepseek-ai/cordis'),
     import('@deepseek-ai/cordis-plugin-loader'),
     import('@deepseek-ai/dsh-home-paths'),
@@ -223,6 +225,7 @@ async function verifyHostSymbols() {
     import('@deepseek-ai/dsh-subprocess'),
     import('@deepseek-ai/dsh-api-remotes'),
     import('@deepseek-ai/dsh-api-gateway'),
+    import('@deepseek-ai/dsh-typert-protocol'),
   ])
 
   assert(typeof cordis.Context === 'function', '@deepseek-ai/cordis does not export Context')
@@ -256,6 +259,8 @@ async function verifyHostSymbols() {
   assert(remotes.API_REMOTE_FORWARDED_EVENTS.includes('settings/document-updated'), 'Remote event allowlist lost settings/document-updated')
   assert(typeof gateway.TypertGatewayService === 'function', 'dsh-api-gateway.TypertGatewayService is unavailable')
   assert(typeof gateway.TypertGatewayService.prototype.invoke === 'function', 'TypertGatewayService.invoke is unavailable')
+  assert(typeof typert.TypertRemoteService === 'function', 'dsh-typert-protocol.TypertRemoteService is unavailable')
+  assert(typeof typert.Remote === 'function', 'dsh-typert-protocol.Remote is unavailable')
 
   const ctx = new cordis.Context()
   await ctx.plugin(loaderModule.Loader, { baseUrl: import.meta.url })

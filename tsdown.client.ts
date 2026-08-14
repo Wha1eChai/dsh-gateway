@@ -178,7 +178,7 @@ function clientConfig(id: string, entry: string): UserConfig {
 export function clientBundle(
   id: string,
   nodeEntries: readonly string[],
-  options: { readonly client?: boolean } = {},
+  options: { readonly client?: boolean; readonly splitFaces?: boolean } = {},
 ): BuildFaceConfig {
   return ({ env }) => {
     const face = buildFace(env?.DSH_BUILD_FACE)
@@ -190,8 +190,8 @@ export function clientBundle(
       id,
       face === undefined ? 'src/client/index.tsx' : 'lib/types/client/index.js',
     )
-    if (face === 'host') return [skipWorkspaceBuild]
-    if (face === 'client') return [node, client]
+    if (face === 'host') return options.splitFaces === true ? [node] : [skipWorkspaceBuild]
+    if (face === 'client') return options.splitFaces === true ? [client] : [node, client]
     return [node, client]
   }
 }

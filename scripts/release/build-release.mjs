@@ -21,6 +21,7 @@ const sourceDirectory = path.join(stagingRoot, 'sources')
 const cacheDirectory = path.join(root, '.staging', 'cache')
 const webpageTarball = path.join(cacheDirectory, webpage.filename)
 const localWebpageTarball = path.join(localDirectory, webpage.filename)
+const localZodTarball = path.join(localDirectory, 'zod-4.4.3.tgz')
 const pnpmCli = process.env.npm_execpath
 assert(pnpmCli, 'release build must be launched through pnpm')
 
@@ -68,6 +69,7 @@ async function ensureWebpageTarball() {
 function isExcluded(entryPath) {
   return entryPath.split(path.sep).some((part) =>
     ['node_modules', '.cache', '.staging'].includes(part))
+    || /[.]test[.](?:d[.]ts|js|js[.]map)$/u.test(entryPath)
 }
 
 async function stageSource(spec, flavor, dependencyFiles) {
@@ -89,7 +91,6 @@ async function stageSource(spec, flavor, dependencyFiles) {
     ? packageUrl(name)
     : portableFileSpecifier(dependencyFiles.get(name))
   if (spec.key === 'runtime') {
-    manifest.dependencies['@wha1echai/dsh-gateway'] = own('@wha1echai/dsh-gateway')
     for (const name of Object.keys(manifest.optionalDependencies)) {
       manifest.optionalDependencies[name] = own(name)
     }
@@ -105,6 +106,12 @@ async function stageSource(spec, flavor, dependencyFiles) {
       '@wha1echai/dsh-gateway-analytics',
     ]) manifest.dependencies[name] = own(name)
   }
+  if (spec.key === 'gateway' && flavor === 'local') {
+    manifest.dependencies.zod = portableFileSpecifier(localZodTarball)
+  }
+
+  // Build-only workspace and fixture dependencies never belong to release manifests.
+  delete manifest.devDependencies
 
   const serialized = JSON.stringify(manifest)
   assert(!serialized.includes('workspace:'), `${spec.name}: workspace dependency leaked into ${flavor} manifest`)
@@ -155,7 +162,12 @@ async function buildFlavor(flavor) {
   const outputDirectory = flavor === 'github' ? githubDirectory : localDirectory
   await fs.rm(outputDirectory, { recursive: true, force: true })
   await fs.mkdir(outputDirectory, { recursive: true })
-  if (flavor === 'local') await fs.cp(webpageTarball, localWebpageTarball)
+  if (flavor === 'local') {
+    await fs.cp(webpageTarball, localWebpageTarball)
+    const zodRoot = path.dirname(fileURLToPath(import.meta.resolve('zod/package.json')))
+    run(process.execPath, [pnpmCli, 'pack', '--pack-destination', localDirectory], { cwd: zodRoot, capture: true })
+    assert(await fs.stat(localZodTarball).then(() => true, () => false), 'local zod tarball was not created')
+  }
   const dependencyFiles = new Map()
   const results = []
   const order = flavor === 'local'

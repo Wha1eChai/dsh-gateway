@@ -5,6 +5,6 @@
     "outDir": "lib/types",
     "jsx": "react-jsx"
   },
-  "include": ["src"]
+  "include": ["src"],
+  "exclude": ["src/client", "src/**/*.test.ts"]
 }
-

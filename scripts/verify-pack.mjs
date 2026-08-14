@@ -71,7 +71,50 @@ function assertPackagePayload(spec, tarball) {
   const names = entries.map((entry) => entry.replace(/^package\//u, ''))
   let expected
   if (spec.key === 'gateway') {
-    expected = ['LICENSE', 'README.md', 'lib/client.js', 'lib/index.js', 'lib/types/client/index.d.ts', 'lib/types/index.d.ts', 'package.json']
+    expected = [
+      'LICENSE',
+      'README.md',
+      'lib/client.js',
+      'lib/index.js',
+      'lib/typert.host.d.ts',
+      'lib/typert.host.js',
+      'lib/typert.remote-client.d.ts',
+      'lib/typert.remote-client.js',
+      'lib/types/client/GatewayApp.d.ts',
+      'lib/types/client/index.d.ts',
+      'lib/types/client/locales.d.ts',
+      'lib/types/config.d.ts',
+      'lib/types/host/contracts.d.ts',
+      'lib/types/host/contracts.js',
+      'lib/types/host/cpa-client/errors.d.ts',
+      'lib/types/host/cpa-client/index.d.ts',
+      'lib/types/host/cpa-client/types.d.ts',
+      'lib/types/host/gateway-service.d.ts',
+      'lib/types/host/oauth/callback.d.ts',
+      'lib/types/host/oauth/errors.d.ts',
+      'lib/types/host/oauth/index.d.ts',
+      'lib/types/host/oauth/manager.d.ts',
+      'lib/types/host/oauth/parser.d.ts',
+      'lib/types/host/oauth/types.d.ts',
+      'lib/types/host/provider/errors.d.ts',
+      'lib/types/host/provider/index.d.ts',
+      'lib/types/host/provider/models.d.ts',
+      'lib/types/host/provider/profile.d.ts',
+      'lib/types/host/provider/settings.d.ts',
+      'lib/types/host/provider/types.d.ts',
+      'lib/types/index.d.ts',
+      'package.json',
+    ]
+  } else if (spec.key === 'runtime') {
+    expected = [
+      'LICENSE',
+      'README.md',
+      'lib/index.js',
+      'lib/typert.host.d.ts',
+      'lib/typert.host.js',
+      'lib/types/index.d.ts',
+      'package.json',
+    ]
   } else if (spec.key.startsWith('platform-')) {
     const binary = spec.key.startsWith('platform-win32-')
       ? 'vendor/cli-proxy-api.exe'
@@ -109,6 +152,10 @@ function inspectManifest(spec, flavor) {
   if (flavor === 'github') {
     for (const group of ['dependencies', 'optionalDependencies']) {
       for (const [name, value] of Object.entries(manifest[group] ?? {})) {
+        if (name === 'zod') {
+          assert(value === '4.4.3', `${spec.name}: unexpected zod version ${value}`)
+          continue
+        }
         assert(name.startsWith('@wha1echai/'), `${spec.name}: registry dependency is forbidden: ${name}@${value}`)
         const expected = name === webpage.name ? webpage.url : packageUrl(name)
         assert(value === expected, `${spec.name}: unexpected public URL for ${name}`)
@@ -129,10 +176,10 @@ function inspectManifest(spec, flavor) {
 function expectedDependencyNames(spec) {
   if (spec.key === 'runtime') {
     return [
-      '@wha1echai/dsh-gateway',
       ...packageSpecs.filter((entry) => entry.key.startsWith('platform-')).map((entry) => entry.name),
     ].sort()
   }
+  if (spec.key === 'gateway') return ['zod']
   if (spec.key === 'analytics') return ['@wha1echai/dsh-gateway']
   if (spec.key === 'pack') {
     return [
@@ -157,6 +204,7 @@ function normalizeDependencyRewrite(manifest) {
   for (const group of ['dependencies', 'optionalDependencies']) {
     for (const name of Object.keys(copy[group] ?? {})) {
       if (name.startsWith('@wha1echai/')) copy[group][name] = `<artifact:${name}>`
+      if (name === 'zod') copy[group][name] = '<artifact:zod>'
     }
   }
   return copy
@@ -206,9 +254,16 @@ async function loadPackedGatewayClient(profileRequire) {
     const id = '@wha1echai/dsh-gateway'
     const clientPath = profileRequire.resolve(`${id}/client`)
     const clientUrl = pathToFileURL(clientPath).href
+    const [React, ReactJsxRuntime] = await Promise.all([
+      import('react'),
+      import('react/jsx-runtime'),
+    ])
     const system = new moduleExports.ClientModuleSystem({
       modules: [{ id, url: clientUrl, rev: 'phase1-packed-profile' }],
-      staticModules: {},
+      staticModules: {
+        react: React,
+        'react/jsx-runtime': ReactJsxRuntime,
+      },
       loadBundle: async () => import(`${clientUrl}?phase1-packed-profile`),
     })
     const clientExports = await system.import(id)
@@ -238,7 +293,15 @@ async function verifyPackedHostLifecycle(profileDirectory) {
     ['gateway-runtime', '@wha1echai/dsh-gateway-runtime'],
     ['gateway-analytics', '@wha1echai/dsh-gateway-analytics'],
   ]
+  const coreRows = [
+    ['llm', '@deepseek-ai/dsh-llm'],
+    ['settings', '@deepseek-ai/dsh-settings-file', { path: path.join(profileDirectory, 'packed-settings.yaml'), watch: false }],
+    ['credentials', '@deepseek-ai/dsh-credentials-local', { path: path.join(profileDirectory, 'packed-credentials.yaml'), watch: false }],
+    ['subprocess', '@deepseek-ai/dsh-subprocess-local'],
+    ['llm-pi-ai', '@deepseek-ai/dsh-llm-pi-ai'],
+  ]
   try {
+    for (const [id, name, config] of coreRows) await ctx.loader.create({ id, name, ...(config === undefined ? {} : { config }) })
     for (const [id, name] of rows) await ctx.loader.create({ id, name })
     await ctx.loader.await()
     for (const [id, name] of rows) {
@@ -247,6 +310,7 @@ async function verifyPackedHostLifecycle(profileDirectory) {
       assert(entry.fiber !== undefined, `${id}: packed Host entry did not create a Cordis fiber`)
     }
     for (const [id] of [...rows].reverse()) await ctx.loader.remove(id)
+    for (const [id] of [...coreRows].reverse()) await ctx.loader.remove(id)
     await ctx.loader.await()
     assert([...ctx.loader.entries()].length === 0, 'packed Host Loader entries survived unload')
   } finally {

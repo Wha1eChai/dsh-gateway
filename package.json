@@ -12,7 +12,7 @@
     "typecheck": "corepack pnpm@11.7.0 -r --if-present --sort run typecheck",
     "lint": "node scripts/verify-repository.mjs lint",
     "test:unit": "corepack pnpm@11.7.0 --filter @dsh-gateway/fake-cpa test && vitest run --config vitest.config.ts",
-    "test:integration": "node scripts/verify-real-cpa.mjs",
+    "test:integration": "node scripts/verify-phase3.mjs && node scripts/verify-real-cpa.mjs",
     "test:analytics": "node scripts/phase-not-implemented.mjs test:analytics 4",
     "test:browser": "node scripts/phase-not-implemented.mjs test:browser 5",
     "test:hmr": "node scripts/phase-not-implemented.mjs test:hmr 2B",
@@ -20,7 +20,7 @@
     "test:supply-chain": "node scripts/verify-repository.mjs supply-chain",
     "test:clean-checkout": "node scripts/verify-clean-checkout.mjs",
     "test:llm-compat": "node scripts/verify-llm-compat.mjs",
-    "test:oauth": "node scripts/phase-not-implemented.mjs test:oauth 3",
+    "test:oauth": "vitest run packages/gateway/src/host/oauth/oauth.test.ts --config vitest.config.ts",
     "test:quota": "node scripts/phase-not-implemented.mjs test:quota 4",
     "test:security": "node scripts/verify-security.mjs",
     "pack:build": "node scripts/release/build-release.mjs",
@@ -56,6 +56,8 @@
     "@deepseek-ai/dsh-subprocess": "0.1.0-rc.6",
     "@deepseek-ai/dsh-subprocess-local": "0.1.0-rc.6",
     "@deepseek-ai/dsh-timeout": "0.1.0-rc.6",
+    "@deepseek-ai/dsh-typert-generator": "0.1.0-rc.6",
+    "@deepseek-ai/dsh-typert-protocol": "0.1.0-rc.6",
     "@deepseek-ai/schemastery": "3.18.1",
     "@types/node": "22.20.0",
     "@types/react": "18.3.1",
@@ -68,6 +70,7 @@
     "react-dom": "18.3.1",
     "tsdown": "0.22.2",
     "typescript": "6.0.3",
-    "vitest": "4.1.8"
+    "vitest": "4.1.8",
+    "zod": "4.4.3"
   }
 }

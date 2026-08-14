@@ -1,7 +1,9 @@
 # dsh-gateway security model
 
-Status: Phase 0 security baseline. This document defines the trust boundary
-for DSH `0.1.0-rc.6`, dsh-webpage `0.1.0`, and CLIProxyAPI `7.2.131`.
+Status: Phase 3 security baseline — Complete / GO. This document defines the
+trust boundary for DSH `0.1.0-rc.6`, dsh-webpage `0.1.0`, and CLIProxyAPI
+`7.2.131`. Phase 4 Analytics is next; browser/HMR/full release checks remain
+planned.
 
 ## Security claim and assumptions
 
@@ -30,7 +32,7 @@ administrator-equivalent and is not trusted as a browser-facing API.
 | CPA management credential | Separate `managementCredentialRef` in settings; value in DSH credentials | Host-side allowlisted Management client only; never falls back to the proxy credential |
 | Provider API keys, OAuth codes, refresh tokens | CPA and its private auth store | Never Client-visible, never URL/query/log/analytics data |
 | CPA config/auth files | Managed runtime owner below the private state root | Host/CPA process only; never served as files |
-| Playground prompt, DSH attachment refs, model output | Requesting Client and Host `probe.run` path | Prompt and attachment refs enter the typed request; the result returns only to that requesting Client. None may enter operational Remotes, analytics, logs, the database, or persistence |
+| Playground prompt, DSH attachment refs, model output | Requesting Client and Host `gateway.probe` path | Prompt and attachment refs enter the typed request; the result returns only to that requesting Client. None may enter operational Remotes, analytics, logs, the database, or persistence |
 | Release URL, digest, signature, version | Runtime installer | Sanitized release identity and verification state |
 
 No secret value appears in settings profiles, `PiAiProviderProfile` JSON sent
@@ -40,10 +42,11 @@ raw account identifiers and raw keys remain prohibited.
 
 ## Host and Client boundary
 
-The App has ID `wha1echai.gateway` and is mounted under
-`/apps/wha1echai.gateway`. Its exact routes are `/`, `/accounts`, `/models`,
-`/requests`, `/playground`, and `/settings`, contributed through dsh-webpage
-slots. The routes do not create a second HTTP server.
+The Phase 3 App foundation has ID `wha1echai.gateway` and is mounted through
+the dsh-webpage `webpage.app` slot at `/apps/wha1echai.gateway`. It registers
+the descriptor, locale, and slot composition, renders only sanitized runtime
+status, and does not create a second HTTP server. The full route/view set is
+Phase 5 work.
 
 The App imports only generated Typert Remote contributions. A Client assembly
 uses `TypertClientRemote` and `ctx.remote.$mount()`; it does not call CPA with
@@ -53,29 +56,24 @@ Gateway policy before any management request is made. Mounting a Typert
 Remote does not attest a trusted HTTP Origin, so no security decision may use
 the Client's origin claim.
 
-The v0.1 allowlist is deliberately closed. Client names use
-`namespace.method`; generated wire endpoints use `namespace/method`:
+The Phase 3 allowlist is deliberately closed and contains exactly 11 generated
+endpoints. Client names use `namespace.method`; generated wire endpoints use
+`namespace/method`:
 
-- `gateway.status` and `gateway.setup` cover sanitized state and closed setup
-  for mode, approved endpoint, route, persisted port, and separate credential
-  refs.
-- `runtime.install`, `runtime.start`, `runtime.stop`, and `runtime.restart`
-  cover the managed lifecycle. Install accepts only a release id from the
-  pinned manifest, never an arbitrary URL or archive.
-- `model.discover` returns non-persistent candidates; `model.apply` accepts a
-  closed model/profile selection with `expectedRevision`, performs no
-  automatic image inference, and fails loud on a CPA provider-name conflict.
-- `oauth.deviceStart`, `oauth.localCallbackStart`, `oauth.status`, and
-  `oauth.cancel` expose only the approved OAuth lifecycle. Results never carry
-  authorization codes, tokens, auth paths, or raw CPA responses.
-- `analytics.summary`, `analytics.trend`, `analytics.requests`,
-  `analytics.quota`, and `analytics.accountHealth` expose only the sanitized
-  metric vocabulary defined below.
-- `probe.run` accepts a bounded route/model selection, prompt, and DSH
-  attachment refs; the Host resolves the refs and invokes `ctx.llm`. It cannot
-  carry a CPA URL, header, credential, raw image bytes, or arbitrary request
-  object. Its result is returned only to the requesting Client, never to an
-  operational Remote or any observer.
+- `gateway.status`;
+- `gateway.runtimeInstall`, `gateway.runtimeStart`, `gateway.runtimeStop`,
+  and `gateway.runtimeRestart`;
+- `gateway.models` and `gateway.applyModels`;
+- `gateway.oauthDeviceStart`, `gateway.oauthDeviceStatus`, and
+  `gateway.oauthDeviceCancel`; and
+- `gateway.probe`, which accepts only a bounded model/prompt/tool payload and
+  optional DSH attachment ref before invoking `ctx.llm`.
+
+The runtime methods return sanitized state. Model discovery is identity-only;
+`applyModels` persists only the official `llm-pi-ai` `cpa` route with explicit
+image capability. OAuth results never carry authorization codes, tokens,
+auth paths, or raw CPA output. Analytics, local-callback, generic management,
+and account-action methods are not in this Phase 3 artifact and remain planned.
 
 All inputs and outputs are closed typed payloads. No Remote accepts arbitrary
 YAML, HTTP headers, Management paths, upstream request bodies, or a generic
@@ -192,7 +190,7 @@ or forwards a DSH credential to the external origin.
 External mode remains usable without the managed-runtime and analytics
 companions. Runtime methods and analytics methods return typed `unavailable`
 results when their owner is absent; status, setup, model apply/discovery,
-OAuth where configured, and `probe.run` remain independently usable.
+OAuth where configured, and `gateway.probe` remain independently usable.
 
 The Host uses bounded health probes and reports endpoint, authentication, and
 CPA-health failures separately. It does not silently fall back from a failed
@@ -210,11 +208,12 @@ authorization to pool, resell, or redistribute accounts.
 ### Device flow
 
 Device flow is the default and always-supported OAuth flow. The Host starts a
-CPA device operation with the Management credential. It returns only a
+bounded CPA Codex device-login subprocess with Host-owned binary/config/cwd and
+explicit argv, stdio, environment, and termination grace. It returns only a
 short-lived operation id, verification URI, user code, expiry, and polling
-interval. The Client asks `oauth.status` for a sanitized state. The Host
-rejects expired, cancelled, repeated, or foreign operation ids; CPA's access
-and refresh tokens never cross the Remote boundary.
+interval. The Client asks `gateway.oauthDeviceStatus` for a sanitized state.
+The Host rejects expired, cancelled, repeated, or foreign operation ids; CPA's
+access and refresh tokens never cross the Remote boundary.
 
 ### Local callback flow
 
@@ -253,7 +252,7 @@ input in the `PiAiProviderProfile` metadata and the Host accepts that
 declaration. No automatic image modality is inferred from a model name,
 listing field, or CPA response.
 
-When image input is explicitly enabled, `probe.run` accepts only DSH attachment
+When image input is explicitly enabled, `gateway.probe` accepts only DSH attachment
 refs. The Host resolves them through the DSH attachment seam and includes them
 in its `ctx.llm` call. The App never submits raw image bytes, base64, filesystem
 paths, or CPA requests, and it never calls CPA directly. The bounded model
@@ -310,7 +309,7 @@ image bytes or refs, model output, raw account/API keys, access or refresh
 tokens, OAuth codes, auth-file paths or contents, authorization headers, and
 raw Management API responses. Error messages use stable codes and
 operator-safe summaries rather than upstream bodies that may contain secrets
-or account details. `probe.run` content is explicitly excluded from analytics,
+or account details. `gateway.probe` content is explicitly excluded from analytics,
 operational Remotes, ordinary gateway logs, the database, and persistence.
 
 ## Rejected security shortcuts
