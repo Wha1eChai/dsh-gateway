@@ -1,8 +1,8 @@
 # dsh-gateway security model
 
-Status: Phase 3 security baseline — Complete / GO. This document defines the
+Status: Phase 4 security baseline — Complete / GO. This document defines the
 trust boundary for DSH `0.1.0-rc.6`, dsh-webpage `0.1.0`, and CLIProxyAPI
-`7.2.131`. Phase 4 Analytics is next; browser/HMR/full release checks remain
+`7.2.131`. Analytics Host/storage checks pass; browser/HMR/full release checks remain
 planned.
 
 ## Security claim and assumptions
@@ -311,6 +311,13 @@ raw Management API responses. Error messages use stable codes and
 operator-safe summaries rather than upstream bodies that may contain secrets
 or account details. `gateway.probe` content is explicitly excluded from analytics,
 operational Remotes, ordinary gateway logs, the database, and persistence.
+
+The worker receives only closed projection messages. Schema v1 contains no
+prompt, image, output-content, authorization, credential, token-value, or
+auth-file column. The installation HMAC key is provisioned through DSH
+credentials and is never placed in SQLite or a package artifact. Analytics
+startup, poll, maintenance, and worker failures return unavailable/empty
+observations and never alter `ctx.llm` delivery.
 
 ## Rejected security shortcuts
 

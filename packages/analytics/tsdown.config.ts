@@ -1,8 +1,13 @@
 import { clientBundle } from '../../tsdown.client.ts'
+import { typertPlugin } from '@deepseek-ai/dsh-typert-generator/tsdown'
 
-export default clientBundle(
+const bundle = clientBundle(
   '@wha1echai/dsh-gateway-analytics',
-  ['lib/types/index.js'],
+  ['lib/types/index.js', 'lib/types/storage/worker-entry.js'],
   { client: false },
 )
 
+export default (input: Parameters<typeof bundle>[0]) => bundle(input).map((config) => ({
+  ...config,
+  plugins: [...(config.plugins ?? []), typertPlugin({ mode: 'package', faces: ['host'] })],
+}))

@@ -115,6 +115,37 @@ function assertPackagePayload(spec, tarball) {
       'lib/types/index.d.ts',
       'package.json',
     ]
+  } else if (spec.key === 'analytics') {
+    const chunks = names.filter((name) => /^lib\/engine-[A-Za-z0-9_-]+[.]js$/u.test(name))
+    assert(chunks.length === 1, `${spec.name}: expected exactly one analytics engine chunk`)
+    expected = [
+      'LICENSE',
+      'README.md',
+      chunks[0],
+      'lib/index.js',
+      'lib/storage/worker-entry.js',
+      'lib/typert.host.d.ts',
+      'lib/typert.host.js',
+      'lib/types/config.d.ts',
+      'lib/types/contracts.d.ts',
+      'lib/types/index.d.ts',
+      'lib/types/pipeline/collector.d.ts',
+      'lib/types/pipeline/hashing.d.ts',
+      'lib/types/pipeline/index.d.ts',
+      'lib/types/pipeline/management-projectors.d.ts',
+      'lib/types/pipeline/pricing.d.ts',
+      'lib/types/pipeline/usage-projector.d.ts',
+      'lib/types/pricing-snapshot.d.ts',
+      'lib/types/service.d.ts',
+      'lib/types/storage/client.d.ts',
+      'lib/types/storage/engine.d.ts',
+      'lib/types/storage/index.d.ts',
+      'lib/types/storage/protocol.d.ts',
+      'lib/types/storage/schema.d.ts',
+      'lib/types/storage/validation.d.ts',
+      'lib/types/storage/worker-entry.d.ts',
+      'package.json',
+    ]
   } else if (spec.key.startsWith('platform-')) {
     const binary = spec.key.startsWith('platform-win32-')
       ? 'vendor/cli-proxy-api.exe'
@@ -291,7 +322,10 @@ async function verifyPackedHostLifecycle(profileDirectory) {
     ['webpage', '@wha1echai/dsh-webpage'],
     ['gateway', '@wha1echai/dsh-gateway'],
     ['gateway-runtime', '@wha1echai/dsh-gateway-runtime'],
-    ['gateway-analytics', '@wha1echai/dsh-gateway-analytics'],
+    ['gateway-analytics', '@wha1echai/dsh-gateway-analytics', {
+      stateDir: path.join(profileDirectory, 'packed-analytics'),
+      pollIntervalMs: 1_000,
+    }],
   ]
   const coreRows = [
     ['llm', '@deepseek-ai/dsh-llm'],
@@ -302,13 +336,18 @@ async function verifyPackedHostLifecycle(profileDirectory) {
   ]
   try {
     for (const [id, name, config] of coreRows) await ctx.loader.create({ id, name, ...(config === undefined ? {} : { config }) })
-    for (const [id, name] of rows) await ctx.loader.create({ id, name })
+    for (const [id, name, config] of rows) await ctx.loader.create({ id, name, ...(config === undefined ? {} : { config }) })
     await ctx.loader.await()
     for (const [id, name] of rows) {
       const entry = ctx.loader.resolve(id)
       assert(entry.options.name === name, `${id}: Loader name drift`)
       assert(entry.fiber !== undefined, `${id}: packed Host entry did not create a Cordis fiber`)
     }
+    const analytics = ctx.get('gatewayAnalytics')
+    assert(analytics !== undefined, 'packed Analytics service is unavailable')
+    const analyticsStatus = await analytics.status()
+    assert(analyticsStatus.availability !== 'disabled', 'packed Analytics worker did not start')
+    await fs.stat(path.join(profileDirectory, 'packed-analytics', 'usage.sqlite3'))
     for (const [id] of [...rows].reverse()) await ctx.loader.remove(id)
     for (const [id] of [...coreRows].reverse()) await ctx.loader.remove(id)
     await ctx.loader.await()

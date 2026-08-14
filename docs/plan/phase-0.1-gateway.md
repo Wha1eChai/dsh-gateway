@@ -4,8 +4,8 @@
 
 | Item | Decision |
 | --- | --- |
-| Plan status | **Phases 0–3 — Complete / GO**; Phase 4 Analytics is next. |
-| Code status | The foundation, official `llm-pi-ai` compatibility, runtime lifecycle, typed CPA client, provider bridge, bounded Codex device OAuth, generated Typert Host/Remote artifacts, strict Host BFF, and minimal App foundation are implemented. |
+| Plan status | **Phases 0–4 — Complete / GO**; Phase 5 Gateway App is in progress. |
+| Code status | The foundation, official `llm-pi-ai` compatibility, runtime lifecycle, provider/OAuth bridge, and optional failure-isolated SQLite analytics companion are implemented. |
 | Release shape | Public, out-of-tree DSH Bundle/Pack preview composed from ordinary DSH Plugins; no DeepSeek Harness source changes and no npm publication in this preview. |
 | Pinned compatibility | DeepSeek Harness `0.1.0-rc.6`; dsh-webpage `0.1.0`; CLIProxyAPI `7.2.131`; CPA-Manager-Plus `1.12.0-rc.2` as a reference only. |
 | Toolchain | Node `^22.19.0 || >=24.0.0`; pnpm `11.7.0`; Windows 11 is the primary release verification environment. Managed-platform policy is Linux `no-plugin` only; Windows/macOS use standard upstream executable names with dynamic plugins disabled by configuration. |
@@ -164,8 +164,8 @@ coerced into zero or a fabricated quota.
 | 2A. `llm-pi-ai` compatibility hard gate | **Complete / GO** | Phase 1 GO | Real built official `@deepseek-ai/dsh-llm-pi-ai` public-contract probe against fake/external CPA: text, tools, stream, explicit image opt-in, and abort | **GO** only when all five behaviors pass on the same real path. **STOP before Phase 2B and all runtime/client investment** on any failure; no adapter fallback. |
 | 2B. Runtime and client | **Complete / GO** | Phase 2A GO | Managed/external runtime state machine; process supervisor; readiness/health; settings and three-path credential handoff; DSH client installation; real `ctx.llm` request path | **GO** when all state transitions, disposal/restart behavior, and real rc.6 Loader/client lifecycle pass. **STOP** on shell execution, shell-interpreted argv, implicit process fields, leaked secret, duplicate lifecycle, or private API. |
 | 3. Provider and OAuth | **Complete / GO** | Phase 2B GO | Model discovery and explicit capability registry; official `cpa` settings bridge; bounded Codex device login; fail-closed local callback capability; strict Host BFF; generated Typert Host/Remote artifacts; minimal `wha1echai.gateway` App foundation | **GO**: provider/model discovery, explicit image capability, bounded device flow, fail-closed callback capability, official `ctx.llm` probe, generated 11-endpoint allowlist, Loader unload, and packed client import passed. Browser, HMR, full App routes, analytics, and full aggregate remain later-phase work. |
-| 4. Analytics | Planned | Phase 3 GO | Optional SQLite plugin; migrations/schema; request, token, cost, latency, account-health, and quota records; redaction and retention policy; query/read remotes; failure isolation | **GO** when migration, concurrent writes, aggregation, restart, redaction, and disabled-analytics behavior pass without changing model delivery. **STOP** if prompts, images, model output, credentials, auth files, or management keys can be persisted or if analytics failure breaks `ctx.llm`. |
-| 5. dsh-webpage App | Planned | Phases 2–4 GO; provider/OAuth and analytics contracts | Native App package; launcher/settings/runtime/provider/OAuth/analytics views; full-path Playground using `ctx.llm`; unavailable/degraded states; generated Typert Remotes mounted by `ctx.remote.$mount()`; no browser proxy | **GO** when the App loads through the existing dsh-webpage slot/route contract, exercises the complete stream/tool/image path, preserves conversation state, and every action is an allowlisted generated remote. **STOP** on a second transport, secret-bearing client state, route takeover, or App behavior that cannot be covered by the remotes contract. |
+| 4. Analytics | **Complete / GO** | Phase 3 GO | Optional SQLite plugin; checksummed migration; worker-owned WAL store and collector lease; redacted usage, token, latency, health and quota projections; rollups/retention; typed Host read surface; failure isolation | **GO**: 28 analytics tests, 23 quota/client tests, built-worker verification, exact tarball payload, repository-external packed worker, clean checkout, and full current-phase aggregate passed. Unknown pricing remains explicitly unpriced; analytics failure is off the model path. |
+| 5. dsh-webpage App | **In Progress** | Phases 2–4 GO; provider/OAuth and analytics contracts | Native App package; launcher/settings/runtime/provider/OAuth/analytics views; full-path Playground using `ctx.llm`; unavailable/degraded states; generated Typert Remotes mounted by `ctx.remote.$mount()`; no browser proxy | **GO** when the App loads through the existing dsh-webpage slot/route contract, exercises the complete stream/tool/image path, preserves conversation state, and every action is an allowlisted generated remote. **STOP** on a second transport, secret-bearing client state, route takeover, or App behavior that cannot be covered by the remotes contract. |
 | 6. Packed public preview | Planned | Phases 1–5 GO | Exact tarballs/Pack; clean repository-external profile; real rc.6 Loader/CLI composition; browser acceptance; client HMR; security audit; final provenance, docs, and aggregate report | **GO** only when every required lane is green, HMR has no duplicate/stale lifecycle, browser/security assertions pass, and packed installation resolves outside this repository. **STOP** on any skipped lane, private API, install-path leak, secret exposure, non-reproducible artifact, or unresolved review finding. |
 
 Phase status is not evidence status. A phase cannot become `Complete` from code
@@ -271,24 +271,24 @@ Commands: pnpm build; pnpm typecheck; pnpm lint; pnpm exec vitest run packages/g
 Observed result: build/typecheck/lint passed; focused provider/OAuth/CPA tests passed 35/35 after the terminal-process regression fix; the clean-checkout unit aggregate passed with 11 fake-CPA tests and 55 Vitest tests; the Phase 3 Loader verifier passed with 2 models, official cpa registration, a text probe, 11 generated Remote descriptors, and clean unload; packed verification passed with an external offline install, Host lifecycle, and client bundle import
 Open risks/decisions: local callback remains fail-closed without a trusted server-derived origin; browser/HMR/full aggregate and the full App remain later-phase work; rc.6 Typert generator needs the narrow build-only patch recorded in docs/evidence/phase-3.md, which is not a runtime fork
 Gate decision: GO; Phase 4 Analytics is the next phase
-Commit/push: not performed in this documentation pass
+Commit/push: `7359eb3` (`feat: add gateway provider and OAuth bridge`) pushed to public `origin/main`
 ```
 
 ```text
 Phase: 4
-Status: Planned / Unverified
-Implementation refs: <SQLite plugin, migrations, event writer, aggregates, analytics remotes>
-Evidence refs: <migration report, concurrency/restart report, redaction and failure-isolation artifacts>
-Commands: pnpm test:unit; pnpm test:integration; pnpm test:analytics; pnpm test:security; pnpm typecheck; pnpm lint
-Observed result: <PLANNED / UNVERIFIED>
-Open risks/decisions: <none recorded yet>
-Gate decision: STOP until analytics is optional, redacted, and failure-isolated
-Commit/push: <record hash and remote only after GO>
+Status: Complete / GO
+Implementation refs: packages/analytics/src; packages/gateway/src/host/gateway-service.ts; packages/gateway/src/host/cpa-client; scripts/verify-analytics.mjs; scripts/clean-analytics-build.mjs
+Evidence refs: docs/evidence/phase-4.md; built worker PASS record; external packed-install report
+Commands: pnpm test:analytics; pnpm test:quota; pnpm typecheck; pnpm lint; pnpm pack:verify; pnpm test:security
+Observed result: 28 analytics and 23 quota/client tests passed; the fixed Host-only Codex quota selector/projector, fractional percent persistence, single-owner lease, failure latch, and typed unavailable state passed; the built and packed workers created schema v1 and closed; the 161-file clean checkout and full current-phase aggregate passed
+Open risks/decisions: schema v1 is still an unreleased preview, so the pre-gate local checksum is intentionally not migrated; the immutable pricing snapshot is empty until a trusted versioned source is adopted; the destructive CPA queue remains explicitly at-most-once; the Browser receives no analytics Remote until Phase 5
+Gate decision: GO on 2026-08-14
+Commit/push: this record is included in the Phase 4 gate commit pushed to public `origin/main`
 ```
 
 ```text
 Phase: 5
-Status: Planned / Unverified
+Status: In Progress / Unverified
 Implementation refs: <dsh-webpage App, Playground, views, generated Typert Remote mounts>
 Evidence refs: <real Loader/App log, browser artifacts, UI snapshot, remote allowlist report>
 Commands: pnpm test:unit; pnpm test:integration; pnpm test:browser; pnpm test:security; pnpm typecheck; pnpm lint; pnpm build

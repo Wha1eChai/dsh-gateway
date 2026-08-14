@@ -10,7 +10,7 @@ import type { DeviceLoginLaunchTarget, GatewayRuntime, RuntimeSnapshot } from '@
 
 import type { Config } from '../config.js'
 import { createCpaClientForOperation } from './cpa-client/index.js'
-import type { CpaCredentialRefs } from './cpa-client/types.js'
+import type { CpaAccountStatus, CpaCredentialRefs, CpaQuota, CpaUsageRecord } from './cpa-client/types.js'
 import type {
   GatewayApplyModelsRequest,
   GatewayApplyModelsResult,
@@ -46,6 +46,15 @@ const MAX_TOOL_COUNT = 32
 const MAX_TOOL_DESCRIPTION_CHARS = 4_096
 const TOOL_NAME = /^[A-Za-z_][A-Za-z0-9_-]{0,63}$/
 const TERMINAL_OAUTH_STATES = new Set(['success', 'denied', 'expired', 'cancelled', 'timed_out', 'failed'])
+
+/** Host-only, content-free source consumed by the optional analytics plugin. */
+export interface GatewayAnalyticsSource {
+  readonly mode: 'managed' | 'external'
+  readonly targetIdentity: string
+  dequeueUsage(signal?: AbortSignal): Promise<readonly CpaUsageRecord[]>
+  accountHealth(signal?: AbortSignal): Promise<readonly CpaAccountStatus[]>
+  quota(signal?: AbortSignal): Promise<readonly CpaQuota[]>
+}
 
 export class GatewayHostError extends Error {
   readonly code: string
@@ -212,6 +221,44 @@ export class GatewayHostService extends TypertRemoteService {
       blocks,
       finish: finish.kind as 'stop' | 'tool-calls' | 'max-tokens',
       ...(assembler.usage === undefined ? {} : { usage: { ...assembler.usage } }),
+    }
+  }
+
+  /** Build a narrow Host-only analytics source; credentials remain per-operation. */
+  analyticsSource(): GatewayAnalyticsSource {
+    const snapshot = this.runtime()?.snapshot()
+    return {
+      mode: snapshot?.mode ?? 'external',
+      targetIdentity: this.endpoint(),
+      dequeueUsage: async (signal) => {
+        const client = await createCpaClientForOperation(
+          'dequeueUsage',
+          this.ctx.credentials,
+          this.credentialRefs(),
+          this.clientOptions(),
+        )
+        return client.dequeueUsage({ ...(signal === undefined ? {} : { signal }) })
+      },
+      accountHealth: async (signal) => {
+        const client = await createCpaClientForOperation(
+          'authStatus',
+          this.ctx.credentials,
+          this.credentialRefs(),
+          this.clientOptions(),
+        )
+        return client.accountStatus({ ...(signal === undefined ? {} : { signal }) })
+      },
+      quota: async (signal) => {
+        const client = await createCpaClientForOperation(
+          'quota',
+          this.ctx.credentials,
+          this.credentialRefs(),
+          this.clientOptions(),
+        )
+        const options = signal === undefined ? {} : { signal }
+        const selections = await client.quotaSelections(options)
+        return Promise.all(selections.map((selection) => client.quota({ authIndex: selection.authIndex }, options)))
+      },
     }
   }
 

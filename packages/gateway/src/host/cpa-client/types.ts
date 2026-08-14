@@ -99,6 +99,12 @@ export interface CpaQuota {
   windows: CpaQuotaWindow[];
 }
 
+/** Host-only selector used to call the fixed quota endpoint; never crosses a Remote. */
+export interface CpaQuotaSelection {
+  authIndex: string;
+  providerId: string;
+}
+
 export interface CpaTokenCounts {
   inputTokens?: number;
   outputTokens?: number;

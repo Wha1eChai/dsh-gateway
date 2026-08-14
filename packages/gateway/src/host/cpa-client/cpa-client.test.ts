@@ -306,6 +306,10 @@ describe('typed CPA client', () => {
       reasonCode: 'ready',
       observedAtMs: Date.parse('2026-08-14T00:00:00.000Z'),
     }]);
+    await expect(client.quotaSelections()).resolves.toEqual([{
+      authIndex: 'internal-only',
+      providerId: 'openai-codex',
+    }]);
     await expect(client.dequeueUsage()).resolves.toEqual([{
       eventId: 'safe-event',
       provider: 'openai',

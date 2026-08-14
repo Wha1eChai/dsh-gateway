@@ -2,7 +2,7 @@
 
 Status: Phase 3 architecture baseline — Complete / GO. Compatibility target:
 DeepSeek Harness `0.1.0-rc.6`, `@wha1echai/dsh-webpage` `0.1.0`, and
-CLIProxyAPI `7.2.131`. Phase 4 Analytics is next.
+CLIProxyAPI `7.2.131`. Phases 0–4 are implemented; the native App is next.
 
 ## Decision summary
 
@@ -90,11 +90,13 @@ before staging it.
 
 ### Analytics companion
 
-Analytics consumes the separately defined gateway event model. It does not
+Analytics consumes the Host-only sanitized CPA usage/health/quota source. It does not
 own CPA configuration, credentials, OAuth files, or the model route. Exactly
 one collector owner may be active for one resolved DSH home. Sanitized outputs
 may include token-category counts, hashed account and API-key identities,
 latency, estimated cost, model, provider, route, quota, and account health.
+The v0.1 implementation does not add a second request interceptor: request
+identity and timing originate in CPA's bounded usage projection.
 They never include prompts, images, model output, raw keys or tokens, auth
 files, or raw Management API responses.
 

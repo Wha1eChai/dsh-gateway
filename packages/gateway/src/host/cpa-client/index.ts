@@ -14,6 +14,7 @@ import type {
   CpaModels,
   CpaProbe,
   CpaQuota,
+  CpaQuotaSelection,
   CpaQuotaWindow,
   CpaRequestOptions,
   CpaUsageRecord,
@@ -38,6 +39,7 @@ export type {
   CpaModels,
   CpaProbe,
   CpaQuota,
+  CpaQuotaSelection,
   CpaQuotaWindow,
   CpaRequestOptions,
   CpaTokenCounts,
@@ -245,6 +247,13 @@ export class CpaClient {
 
   async authStatus(options: CpaRequestOptions = {}): Promise<CpaAccountStatus[]> {
     return this.accountStatus(options);
+  }
+
+  /** Selects only Codex auth entries for the fixed Host-only quota call. */
+  async quotaSelections(options: CpaRequestOptions = {}): Promise<CpaQuotaSelection[]> {
+    this.requireCredential('management');
+    const response = await this.fetchJson('authStatus', { acceptedStatuses: [200], signal: options.signal });
+    return parseQuotaSelections(response.json, 'authStatus');
   }
 
   async quota(
@@ -539,6 +548,20 @@ function parseAccountStatus(value: unknown, path: string): CpaAccountStatus[] {
       result.observedAtMs = observedAtMs;
     }
     return result;
+  });
+}
+
+function parseQuotaSelections(value: unknown, path: string): CpaQuotaSelection[] {
+  const record = requireRecord(value, path);
+  const files = requireArray(record.files, `${path}.files`);
+  return files.flatMap((rawFile, index) => {
+    const file = requireObject(rawFile, `${path}.files[${index}]`);
+    const providerId = requireString(file.provider ?? file.provider_id, `${path}.files[${index}].provider`, 128);
+    if (providerId !== 'openai-codex') return [];
+    return [{
+      authIndex: requireString(file.auth_index, `${path}.files[${index}].auth_index`, 256),
+      providerId,
+    }];
   });
 }
 

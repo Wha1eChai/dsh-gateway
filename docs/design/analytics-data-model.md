@@ -555,7 +555,25 @@ the artifact containing that material. That attribution applies only to the
 copied CPAMP material; it does not cover CLIProxyAPI, provider account policy,
 DSH code, or unrelated dependencies.
 
-## Phase 0 verification checklist
+## Phase 4 implementation status
+
+Schema v1, the single worker connection, WAL, checksummed migration, receipts,
+dead letters, hourly/daily rollups, latency buckets, 30-day/one-year retention,
+health/quota snapshots, bounded reads, and failure isolation are implemented.
+The worker atomically acquires one target lease and releases only its own
+generation; a competing owner fails before queue consumption. A post-pop
+write failure latches collection unavailable until plugin restart.
+The Host source polls the destructive queue only in managed mode or after an
+explicit external opt-in. Codex quota selection remains Host-only and uses the
+fixed CPA wrapper; no auth index or raw response crosses into analytics.
+
+The bundled pricing snapshot is intentionally empty in v0.1 until a trusted,
+versioned source with provenance is selected. This is valid unknown-pricing
+behavior: token counts remain available and cost remains `null`/unpriced.
+There is currently no separate DSH request-completion interception seam; the
+CPA usage queue supplies request identity, token and latency facts.
+
+## Phase 4 verification checklist
 
 - run gateway traffic with analytics absent and verify identical delivery;
 - prove one worker owns `usage.sqlite3` with WAL and one collector lease;

@@ -8,7 +8,7 @@ native dsh-webpage App without modifying DeepSeek Harness.
 
 ## Current Phase
 
-Phases 0–3 are complete / GO. Phase 4 Analytics is next.
+Phases 0–4 are complete / GO. Phase 5 Gateway App is in progress.
 
 ## Completed
 
@@ -55,12 +55,26 @@ Phases 0–3 are complete / GO. Phase 4 Analytics is next.
   plus 55 Vitest); the built Loader
   verifier (2 models, official `cpa`, text probe, 11 Remotes, unload); and
   external offline `pack:verify` (Host lifecycle and client import).
+- Phase 3 commit `7359eb3` is pushed to public `origin/main`.
+- The optional analytics companion now owns a single `node:sqlite` worker,
+  WAL schema v1, receipt dedupe/dead letters, rollups, retention, bounded reads,
+  and redacted usage, account-health, and quota projections.
+- Managed mode consumes CPA's destructive HTTP usage queue; external mode
+  requires explicit opt-in and reports possible competition/incompleteness.
+- The fixed Host-only Codex quota path selects an internal CPA auth index and
+  stores only projected quota windows; no generic Management API reaches Web.
+- Phase 4 evidence passed 28 analytics tests, 23 focused quota/client tests,
+  83 aggregate Vitest tests, the actual built and packed workers, exact tarball
+  inspection, real CPA smoke, and a clean 161-file checkout.
+- A focused Luna gate review found four P1 defects; all are covered by
+  regressions: destructive dequeue latches after a write failure, collector
+  lease ownership is atomic and generation-bound, fractional Codex quota is
+  persisted, and source/worker faults become typed unavailable state.
 
 ## Pending
 
-1. Implement Phase 4 Analytics: SQLite schema/migrations, redacted event
-   pipeline, destructive-queue completeness state, and typed read surfaces.
-2. Keep Phase 4–6 claims planned until their own evidence gates pass.
+1. Implement Phase 5's native Gateway App views and analytics read Remotes.
+2. Keep browser/HMR and public-preview claims unverified until Phase 5/6 gates.
 
 ## Decisions / Constraints
 
@@ -93,16 +107,16 @@ Phases 0–3 are complete / GO. Phase 4 Analytics is next.
 - CLIProxyAPI v7.2.131 six-platform asset names and SHA-256 values were checked
   against the upstream release `checksums.txt`.
 - All initial and follow-up Sol STOP findings were resolved; final result: GO.
-- Phase 3 evidence is recorded in `docs/evidence/phase-3.md`; no browser, HMR,
-  full `pnpm verify`, analytics, or full App acceptance was run or claimed.
+- Phase 4 evidence is recorded in `docs/evidence/phase-4.md`; no browser, HMR,
+  or full App acceptance is claimed yet.
 - Phase 1 frozen install, typecheck, lint, build, fake CPA tests, public API
   probe, six-platform supply-chain verification, and packed external-profile
   install passed locally on Windows x64, Node 24.11.1, pnpm 11.7.0, DSH rc.6.
 - Evidence is generated under `.staging/release/v0.1.0/` and
   `.staging/reports/phase1-packed-install.log`; these generated artifacts are
   intentionally ignored by Git.
-- Phase 2A and 2B evidence is recorded under `docs/evidence/`; Phases 4–6
-  remain planned and unverified. The narrow
+- Phase 2A through Phase 4 evidence is recorded under `docs/evidence/`; Phases
+  5–6 remain unverified. The narrow
   `patches/dsh-typert-generator-0.1.0-rc.6.patch` is a known rc.6 build-only
   compatibility limitation for out-of-tree generation, not a runtime fork.
 - A bounded Luna Phase 3 review found and verified the fix for terminal OAuth
@@ -111,16 +125,15 @@ Phases 0–3 are complete / GO. Phase 4 Analytics is next.
 
 ## Next Step
 
-Next phase: Phase 4 Analytics. After implementing that phase, run exactly:
+Next phase: Phase 5 Gateway App. Start from the existing built client and run:
 
 ```text
 cd D:\coding\programs\dsh\dsh-gateway
-corepack pnpm@11.7.0 run test:analytics
+corepack pnpm@11.7.0 run test:browser
 ```
 
-Recovery state: the shared worktree contains the uncommitted Phase 3
-implementation and this documentation update. Preserve unrelated worktree
-changes; do not revert or commit them during recovery. Read
+Recovery state: the shared worktree contains the Phase 4 gate implementation
+until its commit is pushed. Preserve unrelated worktree changes. Read
 `docs/plan/phase-0.1-gateway.md`, `docs/testing.md`, and this file before
 continuing.
 
@@ -132,8 +145,10 @@ continuing.
   model endpoint.
 - The trusted server-derived origin seam for local callback remains absent;
   device flow is the supported path.
-- Browser/HMR/full aggregate evidence, analytics, and the complete App remain
-  future gates; do not infer them from the Phase 3 Loader or packed checks.
+- Browser/HMR evidence and the complete App remain future gates; the current
+  aggregate is green through Phase 4 only.
+- Pricing is intentionally unpriced until a trusted immutable snapshot with
+  provenance is selected; token metrics remain valid.
 - Phase 2A is recoverable from public commit `4e4485c`. Phase 2B tests clean up
   all runtime processes and private configs; generated release/cache data is under ignored
   `.staging/` and `packages/platform/*/vendor/` paths.

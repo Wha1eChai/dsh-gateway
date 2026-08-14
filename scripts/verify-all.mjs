@@ -24,6 +24,8 @@ for (const script of [
   'typecheck',
   'lint',
   'test:unit',
+  'test:analytics',
+  'test:quota',
   'test:public-api',
   'test:llm-compat',
   'test:supply-chain',
