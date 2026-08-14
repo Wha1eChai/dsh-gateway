@@ -1,8 +1,10 @@
 # dsh-gateway architecture
 
-Status: Phase 3 architecture baseline — Complete / GO. Compatibility target:
+Status: Phase 5 architecture baseline — implemented; acceptance is being
+completed. Compatibility target:
 DeepSeek Harness `0.1.0-rc.6`, `@wha1echai/dsh-webpage` `0.1.0`, and
-CLIProxyAPI `7.2.131`. Phases 0–4 are implemented; the native App is next.
+CLIProxyAPI `7.2.131`. Phases 0–4 are complete and the native App is running
+in the real DSH Web profile; Phase 6 automation remains the release gate.
 
 ## Decision summary
 
@@ -42,7 +44,7 @@ part of this design.
 | Child process | `@deepseek-ai/dsh-subprocess`, `SubprocessSpawnSpec`, `SubprocessRuntime`, `ctx.subprocess.spawn()` | The spawn spec is `argv`/`cwd`/`stdio`/`graceMs` plus a scrubbed explicit `env`. There is no subprocess `shell` field. The complete `argv` is passed directly and is never shell interpreted. The child receives only explicit managed bootstrap environment entries. |
 | User data root | `@deepseek-ai/dsh-home-paths`, `resolveDshHome()` | One gateway Host service resolves `resolveDshHome()/dsh-gateway/v1` once and passes derived paths to companion services. No plugin-private or current-working-directory data root is allowed. |
 | Host Remotes | `@deepseek-ai/dsh-typert-protocol`, `TypertRemoteContribution`, `TypertClientRemote`, `@Remote`, `@RemoteScope` | Host methods are generated Typert contributions and are mounted explicitly by the Client with `ctx.remote.$mount()`. The Client never discovers or calls CPA endpoints directly. |
-| Webpage | `@wha1echai/dsh-webpage`, `ctx.pages`, `webpage.app` | The Phase 3 foundation registers App ID `wha1echai.gateway` through the `webpage.app` slot at `/apps/wha1echai.gateway`, mounts the generated Remote, and renders sanitized status. The full route/view set (`/`, `/accounts`, `/models`, `/requests`, `/playground`, and `/settings`) remains a Phase 5 plan; the Client is not the provider, a server, or an independently installable unit. |
+| Webpage | `@wha1echai/dsh-webpage`, `ctx.pages`, `webpage.app` | The Client registers App ID `wha1echai.gateway` through the `webpage.app` slot at `/apps/wha1echai.gateway`, mounts the generated Remote, and provides `/`, `/accounts`, `/models`, `/requests`, `/playground`, and `/settings`. The Client is not the provider, a server, or an independently installable unit. |
 
 The target release must verify these names against the installed rc.6
 declarations and exports. A local checkout from another DSH revision is
@@ -102,19 +104,21 @@ files, or raw Management API responses.
 
 ### Gateway App contribution
 
-The Phase 3 App foundation is the Client contribution with exact ID
+The Gateway App is the Client contribution with exact ID
 `wha1echai.gateway`, mounted through the dsh-webpage `webpage.app` slot at
 `/apps/wha1echai.gateway`. It registers the descriptor, locale, and slot
 composition, mounts the generated Remote with `ctx.remote.$mount()`, and
-renders loading, unavailable, and sanitized runtime status. It does not import
-a CPA SDK, call `fetch()` to a CPA management or data endpoint, receive a
-management key, or act as a second administration server.
+renders the Dashboard, Accounts, Models, Requests, Playground, and Settings
+views with explicit loading, unavailable, degraded, and failure states. It
+does not import a CPA SDK, call `fetch()` to a CPA management or data endpoint,
+receive a management key, or act as a second administration server.
 
-The full route/view set and Playground remain Phase 5 work. When that work is
-implemented, a bounded prompt and optional DSH attachment refs will cross only
-the typed `gateway.probe` flow; the Host will resolve refs and invoke
-`ctx.llm`. Prompt, attachment refs, and model output remain excluded from
-operational Remotes, analytics, logs, the database, and other persistence.
+A bounded prompt, optional tool declaration, and optional DSH attachment ref
+cross only the typed `gateway.probe` flow; image bytes first enter the narrow
+`gateway.uploadImage` method and are immediately converted to an opaque DSH
+attachment ref. The Host resolves the ref and invokes `ctx.llm`. Prompt,
+attachment content, and model output remain excluded from operational Remotes,
+analytics, logs, the database, and other persistence.
 
 ### Gateway Pack
 

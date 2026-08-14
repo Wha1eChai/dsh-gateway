@@ -20,7 +20,7 @@ native App through [dsh-webpage](https://github.com/Wha1eChai/dsh-webpage).
 
 The browser never receives proxy keys, management keys, OAuth tokens, auth
 files, or raw Management API responses. Playground content traverses only the
-typed `probe.run` request/response path for the requesting client; prompts,
+typed `gateway.probe` request/response path for the requesting client; prompts,
 attachment content, and model output are never written to operational remotes,
 analytics, logs, or persistent storage. Managed mode binds loopback only. The
 first release inherits DSH `0.1.0-rc.6`'s trusted single-user Web boundary and
@@ -66,19 +66,18 @@ Models, Requests, Playground, and Settings subroutes.
 - [Phase 1 evidence](./docs/evidence/phase-1.md)
 - [Phase 2A evidence](./docs/evidence/phase-2a.md)
 - [Phase 2B evidence](./docs/evidence/phase-2b.md)
+- [Phase 3 evidence](./docs/evidence/phase-3.md)
+- [Phase 4 evidence](./docs/evidence/phase-4.md)
 - [Current handoff](./HANDOFF.md)
 
 ## Current status
 
-Phase 0 and Phase 1 are complete and independently reviewed. The workspace,
-six-platform supply chain, release rewriting, public API probes, clean-checkout
-verification, and repository-external one-Pack installation passed their Gate.
-Phase 2A is also complete: the official rc.6 `llm-pi-ai` path passed text,
-tools, ordered streaming, explicit image opt-in, and abort against the fake
-CPA. Phase 2B is complete with managed/external runtime, typed CPA client,
-Cordis lifecycle, per-operation credentials, and a real Windows CPA smoke.
-Provider bridge and OAuth Phase 3 are next. No public installable Gateway
-release exists yet.
+Phases 0–4 are complete. The official rc.6 `llm-pi-ai` path, managed/external
+runtime, provider bridge, device OAuth, and optional failure-isolated SQLite
+analytics have passed their focused gates. The Phase 5 native App is
+implemented and running in a real DSH Web profile with Dashboard, Accounts,
+Models, Requests, Playground, and Settings views. Phase 6 packed browser/HMR
+acceptance is in progress. No public installable Gateway release exists yet.
 
 ## Deferred
 

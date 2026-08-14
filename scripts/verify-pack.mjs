@@ -81,8 +81,15 @@ function assertPackagePayload(spec, tarball) {
       'lib/typert.remote-client.d.ts',
       'lib/typert.remote-client.js',
       'lib/types/client/GatewayApp.d.ts',
+      'lib/types/client/PlaygroundView.d.ts',
+      'lib/types/client/RequestsView.d.ts',
       'lib/types/client/index.d.ts',
       'lib/types/client/locales.d.ts',
+      'lib/types/client/view-types.d.ts',
+      'lib/types/client/views/AccountsView.d.ts',
+      'lib/types/client/views/DashboardView.d.ts',
+      'lib/types/client/views/ModelsView.d.ts',
+      'lib/types/client/views/SettingsView.d.ts',
       'lib/types/config.d.ts',
       'lib/types/host/contracts.d.ts',
       'lib/types/host/contracts.js',
@@ -294,6 +301,10 @@ async function loadPackedGatewayClient(profileRequire) {
       staticModules: {
         react: React,
         'react/jsx-runtime': ReactJsxRuntime,
+        '@deepseek-ai/dsh-client-ui-primitives': {
+          Button: () => null,
+          StateDot: () => null,
+        },
       },
       loadBundle: async () => import(`${clientUrl}?phase1-packed-profile`),
     })
@@ -332,6 +343,7 @@ async function verifyPackedHostLifecycle(profileDirectory) {
     ['settings', '@deepseek-ai/dsh-settings-file', { path: path.join(profileDirectory, 'packed-settings.yaml'), watch: false }],
     ['credentials', '@deepseek-ai/dsh-credentials-local', { path: path.join(profileDirectory, 'packed-credentials.yaml'), watch: false }],
     ['subprocess', '@deepseek-ai/dsh-subprocess-local'],
+    ['attachments', '@deepseek-ai/dsh-attachment-local', { dshHome: profileDirectory }],
     ['llm-pi-ai', '@deepseek-ai/dsh-llm-pi-ai'],
   ]
   try {

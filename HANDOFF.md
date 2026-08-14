@@ -8,7 +8,7 @@ native dsh-webpage App without modifying DeepSeek Harness.
 
 ## Current Phase
 
-Phases 0–4 are complete / GO. Phase 5 Gateway App is in progress.
+Phases 0–5 are complete / GO. Phase 6 packed preview acceptance is in progress.
 
 ## Completed
 
@@ -70,11 +70,22 @@ Phases 0–4 are complete / GO. Phase 5 Gateway App is in progress.
   regressions: destructive dequeue latches after a write failure, collector
   lease ownership is atomic and generation-bound, fractional Codex quota is
   persisted, and source/worker faults become typed unavailable state.
+- The six-route native Gateway App, 18-endpoint generated Remote allowlist,
+  ECharts Dashboard, model capability editor, account/request views, runtime
+  settings, and one-shot text/tool/image Playground are implemented.
+- A real 3080 profile and a repository-external packed rc.6 Browser profile
+  passed App navigation, deep links, reload/history, conversation DOM
+  identity, model apply, text/image probes, opaque attachment upload, optional
+  analytics states, and browser-visible image-data negative checks.
+- The Browser gate found and verified the fix for a missing `attachments`
+  Host injection. The focused regression was red before the fix and green
+  after it.
 
 ## Pending
 
-1. Implement Phase 5's native Gateway App views and analytics read Remotes.
-2. Keep browser/HMR and public-preview claims unverified until Phase 5/6 gates.
+1. Complete the Phase 6 HMR lane, then run the full aggregate.
+2. Finalize Phase 6 evidence, commit/push, then prepare the preview release and
+   public Discussion only after the aggregate remains green.
 
 ## Decisions / Constraints
 
@@ -107,16 +118,16 @@ Phases 0–4 are complete / GO. Phase 5 Gateway App is in progress.
 - CLIProxyAPI v7.2.131 six-platform asset names and SHA-256 values were checked
   against the upstream release `checksums.txt`.
 - All initial and follow-up Sol STOP findings were resolved; final result: GO.
-- Phase 4 evidence is recorded in `docs/evidence/phase-4.md`; no browser, HMR,
-  or full App acceptance is claimed yet.
+- Phase 5 evidence is recorded in `docs/evidence/phase-5.md`; the packed Browser
+  lane is green. HMR and the final aggregate remain Phase 6 evidence.
 - Phase 1 frozen install, typecheck, lint, build, fake CPA tests, public API
   probe, six-platform supply-chain verification, and packed external-profile
   install passed locally on Windows x64, Node 24.11.1, pnpm 11.7.0, DSH rc.6.
 - Evidence is generated under `.staging/release/v0.1.0/` and
   `.staging/reports/phase1-packed-install.log`; these generated artifacts are
   intentionally ignored by Git.
-- Phase 2A through Phase 4 evidence is recorded under `docs/evidence/`; Phases
-  5–6 remain unverified. The narrow
+- Phase 2A through Phase 5 evidence is recorded under `docs/evidence/`; Phase
+  6 remains in progress. The narrow
   `patches/dsh-typert-generator-0.1.0-rc.6.patch` is a known rc.6 build-only
   compatibility limitation for out-of-tree generation, not a runtime fork.
 - A bounded Luna Phase 3 review found and verified the fix for terminal OAuth
@@ -125,15 +136,15 @@ Phases 0–4 are complete / GO. Phase 5 Gateway App is in progress.
 
 ## Next Step
 
-Next phase: Phase 5 Gateway App. Start from the existing built client and run:
+Continue Phase 6 from the green packed Browser and packed-install lanes:
 
 ```text
 cd D:\coding\programs\dsh\dsh-gateway
-corepack pnpm@11.7.0 run test:browser
+corepack pnpm@11.7.0 test:hmr
 ```
 
-Recovery state: the shared worktree contains the Phase 4 gate implementation
-until its commit is pushed. Preserve unrelated worktree changes. Read
+Recovery state: the shared worktree contains Phase 6 browser/HMR automation
+outside the Phase 5 gate commit. Preserve unrelated worktree changes. Read
 `docs/plan/phase-0.1-gateway.md`, `docs/testing.md`, and this file before
 continuing.
 
@@ -145,8 +156,8 @@ continuing.
   model endpoint.
 - The trusted server-derived origin seam for local callback remains absent;
   device flow is the supported path.
-- Browser/HMR evidence and the complete App remain future gates; the current
-  aggregate is green through Phase 4 only.
+- Browser evidence is green. HMR, the complete aggregate, and public preview
+  artifacts remain the final gate.
 - Pricing is intentionally unpriced until a trusted immutable snapshot with
   provenance is selected; token metrics remain valid.
 - Phase 2A is recoverable from public commit `4e4485c`. Phase 2B tests clean up

@@ -6,6 +6,7 @@ import type {} from '@wha1echai/dsh-gateway/remote'
 
 import { GatewayApp } from './GatewayApp.js'
 import { en, zh } from './locales.js'
+import type { GatewayRemote } from './view-types.js'
 
 const descriptor = Object.freeze({
   id: 'wha1echai.gateway',
@@ -22,23 +23,27 @@ export const inject = ['remote', 'pages', 'slots', 'locale']
 /** Mount the generated Gateway Remote contribution for this client fiber. */
 export async function apply(ctx: ClientContext): Promise<() => Promise<void>> {
   const unmountRemote = await ctx.remote.$mount(gatewayRemote)
-  const unregisterComposition = ctx.effect(() => {
-    const unregisterLocale = ctx.locale.register('gateway', { zh, en })
-    const unregisterPage = ctx.pages.register(descriptor)
-    const unregisterSlot = ctx.slots.inject('webpage.app', () => ctx.slots.register({
-      name: 'webpage.app',
-      key: descriptor.id,
-      locale: 'gateway',
-    }, (props) => <GatewayApp {...props} loadStatus={() => ctx.remote.gateway.status()} />))
-    return () => {
-      unregisterSlot()
-      unregisterPage()
-      unregisterLocale()
-    }
-  }, 'dsh-gateway: App composition')
+  const composition = ctx.inject(['remote.gateway'], (scope: ClientContext) => {
+    const remote = scope.remote.gateway as unknown as GatewayRemote
+    scope.effect(() => {
+      const unregisterLocale = scope.locale.register('gateway', { zh, en })
+      const unregisterPage = scope.pages.register(descriptor)
+      const unregisterSlot = scope.slots.inject('webpage.app', () => scope.slots.register({
+        name: 'webpage.app',
+        key: descriptor.id,
+        locale: 'gateway',
+      }, (props) => <GatewayApp {...props} remote={remote} />))
+      return () => {
+        unregisterSlot()
+        unregisterPage()
+        unregisterLocale()
+      }
+    }, 'dsh-gateway: App composition')
+  })
+  await composition
 
   return async () => {
-    unregisterComposition()
+    await composition.dispose()
     await unmountRemote()
   }
 }

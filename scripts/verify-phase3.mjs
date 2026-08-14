@@ -68,6 +68,11 @@ async function main() {
       expectedRevision: discovered.settingsRevision,
     })
     expect(applied.changed === true, 'Gateway did not apply the cpa provider route')
+    const rediscovered = await ctx.dshGateway.models(new AbortController().signal)
+    expect(rediscovered.models.find((model) => model.id === 'fake-vision-model')?.imageInput === true,
+      'Gateway did not restore the explicit image capability from its saved provider route')
+    expect(rediscovered.models.find((model) => model.id === 'fake-text-model')?.imageInput === false,
+      'Gateway inferred image capability for an unselected model')
     expect(ctx.llm.listProviders().some((provider) => provider.id === 'cpa'), 'official llm-pi-ai did not register cpa')
 
     const probe = await ctx.dshGateway.probe({
@@ -80,7 +85,7 @@ async function main() {
     const hostTypert = await import(pathToFileURL(join(root, 'packages', 'gateway', 'lib', 'typert.host.js')).href)
     const remoteTypert = await import(pathToFileURL(join(root, 'packages', 'gateway', 'lib', 'typert.remote-client.js')).href)
     expect(hostTypert.TYPERT?.package === '@wha1echai/dsh-gateway', 'Host Typert contribution is missing')
-    expect(remoteTypert.TYPERT_REMOTE?.descriptors?.length === 11, 'Remote endpoint count drifted')
+    expect(remoteTypert.TYPERT_REMOTE?.descriptors?.length === 18, 'Remote endpoint count drifted')
 
     await ctx.loader.remove('gateway')
     await ctx.loader.await()

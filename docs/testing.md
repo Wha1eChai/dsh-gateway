@@ -5,8 +5,8 @@
 This document defines the executable verification contract for the six
 implementation phases after the documentation baseline. It distinguishes
 phase-scoped evidence from future product/release claims. The documentation
-Phases 0–4 are **Complete / GO**; the native App and packed browser/HMR
-acceptance in Phases 5–6 remain unverified.
+Phases 0–5 are **Complete / GO**. The packed Browser lane is green; HMR and the
+final Phase 6 aggregate remain the release gate.
 
 Use these labels exactly:
 
@@ -63,13 +63,13 @@ mocked substitute does not satisfy the corresponding lane.
 | `pnpm typecheck` | Type and public-contract checks | 1–6 | COMPLETED for Phase 1; later phases extend it |
 | `pnpm lint` | Source, manifest, generated-file, and policy lint | 1–6 | COMPLETED for Phase 1; later phases extend it |
 | `pnpm build` | Build all owned packages and generated client/remote artifacts | 1–6 | COMPLETED for Phase 1; later phases extend it |
-| `pnpm test:unit` | Pure contracts, validators, state transitions, redaction, and read models | 2–5 | PARTIAL: Phase 3 aggregate plus the focused Phase 4 analytics/quota lanes pass; Phase 5 UI units remain planned |
+| `pnpm test:unit` | Pure contracts, validators, state transitions, redaction, and read models | 2–5 | COMPLETE through Phase 5: 11 fake-CPA plus 90 Vitest tests after the attachment-injection regression |
 | `pnpm test:integration` | Real rc.6 Loader, DSH client, runtime, provider, OAuth, analytics, and Pack composition after the 2A gate | 2B–6 | PARTIAL: `scripts/verify-phase3.mjs` passed; the real-CPA aggregate and later-phase composition remain unclaimed |
 | `pnpm test:llm-compat` | Phase 2A real built official `llm-pi-ai` plus fake/external CPA text/tools/stream/image-opt-in/abort gate | 2A, 5, 6 | COMPLETED / GO for Phase 2A |
 | `pnpm test:oauth` | Device and localhost callback login lifecycle | 3, 5, 6 | PARTIAL: included in the 31-test provider/OAuth/CPA focused run; browser and full callback lanes remain planned |
 | `pnpm test:analytics` | SQLite migrations, writes, aggregates, restart, redaction, and failure isolation | 4, 5, 6 | COMPLETE / GO for Phase 4: 28 tests plus the real built-worker verifier passed |
 | `pnpm test:quota` | Fixed Codex quota adapter, immutable pricing snapshot, strict projection, unsupported/unavailable states, and no generic `/api-call` | 3–6 | COMPLETE / GO for the Host/storage contract; Browser rendering remains Phase 5 |
-| `pnpm test:browser` | Real root-path App, Playground, remotes, negative cases, and security-visible behavior | 5, 6 | PLANNED / UNVERIFIED |
+| `pnpm test:browser` | Real root-path App, Playground, remotes, negative cases, and security-visible behavior | 5, 6 | COMPLETE for Phase 5 packed Browser acceptance |
 | `pnpm test:hmr` | Client replacement, disposal, duplicate prevention, and crash containment | 2B, 5, 6 | PLANNED / UNVERIFIED |
 | `pnpm test:security` | Host/browser boundary, callback, redaction, process, path, and package security checks | 1–6 | PARTIAL: focused Phase 3 callback/redaction assertions passed; browser and full security lanes remain planned |
 | `pnpm pack:verify` | Exact tarballs and repository-external DSH rc.6 profile install/load | 1, 6 | PARTIAL: external offline packed install, Host lifecycle, actual analytics worker database, and client bundle import passed; Phase 6 browser/HMR remains planned |
@@ -90,7 +90,7 @@ mocked substitute does not satisfy the corresponding lane.
 | Typert Remotes | `pnpm test:unit`; `pnpm test:integration`; `pnpm test:browser`; `pnpm test:security` | Generated schema/mount report proving `ctx.remote.$mount()`, allowlist enforcement, undeclared-action rejection, and no arbitrary proxy | COMPLETED / GO for generated strict 11-endpoint Host/Remote artifact and Loader unload; browser lane remains planned |
 | Analytics and usage queue | `pnpm test:analytics`; `pnpm test:integration`; `pnpm test:security` | Destructive pop/no-ack at-most-once, crash-after-pop loss, degraded/completeness state, post-DB dedupe, migrations, aggregates, redaction, failure isolation | COMPLETE / GO for Phase 4 Host/storage behavior |
 | Pricing and quota | `pnpm test:quota`; `pnpm test:analytics`; `pnpm test:security` | Immutable bundled pricing snapshot; fixed internal Codex payload/projection; strict size/schema; unsupported/unavailable valid; raw response and generic `/api-call` absent | COMPLETE / GO for Phase 4; bundled snapshot currently has no trusted prices and therefore reports unpriced cost |
-| Native dsh-webpage App | `pnpm test:integration`; `pnpm test:browser`; `pnpm test:llm-compat` | Real App/Loader composition, frozen ID/routes, packed `./client` export, full `ctx.llm` Playground, degraded/unavailable states, conversation preservation | PLANNED / UNVERIFIED |
+| Native dsh-webpage App | `pnpm test:integration`; `pnpm test:browser`; `pnpm test:llm-compat` | Real App/Loader composition, frozen ID/routes, packed `./client` export, full `ctx.llm` Playground, degraded/unavailable states, conversation preservation | COMPLETED / GO for Phase 5 |
 | Browser and HMR | `pnpm test:browser`; `pnpm test:hmr` | Root-path navigation, direct/reload/degraded/error cases, no secret DOM/storage, HMR replacement without reload/duplicates/stale slots, crash containment | PLANNED / UNVERIFIED |
 | Security | `pnpm test:security`; `pnpm test:browser`; `pnpm test:supply-chain` | Boundary report for secrets, OAuth callbacks, shell/process, path traversal, HTML/navigation, logs/SQLite/tarballs, dependency and binary provenance | PARTIAL: Phase 1 package/provenance boundary passed; runtime/browser security remains planned |
 | Packed public preview | `pnpm pack:verify`; `pnpm verify` | Exact tarballs, clean repository-external DSH rc.6 profile/Loader/CLI, one Pack composition, browser/HMR/security artifacts | PARTIAL: Phase 1 package/profile subset passed; Phase 6 browser/HMR/security remains planned |
@@ -392,7 +392,7 @@ this lane green.
 | T-10 | Probe and Typert Remote boundary | unit, integration, browser, security | Generated allowlist mounts through `ctx.remote.$mount()`; prompt/attachment/result use only requesting typed `gateway.probe`; unknown action, arbitrary proxy, and operational-content leakage are rejected | COMPLETED / GO for generated 11-endpoint Host boundary; browser/security lanes remain planned |
 | T-11 | Destructive usage queue semantics | analytics, integration, security | Pop/no-ack at-most-once, crash-after-pop loss window, degraded/completeness state, competition warning, and post-DB-receipt-only dedupe | COMPLETE / GO for Phase 4 |
 | T-12 | Analytics, pricing, and quota correctness | quota, analytics, integration, security | Immutable bundled pricing; fixed internal Codex quota payload and strict projection; raw response absent; unsupported/unavailable valid; no generic `/api-call` | COMPLETE / GO for Phase 4 Host/storage contract |
-| T-13 | Native App identity and client export | integration, browser, public-api | `wha1echai.gateway`, `/apps/wha1echai.gateway` plus frozen subroutes, and packed `./package.json` `./client` export resolve; no route takeover | PARTIAL: Phase 3 foundation and packed client import passed; full routes/browser remain planned |
+| T-13 | Native App identity and client export | integration, browser, public-api | `wha1echai.gateway`, `/apps/wha1echai.gateway` plus frozen subroutes, and packed `./package.json` `./client` export resolve; no route takeover | COMPLETED / GO for Phase 5 |
 | T-14 | Browser boundary and HMR | browser, HMR, security | No secret DOM/storage/URL, safe navigation/callback, direct/reload/error cases, one replacement, no stale/duplicate remotes, bounded crash | PLANNED / UNVERIFIED |
 | T-15 | Packed public preview | pack, integration, browser, security | Repository-external rc.6 profile loads exact Pack and passes platform plugin policy, runtime/App/HMR/security checks | PLANNED / UNVERIFIED |
 

@@ -162,6 +162,9 @@ importers:
       '@wha1echai/dsh-webpage':
         specifier: https://github.com/Wha1eChai/dsh-webpage/releases/download/v0.1.0/wha1echai-dsh-webpage-0.1.0.tgz
         version: https://github.com/Wha1eChai/dsh-webpage/releases/download/v0.1.0/wha1echai-dsh-webpage-0.1.0.tgz(114a3ff679905a9a08540a54ec9b9fde)
+      echarts:
+        specifier: 6.1.0
+        version: 6.1.0
 
   packages/pack:
     dependencies:

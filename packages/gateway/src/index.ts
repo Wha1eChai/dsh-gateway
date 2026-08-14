@@ -13,7 +13,7 @@ export * from './host/provider/index.js'
 export { Config }
 
 export const name = '@wha1echai/dsh-gateway'
-export const inject = ['settings', 'credentials', 'llm', 'subprocess']
+export const inject = ['settings', 'credentials', 'llm', 'subprocess', 'attachments']
 
 /** Install the generated-Remote Host BFF in the current plugin fiber. */
 export function apply(ctx: Context, config: Config): void {

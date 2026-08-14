@@ -1,0 +1,275 @@
+.page {
+  display: grid;
+  gap: 1rem;
+  max-width: 56rem;
+  min-width: 0;
+  margin: 0 auto;
+  padding: clamp(1rem, 3vw, 2rem);
+  color: var(--dsw-alias-label-primary);
+}
+
+.header {
+  display: grid;
+  gap: 0.35rem;
+}
+
+.title,
+.sectionTitle {
+  margin: 0;
+  line-height: 1.2;
+}
+
+.title {
+  font-size: clamp(1.4rem, 3vw, 2rem);
+}
+
+.sectionTitle {
+  font-size: 1.1rem;
+}
+
+.description,
+.help,
+.status p {
+  margin: 0;
+  color: var(--dsw-alias-label-tertiary);
+  font-size: 0.8125rem;
+  line-height: 1.5;
+}
+
+.form,
+.output {
+  display: grid;
+  gap: 1rem;
+  min-width: 0;
+  padding: 1rem;
+  border: 1px solid var(--dsw-alias-border-l2);
+  border-radius: 0.625rem;
+  background: var(--dsw-alias-bg-layer-2);
+}
+
+.field {
+  display: grid;
+  gap: 0.4rem;
+  min-width: 0;
+  color: var(--dsw-alias-label-secondary);
+  font-size: 0.8125rem;
+}
+
+.input {
+  width: 100%;
+  min-height: 2.35rem;
+  box-sizing: border-box;
+  padding: 0.5rem 0.6rem;
+  border: 1px solid var(--dsw-alias-border-l2);
+  border-radius: 0.375rem;
+  color: var(--dsw-alias-label-primary);
+  background: var(--dsw-alias-bg-layer-1);
+  font: inherit;
+}
+
+.prompt {
+  resize: vertical;
+  line-height: 1.5;
+}
+
+.input:focus-visible,
+.button:focus-visible,
+.primaryButton:focus-visible,
+.fileButton:focus-visible,
+.textButton:focus-visible {
+  outline: 2px solid var(--dsw-alias-border-l2);
+  outline-offset: 2px;
+}
+
+.input:disabled,
+.button:disabled,
+.primaryButton:disabled,
+.textButton:disabled {
+  cursor: not-allowed;
+  opacity: 0.55;
+}
+
+.status {
+  display: grid;
+  gap: 0.35rem;
+}
+
+.group {
+  display: grid;
+  gap: 0.55rem;
+  min-width: 0;
+  margin: 0;
+  padding: 0.75rem;
+  border: 1px solid var(--dsw-alias-border-l2);
+  border-radius: 0.5rem;
+}
+
+.group legend {
+  padding: 0 0.25rem;
+  color: var(--dsw-alias-label-secondary);
+  font-size: 0.8125rem;
+}
+
+.imageControls,
+.options,
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.65rem;
+}
+
+.fileInput {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+  clip-path: inset(50%);
+}
+
+.fileButton,
+.button,
+.primaryButton,
+.textButton {
+  min-height: 2.35rem;
+  box-sizing: border-box;
+  padding: 0.45rem 0.75rem;
+  border: 1px solid var(--dsw-alias-border-l2);
+  border-radius: 0.375rem;
+  color: var(--dsw-alias-label-primary);
+  background: var(--dsw-alias-bg-layer-1);
+  font: inherit;
+  cursor: pointer;
+}
+
+.fileButton:hover,
+.button:hover:not(:disabled),
+.textButton:hover:not(:disabled) {
+  background: var(--dsw-alias-interactive-bg-hover);
+}
+
+.primaryButton {
+  border-color: var(--dsw-alias-interactive-bg-active);
+  background: var(--dsw-alias-interactive-bg-active);
+}
+
+.primaryButton:hover:not(:disabled) {
+  background: var(--dsw-alias-interactive-bg-hover);
+}
+
+.textButton {
+  min-height: 2rem;
+  padding: 0.3rem 0.55rem;
+  font-size: 0.8125rem;
+}
+
+.options {
+  align-items: flex-start;
+}
+
+.options > .field {
+  flex: 1 1 12rem;
+}
+
+.checkbox {
+  display: flex;
+  flex: 1 1 16rem;
+  align-items: flex-start;
+  gap: 0.55rem;
+  min-width: 0;
+  padding-top: 1.55rem;
+  color: var(--dsw-alias-label-primary);
+  font-size: 0.8125rem;
+  cursor: pointer;
+}
+
+.checkbox input {
+  flex: 0 0 auto;
+  margin-top: 0.15rem;
+}
+
+.checkboxTitle {
+  display: block;
+  margin-bottom: 0.15rem;
+}
+
+.error {
+  margin: 0;
+  color: var(--dsw-alias-label-negative);
+  font-size: 0.8125rem;
+  line-height: 1.5;
+}
+
+.blocks {
+  display: grid;
+  gap: 0.65rem;
+}
+
+.block {
+  min-width: 0;
+  padding: 0.75rem;
+  border: 1px solid var(--dsw-alias-border-l2);
+  border-radius: 0.5rem;
+  background: var(--dsw-alias-bg-layer-1);
+}
+
+.blockTitle {
+  margin: 0 0 0.4rem;
+  color: var(--dsw-alias-label-secondary);
+  font-size: 0.75rem;
+  font-weight: 600;
+}
+
+.blockText {
+  margin: 0;
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+  line-height: 1.55;
+}
+
+.toolCall,
+.usage {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(8rem, 1fr));
+  gap: 0.65rem;
+  margin: 0;
+}
+
+.toolCall > div,
+.usage > div {
+  min-width: 0;
+}
+
+.toolCall dt,
+.usage dt {
+  color: var(--dsw-alias-label-tertiary);
+  font-size: 0.75rem;
+}
+
+.toolCall dd,
+.usage dd {
+  margin: 0.2rem 0 0;
+  overflow-wrap: anywhere;
+}
+
+.toolCall pre {
+  max-height: 14rem;
+  margin: 0;
+  overflow: auto;
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+  font: inherit;
+}
+
+@media (max-width: 42rem) {
+  .page {
+    padding: 0.75rem;
+  }
+
+  .form,
+  .output {
+    padding: 0.75rem;
+  }
+}

@@ -1,9 +1,10 @@
 # dsh-gateway security model
 
-Status: Phase 4 security baseline — Complete / GO. This document defines the
+Status: Phase 5 security baseline — implemented; browser/HMR release acceptance
+is in progress. This document defines the
 trust boundary for DSH `0.1.0-rc.6`, dsh-webpage `0.1.0`, and CLIProxyAPI
-`7.2.131`. Analytics Host/storage checks pass; browser/HMR/full release checks remain
-planned.
+`7.2.131`. Analytics Host/storage and real-Web App checks pass; automated
+browser/HMR/full release checks remain the Phase 6 gate.
 
 ## Security claim and assumptions
 
@@ -42,11 +43,11 @@ raw account identifiers and raw keys remain prohibited.
 
 ## Host and Client boundary
 
-The Phase 3 App foundation has ID `wha1echai.gateway` and is mounted through
+The Gateway App has ID `wha1echai.gateway` and is mounted through
 the dsh-webpage `webpage.app` slot at `/apps/wha1echai.gateway`. It registers
-the descriptor, locale, and slot composition, renders only sanitized runtime
-status, and does not create a second HTTP server. The full route/view set is
-Phase 5 work.
+the descriptor, locale, and slot composition, renders only sanitized runtime,
+provider, account, quota, and analytics projections, and does not create a
+second HTTP server.
 
 The App imports only generated Typert Remote contributions. A Client assembly
 uses `TypertClientRemote` and `ctx.remote.$mount()`; it does not call CPA with
@@ -56,7 +57,7 @@ Gateway policy before any management request is made. Mounting a Typert
 Remote does not attest a trusted HTTP Origin, so no security decision may use
 the Client's origin claim.
 
-The Phase 3 allowlist is deliberately closed and contains exactly 11 generated
+The Phase 5 allowlist is deliberately closed and contains exactly 18 generated
 endpoints. Client names use `namespace.method`; generated wire endpoints use
 `namespace/method`:
 
@@ -65,15 +66,21 @@ endpoints. Client names use `namespace.method`; generated wire endpoints use
   and `gateway.runtimeRestart`;
 - `gateway.models` and `gateway.applyModels`;
 - `gateway.oauthDeviceStart`, `gateway.oauthDeviceStatus`, and
-  `gateway.oauthDeviceCancel`; and
+  `gateway.oauthDeviceCancel`;
+- `gateway.analyticsStatus`, `gateway.analyticsSummary`,
+  `gateway.analyticsTrend`, `gateway.analyticsRequests`,
+  `gateway.analyticsQuota`, and `gateway.analyticsAccounts`;
+- `gateway.uploadImage`, which accepts only bounded canonical PNG, JPEG, WebP,
+  or GIF bytes and returns an opaque DSH attachment ref; and
 - `gateway.probe`, which accepts only a bounded model/prompt/tool payload and
   optional DSH attachment ref before invoking `ctx.llm`.
 
 The runtime methods return sanitized state. Model discovery is identity-only;
 `applyModels` persists only the official `llm-pi-ai` `cpa` route with explicit
 image capability. OAuth results never carry authorization codes, tokens,
-auth paths, or raw CPA output. Analytics, local-callback, generic management,
-and account-action methods are not in this Phase 3 artifact and remain planned.
+auth paths, or raw CPA output. Analytics methods are bounded read-only
+projections. Local-callback, generic management, and account-action methods
+are absent.
 
 All inputs and outputs are closed typed payloads. No Remote accepts arbitrary
 YAML, HTTP headers, Management paths, upstream request bodies, or a generic

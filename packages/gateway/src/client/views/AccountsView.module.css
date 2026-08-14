@@ -1,0 +1,164 @@
+.page {
+  display: grid;
+  gap: 1.25rem;
+}
+
+.headingRow,
+.summary,
+.cardHeading,
+.quotaTopline,
+.quotaValues {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.8rem;
+}
+
+.headingRow {
+  align-items: flex-start;
+}
+
+.eyebrow,
+.subtitle,
+.state,
+.stateBlock p,
+.summary,
+.cardHeading span,
+.secondary {
+  color: var(--dsw-alias-label-tertiary);
+}
+
+.eyebrow,
+.subtitle,
+.state,
+.stateBlock p {
+  margin: 0;
+}
+
+.eyebrow {
+  font-size: 0.78rem;
+  font-weight: 650;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.title {
+  margin: 0.35rem 0 0;
+  font-size: clamp(1.45rem, 3vw, 2rem);
+  line-height: 1.1;
+}
+
+.subtitle {
+  margin-top: 0.5rem;
+  line-height: 1.5;
+}
+
+.summary {
+  justify-content: flex-start;
+  flex-wrap: wrap;
+  font-size: 0.78rem;
+}
+
+.statusDot,
+.stateDot {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+.columns {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.85rem;
+}
+
+.card {
+  min-width: 0;
+  padding: 0.95rem;
+  border: 1px solid var(--dsw-alias-border-l2);
+  border-radius: 0.65rem;
+  background: var(--dsw-alias-bg-layer-2);
+}
+
+.cardHeading {
+  margin-bottom: 0.7rem;
+}
+
+.cardHeading h3 {
+  margin: 0;
+  font-size: 0.95rem;
+}
+
+.cardHeading span {
+  font-size: 0.78rem;
+}
+
+.rows {
+  display: grid;
+  gap: 0.55rem;
+}
+
+.row,
+.quotaRow {
+  display: grid;
+  gap: 0.3rem;
+  padding: 0.65rem 0;
+  border-top: 1px solid var(--dsw-alias-border-l2);
+}
+
+.row {
+  grid-template-columns: auto minmax(0, 1fr);
+}
+
+.row:first-child,
+.quotaRow:first-child {
+  border-top: 0;
+  padding-top: 0;
+}
+
+.row .secondary {
+  grid-column: 2;
+}
+
+.primary {
+  overflow: hidden;
+  color: var(--dsw-alias-label-primary);
+  font-size: 0.84rem;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.secondary {
+  overflow: hidden;
+  font-size: 0.73rem;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.quotaValues {
+  justify-content: flex-start;
+  flex-wrap: wrap;
+  color: var(--dsw-alias-label-secondary);
+  font-size: 0.75rem;
+}
+
+.quotaValues strong {
+  color: var(--dsw-alias-label-primary);
+}
+
+.stateBlock {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 1rem;
+  border: 1px dashed var(--dsw-alias-border-l2);
+  border-radius: 0.65rem;
+}
+
+@media (max-width: 44rem) {
+  .headingRow,
+  .columns {
+    display: grid;
+  }
+}

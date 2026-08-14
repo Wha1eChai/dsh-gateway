@@ -1,0 +1,168 @@
+.page {
+  display: grid;
+  gap: 1.25rem;
+}
+
+.headingRow,
+.actions,
+.cardHeading,
+.row {
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
+}
+
+.headingRow,
+.cardHeading {
+  justify-content: space-between;
+  align-items: flex-start;
+}
+
+.actions {
+  flex: none;
+  align-items: center;
+}
+
+.eyebrow,
+.subtitle,
+.state,
+.stateBlock p,
+.notice,
+.cardHeading p,
+.revision,
+.checkboxText {
+  color: var(--dsw-alias-label-tertiary);
+}
+
+.eyebrow,
+.subtitle,
+.state,
+.stateBlock p,
+.notice,
+.cardHeading p {
+  margin: 0;
+}
+
+.eyebrow {
+  font-size: 0.78rem;
+  font-weight: 650;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.title {
+  margin: 0.35rem 0 0;
+  font-size: clamp(1.45rem, 3vw, 2rem);
+  line-height: 1.1;
+}
+
+.subtitle {
+  margin-top: 0.5rem;
+  line-height: 1.5;
+}
+
+.notice {
+  padding: 0.7rem 0.85rem;
+  border: 1px solid var(--dsw-alias-border-l2);
+  border-radius: 0.55rem;
+  background: var(--dsw-alias-bg-layer-2);
+  font-size: 0.84rem;
+}
+
+.card {
+  min-width: 0;
+  padding: 0.95rem;
+  border: 1px solid var(--dsw-alias-border-l2);
+  border-radius: 0.65rem;
+  background: var(--dsw-alias-bg-layer-2);
+}
+
+.cardHeading h3,
+.cardHeading p {
+  margin: 0;
+}
+
+.cardHeading h3 {
+  font-size: 0.95rem;
+}
+
+.cardHeading p {
+  margin-top: 0.35rem;
+  font-size: 0.78rem;
+}
+
+.revision {
+  flex: none;
+  font-size: 0.75rem;
+}
+
+.rows {
+  display: grid;
+  margin-top: 0.75rem;
+}
+
+.row {
+  min-width: 0;
+  padding: 0.7rem 0;
+  border-top: 1px solid var(--dsw-alias-border-l2);
+  cursor: pointer;
+}
+
+.row:first-child {
+  border-top: 0;
+}
+
+.modelText {
+  display: grid;
+  min-width: 0;
+  flex: 1;
+  gap: 0.15rem;
+}
+
+.modelText strong,
+.modelText code {
+  overflow: hidden;
+  color: var(--dsw-alias-label-primary);
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.modelText strong {
+  font-size: 0.85rem;
+}
+
+.modelText code {
+  color: var(--dsw-alias-label-tertiary);
+  font-size: 0.72rem;
+}
+
+.checkboxText {
+  font-size: 0.75rem;
+}
+
+.row input {
+  width: 1rem;
+  height: 1rem;
+  accent-color: var(--dsw-alias-interactive-bg-active);
+}
+
+.stateBlock {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 1rem;
+  border: 1px dashed var(--dsw-alias-border-l2);
+  border-radius: 0.65rem;
+}
+
+@media (max-width: 44rem) {
+  .headingRow,
+  .cardHeading {
+    display: grid;
+  }
+
+  .actions {
+    justify-content: flex-start;
+  }
+}
