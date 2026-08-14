@@ -8,7 +8,7 @@ native dsh-webpage App without modifying DeepSeek Harness.
 
 ## Current Phase
 
-Phases 0–5 are complete / GO. Phase 6 packed preview acceptance is in progress.
+Phases 0–6 are complete / GO. Preview release publication is in progress.
 
 ## Completed
 
@@ -80,12 +80,17 @@ Phases 0–5 are complete / GO. Phase 6 packed preview acceptance is in progress
 - The Browser gate found and verified the fix for a missing `attachments`
   Host injection. The focused regression was red before the fix and green
   after it.
+- Real client HMR passed atomic replacement, render-crash containment,
+  recovery, graph uniqueness, timer/Remote cleanup, conversation identity,
+  and unrelated Webpage Inspector survival without a document reload.
+- The full release aggregate and a repository-external clean source checkout
+  passed for 182 files. Browser and HMR fixtures are self-contained and no
+  longer borrow files or helpers from adjacent source checkouts.
 
 ## Pending
 
-1. Complete the Phase 6 HMR lane, then run the full aggregate.
-2. Finalize Phase 6 evidence, commit/push, then prepare the preview release and
-   public Discussion only after the aggregate remains green.
+1. Publish the prepared GitHub preview prerelease assets.
+2. Open the public Discussion. Do not publish npm packages.
 
 ## Decisions / Constraints
 
@@ -118,16 +123,15 @@ Phases 0–5 are complete / GO. Phase 6 packed preview acceptance is in progress
 - CLIProxyAPI v7.2.131 six-platform asset names and SHA-256 values were checked
   against the upstream release `checksums.txt`.
 - All initial and follow-up Sol STOP findings were resolved; final result: GO.
-- Phase 5 evidence is recorded in `docs/evidence/phase-5.md`; the packed Browser
-  lane is green. HMR and the final aggregate remain Phase 6 evidence.
+- Phase 6 evidence is recorded in `docs/evidence/phase-6.md`; packed Browser,
+  HMR, security, integration, real CPA, and the final aggregate are green.
 - Phase 1 frozen install, typecheck, lint, build, fake CPA tests, public API
   probe, six-platform supply-chain verification, and packed external-profile
   install passed locally on Windows x64, Node 24.11.1, pnpm 11.7.0, DSH rc.6.
 - Evidence is generated under `.staging/release/v0.1.0/` and
   `.staging/reports/phase1-packed-install.log`; these generated artifacts are
   intentionally ignored by Git.
-- Phase 2A through Phase 5 evidence is recorded under `docs/evidence/`; Phase
-  6 remains in progress. The narrow
+- Phase 2A through Phase 6 evidence is recorded under `docs/evidence/`. The narrow
   `patches/dsh-typert-generator-0.1.0-rc.6.patch` is a known rc.6 build-only
   compatibility limitation for out-of-tree generation, not a runtime fork.
 - A bounded Luna Phase 3 review found and verified the fix for terminal OAuth
@@ -136,17 +140,17 @@ Phases 0–5 are complete / GO. Phase 6 packed preview acceptance is in progress
 
 ## Next Step
 
-Continue Phase 6 from the green packed Browser and packed-install lanes:
+Create the preview release from the verified staging envelope:
 
 ```text
 cd D:\coding\programs\dsh\dsh-gateway
-corepack pnpm@11.7.0 test:hmr
+gh release create v0.1.0 .staging/release/v0.1.0/github/* --prerelease
 ```
 
-Recovery state: the shared worktree contains Phase 6 browser/HMR automation
-outside the Phase 5 gate commit. Preserve unrelated worktree changes. Read
-`docs/plan/phase-0.1-gateway.md`, `docs/testing.md`, and this file before
-continuing.
+Recovery state: the Phase 6 gate is committed on public `origin/main`. The
+verified release envelope is generated under `.staging/release/v0.1.0/`.
+Preserve unrelated worktree changes and keep the existing global 3080 profile
+running.
 
 ## Risks / Rollback
 
@@ -156,8 +160,8 @@ continuing.
   model endpoint.
 - The trusted server-derived origin seam for local callback remains absent;
   device flow is the supported path.
-- Browser evidence is green. HMR, the complete aggregate, and public preview
-  artifacts remain the final gate.
+- Browser, HMR, clean checkout, and aggregate evidence are green. GitHub
+  prerelease publication is the remaining external action.
 - Pricing is intentionally unpriced until a trusted immutable snapshot with
   provenance is selected; token metrics remain valid.
 - Phase 2A is recoverable from public commit `4e4485c`. Phase 2B tests clean up

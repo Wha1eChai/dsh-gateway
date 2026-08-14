@@ -43,6 +43,22 @@ does not claim multi-user ACL security.
 The native App is addressable at `/apps/wha1echai.gateway` with Accounts,
 Models, Requests, Playground, and Settings subroutes.
 
+## Preview installation
+
+After the `v0.1.0` GitHub prerelease is available, install the ordinary Pack
+into a dedicated DSH profile:
+
+```text
+dsh plugin --profile gateway-preview add https://github.com/Wha1eChai/dsh-gateway/releases/download/v0.1.0/wha1echai-dsh-gateway-pack-0.1.0.tgz
+dsh --profile gateway-preview web
+```
+
+The first preview supports root-path deployment only, such as
+`https://host/apps/wha1echai.gateway`; reverse-proxy subpaths such as
+`/dsh/apps/...` are not supported. Keep the DSH Web endpoint loopback-only or
+behind a trusted tunnel because v0.1 inherits DSH rc.6's single-user trust
+model.
+
 ## Frozen compatibility target
 
 | Component | Version |
@@ -68,16 +84,17 @@ Models, Requests, Playground, and Settings subroutes.
 - [Phase 2B evidence](./docs/evidence/phase-2b.md)
 - [Phase 3 evidence](./docs/evidence/phase-3.md)
 - [Phase 4 evidence](./docs/evidence/phase-4.md)
+- [Phase 5 evidence](./docs/evidence/phase-5.md)
+- [Phase 6 evidence](./docs/evidence/phase-6.md)
 - [Current handoff](./HANDOFF.md)
 
 ## Current status
 
-Phases 0–4 are complete. The official rc.6 `llm-pi-ai` path, managed/external
-runtime, provider bridge, device OAuth, and optional failure-isolated SQLite
-analytics have passed their focused gates. The Phase 5 native App is
-implemented and running in a real DSH Web profile with Dashboard, Accounts,
-Models, Requests, Playground, and Settings views. Phase 6 packed browser/HMR
-acceptance is in progress. No public installable Gateway release exists yet.
+Phases 0–6 are complete / GO. The official rc.6 `llm-pi-ai` path,
+managed/external runtime, provider bridge, device OAuth, optional
+failure-isolated SQLite analytics, native six-route App, packed Browser, HMR,
+security, real CPA, and clean-checkout gates have passed. GitHub preview
+artifacts are prepared; npm publication remains out of scope.
 
 ## Deferred
 

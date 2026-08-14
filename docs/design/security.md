@@ -1,10 +1,9 @@
 # dsh-gateway security model
 
-Status: Phase 5 security baseline — implemented; browser/HMR release acceptance
-is in progress. This document defines the
+Status: Phase 6 security baseline — implemented and release-gated. This document defines the
 trust boundary for DSH `0.1.0-rc.6`, dsh-webpage `0.1.0`, and CLIProxyAPI
 `7.2.131`. Analytics Host/storage and real-Web App checks pass; automated
-browser/HMR/full release checks remain the Phase 6 gate.
+browser/HMR/full release checks passed as the Phase 6 gate.
 
 ## Security claim and assumptions
 

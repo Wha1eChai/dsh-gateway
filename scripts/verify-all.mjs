@@ -31,6 +31,8 @@ for (const script of [
   'test:supply-chain',
   'pack:verify',
   'test:security',
+  'test:browser',
+  'test:hmr',
 ]) pnpm(['run', script])
 
 // The real CPA executable is an intentionally ignored, provenance-verified

@@ -4,7 +4,7 @@
 
 | Item | Decision |
 | --- | --- |
-| Plan status | **Phases 0–5 — Complete / GO**; Phase 6 packed preview acceptance is in progress. |
+| Plan status | **Phases 0–6 — Complete / GO**; GitHub preview publication is the next action. |
 | Code status | Runtime, provider/OAuth, optional SQLite analytics, and the six-route native Gateway App are implemented. |
 | Release shape | Public, out-of-tree DSH Bundle/Pack preview composed from ordinary DSH Plugins; no DeepSeek Harness source changes and no npm publication in this preview. |
 | Pinned compatibility | DeepSeek Harness `0.1.0-rc.6`; dsh-webpage `0.1.0`; CLIProxyAPI `7.2.131`; CPA-Manager-Plus `1.12.0-rc.2` as a reference only. |
@@ -166,7 +166,7 @@ coerced into zero or a fabricated quota.
 | 3. Provider and OAuth | **Complete / GO** | Phase 2B GO | Model discovery and explicit capability registry; official `cpa` settings bridge; bounded Codex device login; fail-closed local callback capability; strict Host BFF; generated Typert Host/Remote artifacts; minimal `wha1echai.gateway` App foundation | **GO**: provider/model discovery, explicit image capability, bounded device flow, fail-closed callback capability, official `ctx.llm` probe, generated 11-endpoint allowlist, Loader unload, and packed client import passed. Browser, HMR, full App routes, analytics, and full aggregate remain later-phase work. |
 | 4. Analytics | **Complete / GO** | Phase 3 GO | Optional SQLite plugin; checksummed migration; worker-owned WAL store and collector lease; redacted usage, token, latency, health and quota projections; rollups/retention; typed Host read surface; failure isolation | **GO**: 28 analytics tests, 23 quota/client tests, built-worker verification, exact tarball payload, repository-external packed worker, clean checkout, and full current-phase aggregate passed. Unknown pricing remains explicitly unpriced; analytics failure is off the model path. |
 | 5. dsh-webpage App | **Complete / GO** | Phases 2–4 GO; provider/OAuth and analytics contracts | Native App package; launcher/settings/runtime/provider/OAuth/analytics views; full-path Playground using `ctx.llm`; unavailable/degraded states; generated Typert Remotes mounted by `ctx.remote.$mount()`; no browser proxy | **GO**: the real packed Browser passed all six routes, conversation preservation, model apply, text/image probes, opaque attachment upload, optional analytics states, and the 18-endpoint generated Remote boundary. |
-| 6. Packed public preview | **In Progress** | Phases 1–5 GO | Exact tarballs/Pack; clean repository-external profile; real rc.6 Loader/CLI composition; browser acceptance; client HMR; security audit; final provenance, docs, and aggregate report | **GO** only when every required lane is green, HMR has no duplicate/stale lifecycle, browser/security assertions pass, and packed installation resolves outside this repository. **STOP** on any skipped lane, private API, install-path leak, secret exposure, non-reproducible artifact, or unresolved review finding. |
+| 6. Packed public preview | **Complete / GO** | Phases 1–5 GO | Exact tarballs/Pack; clean repository-external profile; real rc.6 Loader/CLI composition; browser acceptance; client HMR; security audit; final provenance, docs, and aggregate report | **GO**: all required lanes passed; HMR had no duplicate/stale lifecycle, browser/security assertions passed, and packed installation plus the 182-file clean checkout resolved outside this repository. |
 
 Phase status is not evidence status. A phase cannot become `Complete` from code
 inspection or review alone. Every phase record must include the exact command,
@@ -300,14 +300,14 @@ Commit/push: included in the Phase 5 gate commit pushed to public origin/main
 
 ```text
 Phase: 6
-Status: Planned / Unverified
-Implementation refs: <Pack, packed profile, browser/HMR/security scripts, final docs>
-Evidence refs: <external-profile log, tarballs, browser/HMR/security artifacts, independent review>
+Status: Complete / GO
+Implementation refs: packages/pack; scripts/phase6-browser.mjs; scripts/phase6-hmr.mjs; tests/browser
+Evidence refs: docs/evidence/phase-6.md; .staging/reports/phase1-packed-install.log; .staging/reports/phase1-clean-checkout.log
 Commands: pnpm install --frozen-lockfile; pnpm test:browser; pnpm test:hmr; pnpm test:security; pnpm pack:verify; pnpm verify
-Observed result: <PLANNED / UNVERIFIED>
-Open risks/decisions: <none recorded yet>
-Gate decision: STOP until every required lane is green and repository-external
-Commit/push: <record hash, remote, and public-preview artifact only after GO>
+Observed result: 12 fake-CPA, 90 aggregate unit, 28 analytics, and 23 quota/client tests passed; Browser, HMR, exact packed Loader, real CPA, security, external install, and 182-file clean checkout passed
+Open risks/decisions: root-path-only deployment and fail-closed remote callback remain documented v0.1 limits; npm publication remains deferred
+Gate decision: GO on 2026-08-14
+Commit/push: recorded by the Phase 6 gate commit on public origin/main
 ```
 
 ## Acceptance matrix
@@ -316,17 +316,17 @@ Commit/push: <record hash, remote, and public-preview artifact only after GO>
 | --- | --- | --- | --- | --- |
 | G-01 | All DSH integration uses only public DSH `0.1.0-rc.6` declarations/exports and runtime seams; no local rc.5 source or private import is required. | Workspace manifests, API probe, client/runtime installation | `pnpm test:public-api` report plus real rc.6 Loader/profile log | COMPLETED / GO for Phase 1 |
 | G-02 | One clean install outside the checkout is reproducible from immutable GitHub tarball dependencies and local generated-file overrides only; each dependency records URL, version, and SHA-256, with no npm/runtime download. | Pack envelope, manifests, generated artifacts, installer | Frozen/offline install, URL/version/SHA manifest, payload and install-script report | COMPLETED / GO for Phase 1 |
-| G-03 | Managed and external runtime modes have deterministic lifecycle states, readiness/health, stop/dispose, failure, and restart behavior; process launch uses exact argv/cwd/stdio/graceMs/scrubbed env and never shell-interpreted argv. | Runtime state machine and supervisor | Unit transition matrix plus real Loader/integration lifecycle log and spawn-spec assertion | Planned / Unverified |
+| G-03 | Managed and external runtime modes have deterministic lifecycle states, readiness/health, stop/dispose, failure, and restart behavior; process launch uses exact argv/cwd/stdio/graceMs/scrubbed env and never shell-interpreted argv. | Runtime state machine and supervisor | Unit transition matrix plus real Loader/integration lifecycle log and spawn-spec assertion | COMPLETED / GO |
 | G-04 | **Phase 2A hard gate:** the real built official `llm-pi-ai` package plus fake/external CPA proves text, tools, ordered streaming, explicit image opt-in, and abort on one public rc.6 path. Failure stops before Phase 2B and permits no adapter fallback. | Public rc.6 client/LLM path and deterministic CPA fixture | `pnpm test:llm-compat` CPA-observed real-path report | COMPLETED / GO |
 | G-05 | Model discovery does not infer vision from `/v1/models`; image input is enabled only by an explicit verified capability declaration. | Model registry and provider capability metadata | Focused provider tests plus `scripts/verify-phase3.mjs` | COMPLETED / GO for Phase 3 |
 | G-06 | The three credential paths remain separate: `llm-pi-ai` proxy ref/request, Gateway management ref/operation, and managed-child explicit env. Missing one path never falls back to another. | Route, Host management client, child environment builder | Focused CPA/provider tests and existing runtime evidence | COMPLETED / GO for Phases 2B–3 |
 | G-07 | Device OAuth is the default; local callback remains unavailable until a public server-derived trusted-origin seam exists, and a client-supplied origin is rejected as authority. | OAuth coordinator, request-origin validation, callback capability gate | Focused OAuth tests and parser/redaction assertions | COMPLETED / GO for Phase 3 |
-| G-08 | Prompt, attachment refs/content, and model result cross only the typed requesting `gateway.probe` flow; operational Remotes, analytics, logs, DB, and persistence reject/exclude them. | Probe schema/Host handler, Remote projections, analytics/log boundaries | Generated strict codecs, Host probe result projection, and Phase 3 Loader text probe | COMPLETED / GO for Phase 3 Host boundary; browser/analytics checks remain planned |
-| G-09 | The destructive HTTP usage queue is at-most-once with no ack: crash-after-pop loss is visible as degraded/incomplete, and dedupe starts only after DB receipt. | Collector, worker ingest, completeness state | Queue pop/no-ack, crash-window, competition, post-receipt dedupe tests | Planned / Unverified |
-| G-10 | Pricing is an immutable bundled snapshot. The Host-internal Codex quota adapter uses only the fixed allowlisted `POST /v0/management/api-call` payload; other providers may return typed unsupported/unavailable and no generic `/api-call` remote exists. | Pricing asset, quota adapter, management allowlist, typed quota result | `pnpm test:quota` fixed-payload/schema/size/projection and no-generic-proxy report | Planned / Unverified |
+| G-08 | Prompt, attachment refs/content, and model result cross only the typed requesting `gateway.probe` flow; operational Remotes, analytics, logs, DB, and persistence reject/exclude them. | Probe schema/Host handler, Remote projections, analytics/log boundaries | Generated strict codecs, Host probe result projection, Browser negative assertions, and analytics tests | COMPLETED / GO |
+| G-09 | The destructive HTTP usage queue is at-most-once with no ack: crash-after-pop loss is visible as degraded/incomplete, and dedupe starts only after DB receipt. | Collector, worker ingest, completeness state | Queue pop/no-ack, crash-window, competition, post-receipt dedupe tests | COMPLETED / GO |
+| G-10 | Pricing is an immutable bundled snapshot. The Host-internal Codex quota adapter uses only the fixed allowlisted `POST /v0/management/api-call` payload; other providers may return typed unsupported/unavailable and no generic `/api-call` remote exists. | Pricing asset, quota adapter, management allowlist, typed quota result | `pnpm test:quota` fixed-payload/schema/size/projection and no-generic-proxy report | COMPLETED / GO |
 | G-11 | The native App uses ID `wha1echai.gateway`, base `/apps/wha1echai.gateway`, frozen subroutes, and the package `./package.json` `./client` export; it does not take over the shell or reset conversation state. | App manifest, `package.json` exports, route/slot composition | Phase 5 packed Browser and client export evidence | COMPLETED / GO |
-| G-12 | Client HMR replaces gateway contributions exactly once, leaves unrelated Apps and conversation state alive, and contains render failure at the owning boundary. | DSH client lifecycle/HMR integration and App boundary | `pnpm test:hmr` before/after log and browser artifact | Planned / Unverified |
-| G-13 | A clean, repository-external DSH rc.6 profile loads the exact packed public preview with the Linux no-plugin / Windows-macOS standard-name-plus-disabled-plugin policy and all provenance requirements. | Pack descriptor, platform assets/config, profile setup, release scripts | `pnpm pack:verify` artifact plus `pnpm verify` aggregate | Phase 1 packaging subset passed; final Phase 6 acceptance remains planned |
+| G-12 | Client HMR replaces gateway contributions exactly once, leaves unrelated Apps and conversation state alive, and contains render failure at the owning boundary. | DSH client lifecycle/HMR integration and App boundary | `pnpm test:hmr` before/after log and browser artifact | COMPLETED / GO |
+| G-13 | A clean, repository-external DSH rc.6 profile loads the exact packed public preview with the Linux no-plugin / Windows-macOS standard-name-plus-disabled-plugin policy and all provenance requirements. | Pack descriptor, platform assets/config, profile setup, release scripts | `pnpm pack:verify` artifact plus `pnpm verify` aggregate | COMPLETED / GO |
 
 ## Stop conditions and required deviation record
 

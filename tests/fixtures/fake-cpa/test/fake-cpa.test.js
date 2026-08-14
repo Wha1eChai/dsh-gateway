@@ -32,6 +32,10 @@ async function withFixture(t, options, callback) {
   return callback(fixture);
 }
 
+test('rejects an explicit Fetch-forbidden port before starting', async () => {
+  await assert.rejects(startFakeCpa({ port: 6000 }), /port 6000 is forbidden by Fetch/);
+});
+
 test('starts on loopback and exposes deterministic health, capability, and model probes', async (t) => {
   await withFixture(t, {}, async (fixture) => {
     assert.equal(fixture.address.host, '127.0.0.1');

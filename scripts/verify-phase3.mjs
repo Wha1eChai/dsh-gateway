@@ -45,6 +45,7 @@ async function main() {
       config: { path: credentialsPath, watch: false },
     })
     await ctx.loader.create({ id: 'subprocess', name: '@deepseek-ai/dsh-subprocess-local' })
+    await ctx.loader.create({ id: 'attachments', name: '@deepseek-ai/dsh-attachment-local' })
     await ctx.loader.create({ id: 'llm-pi-ai', name: '@deepseek-ai/dsh-llm-pi-ai' })
     await ctx.loader.create({
       id: 'gateway',

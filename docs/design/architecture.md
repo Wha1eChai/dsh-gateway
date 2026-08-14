@@ -3,8 +3,8 @@
 Status: Phase 5 architecture baseline — implemented; acceptance is being
 completed. Compatibility target:
 DeepSeek Harness `0.1.0-rc.6`, `@wha1echai/dsh-webpage` `0.1.0`, and
-CLIProxyAPI `7.2.131`. Phases 0–4 are complete and the native App is running
-in the real DSH Web profile; Phase 6 automation remains the release gate.
+CLIProxyAPI `7.2.131`. Phases 0–6 are complete / GO: the native App, packed
+Browser, HMR, security, real CPA, and clean-checkout gates have passed.
 
 ## Decision summary
 
