@@ -1,0 +1,18 @@
+dsh-gateway
+Copyright (c) 2026 Wha1eChai
+
+This project integrates with DeepSeek Harness and distributes optional,
+platform-specific CLIProxyAPI binaries. DeepSeek Harness and CLIProxyAPI are
+separate projects distributed under their respective MIT licenses. Every
+platform package must include the exact upstream CLIProxyAPI license and a
+provenance manifest naming the release, asset URL, platform, architecture, and
+SHA-256 digest.
+
+Selected relational data-model, collection, rollup, pricing, and quota ideas
+may be adapted from CPA-Manager-Plus under its MIT license. Adapted source
+files must retain a focused attribution header. This project does not include
+CPA-Manager-Plus's independent server, authentication system, updater, or UI.
+
+No trademark rights are granted by this notice. This repository does not
+claim affiliation with or endorsement by DeepSeek, CLIProxyAPI, or
+CPA-Manager-Plus.
