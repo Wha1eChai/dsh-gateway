@@ -71,8 +71,10 @@ Models, Requests, Playground, and Settings subroutes.
 Phase 0 and Phase 1 are complete and independently reviewed. The workspace,
 six-platform supply chain, release rewriting, public API probes, clean-checkout
 verification, and repository-external one-Pack installation passed their Gate.
-Phase 2A compatibility work is next. No public installable Gateway release
-exists yet.
+Phase 2A is also complete: the official rc.6 `llm-pi-ai` path passed text,
+tools, ordered streaming, explicit image opt-in, and abort against the fake
+CPA. Runtime Phase 2B is next. No public installable Gateway release exists
+yet.
 
 ## Deferred
 

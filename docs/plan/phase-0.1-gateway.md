@@ -4,8 +4,8 @@
 
 | Item | Decision |
 | --- | --- |
-| Plan status | **Phases 0–1 — Complete / GO**; Phase 2A compatibility implementation is next. |
-| Code status | The Phase 1 workspace, package/release scaffolding, deterministic fake CPA, six-platform supply chain, and executable evidence exist. Phase 2A product behavior has not started. |
+| Plan status | **Phases 0–2A — Complete / GO**; Phase 2B runtime/client implementation is next. |
+| Code status | The Phase 1 foundation and Phase 2A official `llm-pi-ai` compatibility probe are implemented. Product runtime behavior has not started. |
 | Release shape | Public, out-of-tree DSH Bundle/Pack preview composed from ordinary DSH Plugins; no DeepSeek Harness source changes and no npm publication in this preview. |
 | Pinned compatibility | DeepSeek Harness `0.1.0-rc.6`; dsh-webpage `0.1.0`; CLIProxyAPI `7.2.131`; CPA-Manager-Plus `1.12.0-rc.2` as a reference only. |
 | Toolchain | Node `^22.19.0 || >=24.0.0`; pnpm `11.7.0`; Windows 11 is the primary release verification environment. Managed-platform policy is Linux `no-plugin` only; Windows/macOS use standard upstream executable names with dynamic plugins disabled by configuration. |
@@ -162,7 +162,7 @@ coerced into zero or a fabricated quota.
 | --- | --- | --- | --- | --- |
 | 0. Documentation baseline | **Complete / GO** | Approved scope and dsh-webpage preflight | Scope boundary, architecture/design links, dependency map, package topology, ADR decisions, this phased plan, testing contract, acceptance matrix, evidence template, and HANDOFF update by the main thread | **GO** only after main-thread review accepts the docs as internally consistent. **STOP** on an unresolved public API, capability, licensing, security, or upstream-change contract. This pass does not commit or push. |
 | 1. Workspace and supply chain | **Complete / GO** | Phase 0 GO | pnpm workspace; exact manifests and exports; public rc.6 API probe; package allowlists; platform binary provenance and upstream licenses; reproducible install/build scaffolding | **GO** when frozen install, public-only rc.6 imports/exports, typecheck, lint, build, package payload, provenance, and supply-chain checks pass. **STOP** on a private/local rc.5 import, floating DSH dependency, adjacent-checkout dependency, broad install-script approval, missing license/digest, or unreviewed executable. |
-| 2A. `llm-pi-ai` compatibility hard gate | Planned | Phase 1 GO | Real built official `@deepseek-ai/dsh-llm-pi-ai` public-contract probe against fake/external CPA: text, tools, stream, explicit image opt-in, and abort | **GO** only when all five behaviors pass on the same real path. **STOP before Phase 2B and all runtime/client investment** on any failure; no adapter fallback. |
+| 2A. `llm-pi-ai` compatibility hard gate | **Complete / GO** | Phase 1 GO | Real built official `@deepseek-ai/dsh-llm-pi-ai` public-contract probe against fake/external CPA: text, tools, stream, explicit image opt-in, and abort | **GO** only when all five behaviors pass on the same real path. **STOP before Phase 2B and all runtime/client investment** on any failure; no adapter fallback. |
 | 2B. Runtime and client | Planned | Phase 2A GO | Managed/external runtime state machine; process supervisor; readiness/health; settings and three-path credential handoff; DSH client installation; real `ctx.llm` request path | **GO** when all state transitions, disposal/restart behavior, and real rc.6 Loader/client lifecycle pass. **STOP** on shell execution, shell-interpreted argv, implicit process fields, leaked secret, duplicate lifecycle, or private API. |
 | 3. Provider and OAuth | Planned | Phase 2B GO | Model discovery and explicit capability registry; provider/account status; Codex device login; fail-closed localhost callback gate; host-side credential resolution; provider refresh/failover handoff; generated remote contract for these operations | **GO** when device flow is bounded, local callback is disabled without the trusted server-origin seam, cancellation/error states are deterministic, no token reaches the browser/SQLite/logs, model image support is explicit, and the provider request reaches the same `ctx.llm` path. **STOP** on browser-held secrets, client-origin authority, inferred image support, or gateway-owned provider lifecycle that duplicates CPA. |
 | 4. Analytics | Planned | Phase 3 GO | Optional SQLite plugin; migrations/schema; request, token, cost, latency, account-health, and quota records; redaction and retention policy; query/read remotes; failure isolation | **GO** when migration, concurrent writes, aggregation, restart, redaction, and disabled-analytics behavior pass without changing model delivery. **STOP** if prompts, images, model output, credentials, auth files, or management keys can be persisted or if analytics failure breaks `ctx.llm`. |
@@ -241,14 +241,14 @@ Commit/push: this record is included in the Phase 1 Gate commit pushed to the pu
 
 ```text
 Phase: 2A
-Status: Planned / Unverified
-Implementation refs: <real built official llm-pi-ai compatibility probe; fake/external CPA fixture>
-Evidence refs: <public rc.6 API report; CPA-observed text/tool/stream/image-opt-in/abort report>
+Status: Complete / GO
+Implementation refs: scripts/verify-llm-compat.mjs; tests/fixtures/fake-cpa
+Evidence refs: docs/evidence/phase-2a.md; CPA-observed PASS records emitted by pnpm test:llm-compat
 Commands: pnpm test:public-api; pnpm test:llm-compat; pnpm typecheck
-Observed result: <PLANNED / UNVERIFIED>
-Open risks/decisions: <any one capability failure is a hard STOP before Phase 2B>
-Gate decision: STOP until the real path proves text, tools, streaming, explicit image opt-in, and abort
-Commit/push: <record hash and remote only after GO>
+Observed result: the same real rc.6 Loader route passed text, tool call/result, ordered streaming, pre-dispatch text-only image rejection, image-enabled attachment delivery, and observable abort
+Open risks/decisions: no official-path compatibility blocker and no custom adapter; runtime behavior remains Phase 2B work
+Gate decision: GO on 2026-08-14
+Commit/push: this record is included in the Phase 2A Gate commit pushed to the public repository
 ```
 
 ```text
@@ -318,7 +318,7 @@ Commit/push: <record hash, remote, and public-preview artifact only after GO>
 | G-01 | All DSH integration uses only public DSH `0.1.0-rc.6` declarations/exports and runtime seams; no local rc.5 source or private import is required. | Workspace manifests, API probe, client/runtime installation | `pnpm test:public-api` report plus real rc.6 Loader/profile log | COMPLETED / GO for Phase 1 |
 | G-02 | One clean install outside the checkout is reproducible from immutable GitHub tarball dependencies and local generated-file overrides only; each dependency records URL, version, and SHA-256, with no npm/runtime download. | Pack envelope, manifests, generated artifacts, installer | Frozen/offline install, URL/version/SHA manifest, payload and install-script report | COMPLETED / GO for Phase 1 |
 | G-03 | Managed and external runtime modes have deterministic lifecycle states, readiness/health, stop/dispose, failure, and restart behavior; process launch uses exact argv/cwd/stdio/graceMs/scrubbed env and never shell-interpreted argv. | Runtime state machine and supervisor | Unit transition matrix plus real Loader/integration lifecycle log and spawn-spec assertion | Planned / Unverified |
-| G-04 | **Phase 2A hard gate:** the real built official `llm-pi-ai` package plus fake/external CPA proves text, tools, ordered streaming, explicit image opt-in, and abort on one public rc.6 path. Failure stops before Phase 2B and permits no adapter fallback. | Public rc.6 client/LLM path and deterministic CPA fixture | `pnpm test:llm-compat` CPA-observed real-path report | Planned / Unverified; hard STOP before Phase 2B |
+| G-04 | **Phase 2A hard gate:** the real built official `llm-pi-ai` package plus fake/external CPA proves text, tools, ordered streaming, explicit image opt-in, and abort on one public rc.6 path. Failure stops before Phase 2B and permits no adapter fallback. | Public rc.6 client/LLM path and deterministic CPA fixture | `pnpm test:llm-compat` CPA-observed real-path report | COMPLETED / GO |
 | G-05 | Model discovery does not infer vision from `/v1/models`; image input is enabled only by an explicit verified capability declaration. | Model registry and provider capability metadata | Provider fixture and negative model-capability test | Planned / Unverified |
 | G-06 | The three credential paths remain separate: `llm-pi-ai` proxy ref/request, Gateway management ref/operation, and managed-child explicit env. Missing one path never falls back to another. | Route, Host management client, child environment builder | Three-path fixture with independent missing/invalid refs and no-value exposure scan | Planned / Unverified |
 | G-07 | Device OAuth is the default; local callback remains unavailable until a public server-derived trusted-origin seam exists, and a client-supplied origin is rejected as authority. | OAuth coordinator, request-origin validation, callback listener | `pnpm test:oauth` and security negative cases | Planned / Unverified |

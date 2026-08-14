@@ -65,7 +65,7 @@ mocked substitute does not satisfy the corresponding lane.
 | `pnpm build` | Build all owned packages and generated client/remote artifacts | 1–6 | COMPLETED for Phase 1; later phases extend it |
 | `pnpm test:unit` | Pure contracts, validators, state transitions, redaction, and read models | 2–5 | PARTIAL: fake CPA fixture has 11 passing tests; product units begin in Phase 2 |
 | `pnpm test:integration` | Real rc.6 Loader, DSH client, runtime, provider, OAuth, analytics, and Pack composition after the 2A gate | 2B–6 | PLANNED / UNVERIFIED |
-| `pnpm test:llm-compat` | Phase 2A real built official `llm-pi-ai` plus fake/external CPA text/tools/stream/image-opt-in/abort gate | 2A, 5, 6 | PLANNED / UNVERIFIED |
+| `pnpm test:llm-compat` | Phase 2A real built official `llm-pi-ai` plus fake/external CPA text/tools/stream/image-opt-in/abort gate | 2A, 5, 6 | COMPLETED / GO for Phase 2A |
 | `pnpm test:oauth` | Device and localhost callback login lifecycle | 3, 5, 6 | PLANNED / UNVERIFIED |
 | `pnpm test:analytics` | SQLite migrations, writes, aggregates, restart, redaction, and failure isolation | 4, 5, 6 | PLANNED / UNVERIFIED |
 | `pnpm test:quota` | Fixed Codex quota adapter, immutable pricing snapshot, strict projection, unsupported/unavailable states, and no generic `/api-call` | 3–6 | PLANNED / UNVERIFIED |
@@ -82,7 +82,7 @@ mocked substitute does not satisfy the corresponding lane.
 | Environment and frozen install | `node --version`; `pnpm --version`; `pnpm install --frozen-lockfile` | Versions, OS, frozen/offline-install log, URL/version/SHA manifest, lockfile result | COMPLETED for Phase 1 on Windows x64, Node 24.11.1, pnpm 11.7.0 |
 | Public rc.6 API | `pnpm test:public-api`; `pnpm pack:verify`; later `pnpm test:integration` | Import/export report and real rc.6 Loader/profile proof; no private/local source resolution; packed `./client` handoff executes | COMPLETED for Phase 1; product integration remains planned |
 | Workspace and supply chain | `pnpm test:supply-chain`; `pnpm typecheck`; `pnpm lint`; `pnpm build`; `pnpm pack:verify` | Lockfile policy, one-install envelope, exact payloads, local generated-file overrides, no install/runtime download, licenses, provenance URLs/platform/architecture/SHA-256 | COMPLETED for Phase 1 |
-| Phase 2A `llm-pi-ai` hard gate | `pnpm test:public-api`; `pnpm test:llm-compat` | Real built official package plus fake/external CPA proves text/tools/ordered stream/explicit image opt-in/abort; any failure stops before 2B | PLANNED / UNVERIFIED |
+| Phase 2A `llm-pi-ai` hard gate | `pnpm test:public-api`; `pnpm test:llm-compat` | Real built official package plus fake/external CPA proves text/tools/ordered stream/explicit image opt-in/abort; any failure stops before 2B | COMPLETED / GO |
 | Runtime state machine | `pnpm test:unit`; `pnpm test:integration`; `pnpm test:hmr` | Transition matrix for managed/external modes, readiness, failure, stop/dispose, restart, replacement, exact spawn spec, and unrelated-Plugin survival | PLANNED / UNVERIFIED |
 | Credential paths | `pnpm test:unit`; `pnpm test:integration`; `pnpm test:security` | Independent proof for proxy ref/request, management ref/operation, managed-child explicit env; no fallback or value exposure | PLANNED / UNVERIFIED |
 | Provider and model capability | `pnpm test:unit`; `pnpm test:integration` | Provider discovery, explicit capability registry, negative `/v1/models` image inference, account/failover fixtures | PLANNED / UNVERIFIED |
@@ -143,6 +143,10 @@ install-script approval, a binary without provenance/license, or any package
 that resolves an adjacent checkout.
 
 ### Phase 2A — `llm-pi-ai` compatibility hard gate before runtime
+
+Status on 2026-08-14: Complete / GO. `pnpm test:llm-compat` exercised one
+official built rc.6 Loader route and the fake CPA observed all outbound model
+requests. Evidence is summarized in `docs/evidence/phase-2a.md`.
 
 Run this phase with the real built official `@deepseek-ai/dsh-llm-pi-ai`
 package and the public installed rc.6 client path. Use a deterministic fake or
@@ -346,7 +350,7 @@ this lane green.
 | T-01 | Public rc.6 API boundary | public-api, integration | Imports/exports and runtime seams resolve from installed rc.6 only; private/local/rc.5 resolution fails | COMPLETED for Phase 1; later integration extends it |
 | T-02 | Reproducible one-install supply chain | supply-chain, pack | Clean outside-checkout install from immutable GitHub tarballs plus hashed local generated-file overrides; URL/version/SHA, no npm/runtime download | COMPLETED for Phase 1 |
 | T-03 | Phase 2B runtime state and spawn contract | unit, integration, HMR, security | Valid/invalid transitions, readiness, stop/dispose, child exit, bounded restart, exact argv/cwd/stdio/graceMs/scrubbed env, no shell interpretation | PLANNED / UNVERIFIED |
-| T-04 | Phase 2A `llm-pi-ai` hard gate | llm-compat, public-api | Real built official package plus fake/external CPA proves text, tools, ordered stream, explicit image opt-in, and abort on one public rc.6 path; failure STOPs before 2B; no adapter fallback | PLANNED / UNVERIFIED; hard STOP on failure |
+| T-04 | Phase 2A `llm-pi-ai` hard gate | llm-compat, public-api | Real built official package plus fake/external CPA proves text, tools, ordered stream, explicit image opt-in, and abort on one public rc.6 path; failure STOPs before 2B; no adapter fallback | COMPLETED / GO |
 | T-05 | Explicit model capability | unit, integration, security | `/v1/models` cannot infer image support; explicit opt-in succeeds and unsupported/inferred capability is rejected before attachment dispatch | PLANNED / UNVERIFIED |
 | T-06 | Three credential paths | unit, integration, security | Proxy ref/request, management ref/operation, and managed-child explicit env resolve independently; no cross-fallback or value exposure | PLANNED / UNVERIFIED |
 | T-07 | Provider capability and account state | unit, integration | Model discovery, unknown/unavailable/failover states, and CPA-owned refresh/failover are deterministic | PLANNED / UNVERIFIED |

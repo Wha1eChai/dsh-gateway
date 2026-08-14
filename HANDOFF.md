@@ -8,8 +8,8 @@ native dsh-webpage App without modifying DeepSeek Harness.
 
 ## Current Phase
 
-Phase 0 and Phase 1 are complete with independent GO reviews. Phase 2A is next:
-prove the official `llm-pi-ai` path before investing in runtime Phase 2B.
+Phases 0, 1, and 2A are complete / GO. Runtime and typed CPA client Phase 2B
+is next.
 
 ## Completed
 
@@ -32,11 +32,14 @@ prove the official `llm-pi-ai` path before investing in runtime Phase 2B.
   exports, and produced all four expected `dump-config` rows.
 - A clean committed source snapshot with a fresh pnpm store rebuilt all pinned
   upstream assets, reran the nested aggregate, and remained Git-clean.
+- The official built `dsh-llm-pi-ai` rc.6 Loader path passed text, tool
+  round-trip, ordered streaming, explicit image opt-in, and abort against the
+  fake CPA without a custom adapter.
 
 ## Pending
 
-1. Commit and push the accepted Phase 1 Gate.
-2. Run Phase 2A `llm-pi-ai` compatibility before runtime Phase 2B.
+1. Commit and push the accepted Phase 2A Gate.
+2. Implement the minimal managed/external runtime and typed CPA client.
 
 ## Decisions / Constraints
 
@@ -75,12 +78,13 @@ prove the official `llm-pi-ai` path before investing in runtime Phase 2B.
 - Evidence is generated under `.staging/release/v0.1.0/` and
   `.staging/reports/phase1-packed-install.log`; these generated artifacts are
   intentionally ignored by Git.
-- Phase 2A–6 behavior remains planned and unverified.
+- Phase 2A evidence is recorded in `docs/evidence/phase-2a.md`; Phases 2B–6
+  remain planned and unverified.
 
 ## Next Step
 
-Commit and push Phase 1, then replace the intentional `test:llm-compat` Phase
-2A stop with the real official `llm-pi-ai` compatibility probe.
+Commit and push Phase 2A, then begin the Phase 2B runtime state machine and
+typed CPA client without changing the proven official LLM transport path.
 
 ## Risks / Rollback
 
@@ -88,6 +92,6 @@ Commit and push Phase 1, then replace the intentional `test:llm-compat` Phase
   lock every public import against installed rc.6 declarations and exports.
 - OAuth and remote administration are security gates, not implied by a working
   model endpoint.
-- Phase 0 is recoverable from public commit `27090af`. Phase 1 has no runtime
+- Phase 1 is recoverable from public commit `1eb3ca1`. Phase 2A has no runtime
   activation side effects; generated release/cache data is under ignored
   `.staging/` and `packages/platform/*/vendor/` paths.

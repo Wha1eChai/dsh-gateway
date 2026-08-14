@@ -25,6 +25,7 @@ for (const script of [
   'build',
   'test:unit',
   'test:public-api',
+  'test:llm-compat',
   'test:supply-chain',
   'pack:verify',
   'test:security',
@@ -32,4 +33,4 @@ for (const script of [
 
 if (process.env.DSH_GATEWAY_CLEAN_VERIFY !== '1') pnpm(['run', 'test:clean-checkout'])
 
-process.stdout.write('Phase 1 aggregate verification passed\n')
+process.stdout.write('Phase 2A aggregate verification passed\n')
