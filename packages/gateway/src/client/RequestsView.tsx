@@ -6,7 +6,7 @@ import type {
   GatewayAnalyticsRequestView,
   GatewayAnalyticsRequestsRequest,
   GatewayAnalyticsTimeRange,
-} from '@wha1echai/dsh-gateway/contracts'
+} from '@dshapps/dsh-gateway/contracts'
 
 import styles from './RequestsView.module.css'
 

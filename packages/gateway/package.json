@@ -1,5 +1,5 @@
 {
-  "name": "@wha1echai/dsh-gateway",
+  "name": "@dshapps/dsh-gateway",
   "description": "DSH-native CLIProxyAPI gateway and Webpage App",
   "version": "0.1.0",
   "type": "module",
@@ -35,7 +35,7 @@
         "@deepseek-ai/dsh-client-runtime",
         "@deepseek-ai/dsh-client-locale",
         "@deepseek-ai/dsh-client-ui-slots",
-        "@wha1echai/dsh-webpage"
+        "@dshapps/webpage"
       ],
       "platform": "web"
     }
@@ -80,8 +80,8 @@
     "@deepseek-ai/dsh-subprocess": "0.1.0-rc.6",
     "@deepseek-ai/dsh-typert-protocol": "0.1.0-rc.6",
     "@deepseek-ai/schemastery": "3.18.1",
-    "@wha1echai/dsh-gateway-runtime": "0.1.0",
-    "@wha1echai/dsh-webpage": "0.1.0",
+    "@dshapps/dsh-gateway-runtime": "0.1.0",
+    "@dshapps/webpage": "0.2.0",
     "react": "18.3.1",
     "react-dom": "18.3.1"
   },
@@ -89,17 +89,17 @@
     "@deepseek-ai/dsh-llm-pi-ai": {
       "optional": true
     },
-    "@wha1echai/dsh-gateway-runtime": {
+    "@dshapps/dsh-gateway-runtime": {
       "optional": true
     },
-    "@wha1echai/dsh-webpage": {
+    "@dshapps/webpage": {
       "optional": true
     }
   },
   "devDependencies": {
     "echarts": "6.1.0",
-    "@wha1echai/dsh-gateway-runtime": "workspace:*",
-    "@wha1echai/dsh-webpage": "https://github.com/Wha1eChai/dsh-webpage/releases/download/v0.1.0/wha1echai-dsh-webpage-0.1.0.tgz"
+    "@dshapps/dsh-gateway-runtime": "workspace:*",
+    "@dshapps/webpage": "file:../../../dsh-webpage/packages/webpage"
   },
   "scripts": {
     "build": "tsc -b tsconfig.json && tsdown --env.DSH_BUILD_FACE=host && tsc -b tsconfig.client.json && tsdown --env.DSH_BUILD_FACE=client",

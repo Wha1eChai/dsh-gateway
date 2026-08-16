@@ -1,5 +1,5 @@
 {
-  "name": "@wha1echai/dsh-gateway-analytics",
+  "name": "@dshapps/dsh-gateway-analytics",
   "description": "Privacy-bounded SQLite analytics for dsh-gateway",
   "version": "0.1.0",
   "type": "module",
@@ -34,7 +34,7 @@
     "directory": "packages/analytics"
   },
   "dependencies": {
-    "@wha1echai/dsh-gateway": "workspace:*"
+    "@dshapps/dsh-gateway": "workspace:*"
   },
   "peerDependencies": {
     "@deepseek-ai/cordis": "4.0.1",

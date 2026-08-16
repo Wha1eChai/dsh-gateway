@@ -1,0 +1,73 @@
+/** @type {import('@dshapps/app-check').AppCheckConfig} */
+export default {
+  name: '@dshapps/dsh-gateway',
+  expectedClientInject: [
+    '@deepseek-ai/dsh-client-runtime',
+    '@deepseek-ai/dsh-client-locale',
+    '@deepseek-ai/dsh-client-ui-slots',
+    '@dshapps/webpage',
+  ],
+  packedAllowlist: [
+    'package/LICENSE',
+    'package/README.md',
+    'package/lib/client.js',
+    'package/lib/index.js',
+    'package/lib/typert.host.d.ts',
+    'package/lib/typert.host.js',
+    'package/lib/typert.remote-client.d.ts',
+    'package/lib/typert.remote-client.js',
+    'package/lib/types/client/GatewayApp.d.ts',
+    'package/lib/types/client/PlaygroundView.d.ts',
+    'package/lib/types/client/RequestsView.d.ts',
+    'package/lib/types/client/index.d.ts',
+    'package/lib/types/client/locales.d.ts',
+    'package/lib/types/client/view-types.d.ts',
+    'package/lib/types/client/views/AccountsView.d.ts',
+    'package/lib/types/client/views/DashboardView.d.ts',
+    'package/lib/types/client/views/ModelsView.d.ts',
+    'package/lib/types/client/views/SettingsView.d.ts',
+    'package/lib/types/config.d.ts',
+    'package/lib/types/host/contracts.d.ts',
+    'package/lib/types/host/contracts.js',
+    'package/lib/types/host/cpa-client/errors.d.ts',
+    'package/lib/types/host/cpa-client/index.d.ts',
+    'package/lib/types/host/cpa-client/types.d.ts',
+    'package/lib/types/host/gateway-service.d.ts',
+    'package/lib/types/host/oauth/callback.d.ts',
+    'package/lib/types/host/oauth/errors.d.ts',
+    'package/lib/types/host/oauth/index.d.ts',
+    'package/lib/types/host/oauth/manager.d.ts',
+    'package/lib/types/host/oauth/parser.d.ts',
+    'package/lib/types/host/oauth/types.d.ts',
+    'package/lib/types/host/provider/errors.d.ts',
+    'package/lib/types/host/provider/index.d.ts',
+    'package/lib/types/host/provider/models.d.ts',
+    'package/lib/types/host/provider/profile.d.ts',
+    'package/lib/types/host/provider/settings.d.ts',
+    'package/lib/types/host/provider/types.d.ts',
+    'package/lib/types/index.d.ts',
+    'package/package.json',
+  ],
+  patchMustInclude: ["name: '@dshapps/dsh-gateway'"],
+  patchMustNotInclude: ["name: '@dshapps/webpage'"],
+  allowFileDshPins: true,
+  require: {
+    publishable: true,
+    packageManager: false, // packageManager lives on the workspace root, not packages/gateway
+    enginesNode: false, // engines.node lives on the workspace root, not packages/gateway
+    clientPlatformWeb: true,
+    webpagePeer: true,
+    noWorkspaceRanges: false, // devDependencies use workspace:* for sibling packages in this monorepo
+    noAdjacentCheckout: false, // repository docs and scripts reference sibling checkout paths by design
+    noForbiddenUi: true,
+    localeZhEn: true,
+    bundlePatch: false, // cordis.patch.yml and dsh.bundle live in packages/pack, not the App package
+    loaderPreset: false, // tsdown.client.ts is a shared workspace preset at the repository root
+    invariantExport: false, // no lib/invariant.js; Host service App without a separate invariant module
+    clientExport: true,
+    noNodeDefaultExport: true,
+    clientCssInjection: true,
+    singleTarball: true,
+    noPrepare: true,
+  },
+}

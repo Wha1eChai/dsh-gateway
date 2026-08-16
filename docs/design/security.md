@@ -42,8 +42,8 @@ raw account identifiers and raw keys remain prohibited.
 
 ## Host and Client boundary
 
-The Gateway App has ID `wha1echai.gateway` and is mounted through
-the dsh-webpage `webpage.app` slot at `/apps/wha1echai.gateway`. It registers
+The Gateway App has ID `dshapps.gateway` and is mounted through
+the dsh-webpage `webpage.app` slot at `/apps/dshapps.gateway`. It registers
 the descriptor, locale, and slot composition, renders only sanitized runtime,
 provider, account, quota, and analytics projections, and does not create a
 second HTTP server.

@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "package": {
-    "name": "@wha1echai/dsh-gateway-platform-win32-arm64",
+    "name": "@dshapps/dsh-gateway-platform-win32-arm64",
     "version": "0.1.0"
   },
   "upstream": {

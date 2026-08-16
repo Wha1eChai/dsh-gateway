@@ -8,7 +8,7 @@ import {
   waitForVisible,
 } from './support.mjs'
 
-const APP_ID = 'wha1echai.gateway'
+const APP_ID = 'dshapps.gateway'
 const APP_PATH = `/apps/${APP_ID}`
 const ROUTES = Object.freeze([
   { path: '/', nav: 'Overview', heading: 'AI Gateway', selector: '#gateway-dashboard-title' },
@@ -58,7 +58,7 @@ async function waitForShell(page) {
 
 async function openGatewayFromApps(page, baseUrl) {
   await page.getByRole('button', { name: 'Apps', exact: true }).click()
-  await waitForUrl(page, '/apps/wha1echai.webpage', 'Apps launcher Inspector route')
+  await waitForUrl(page, '/apps/dshapps.webpage', 'Apps launcher Inspector route')
   await waitForVisible(page, page.getByRole('heading', { name: 'App Inspector', exact: true }), 'App Inspector heading')
   const card = page.locator(`[data-app-id="${APP_ID}"]`)
   await waitForVisible(page, card, 'Gateway App Inspector card')

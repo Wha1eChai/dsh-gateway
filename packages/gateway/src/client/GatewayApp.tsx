@@ -3,7 +3,7 @@ import type { ReactNode } from 'react'
 import { Button } from '@deepseek-ai/dsh-client-ui-primitives'
 import type { PropsLocale } from '@deepseek-ai/dsh-client-ui-slots'
 import type { RemoteResult } from '@deepseek-ai/dsh-typert-protocol'
-import type { WebpageAppSlotProps } from '@wha1echai/dsh-webpage/client'
+import type { WebpageAppSlotProps } from '@dshapps/webpage/client'
 
 import { PlaygroundView } from './PlaygroundView.js'
 import type { PlaygroundImageUpload, PlaygroundLabels } from './PlaygroundView.js'

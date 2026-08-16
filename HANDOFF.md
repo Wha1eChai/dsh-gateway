@@ -49,7 +49,7 @@ and upstream DeepSeek Harness Discussions are public.
   15-minute/5-second limits, scrubs private output, and keeps local callback
   capability fail-closed without a trusted server-derived origin.
 - Generated Typert Host/Remote artifacts expose exactly 11 `gateway.*`
-  endpoints; the strict Host BFF and minimal `wha1echai.gateway` App
+  endpoints; the strict Host BFF and minimal `dshapps.gateway` App
   foundation mount and dispose cleanly.
 - Phase 3 evidence passed: build/typecheck/lint; focused provider/OAuth/CPA
   tests 35/35 after the terminal-process fix; clean-checkout unit (11 fake-CPA

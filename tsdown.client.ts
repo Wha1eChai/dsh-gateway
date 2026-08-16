@@ -20,7 +20,7 @@ export const PLATFORM_MODULES = [
 /** Immediately loaded graph rows that may be required after Loader prefetch. */
 export const GRAPH_MODULES = [
   '@deepseek-ai/dsh-client-runtime/client',
-  '@wha1echai/dsh-webpage/client',
+  '@dshapps/webpage/client',
 ] as const
 
 export const CLIENT_EXTERNALS: readonly string[] = [

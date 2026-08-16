@@ -1,5 +1,5 @@
 {
-  "name": "@wha1echai/dsh-gateway-platform-darwin-arm64",
+  "name": "@dshapps/dsh-gateway-platform-darwin-arm64",
   "version": "0.1.0",
   "private": true,
   "description": "Pinned CLIProxyAPI v7.2.131 data asset for macOS arm64.",
@@ -13,7 +13,7 @@
     "README.md",
     "LICENSE"
   ],
-  "wha1echaiPlatform": {
+  "dshappsPlatform": {
     "binary": "vendor/cli-proxy-api",
     "provenance": "provenance/cli-proxy-api.json",
     "managedConfig": "config/managed.yaml",

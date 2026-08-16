@@ -7,7 +7,7 @@ const defaultRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '
 
 const EXPECTED = [
   {
-    packageName: '@wha1echai/dsh-gateway-platform-win32-x64',
+    packageName: '@dshapps/dsh-gateway-platform-win32-x64',
     directory: 'packages/platform/win32-x64',
     os: 'win32',
     cpu: 'x64',
@@ -16,7 +16,7 @@ const EXPECTED = [
     binaryPath: 'vendor/cli-proxy-api.exe',
   },
   {
-    packageName: '@wha1echai/dsh-gateway-platform-win32-arm64',
+    packageName: '@dshapps/dsh-gateway-platform-win32-arm64',
     directory: 'packages/platform/win32-arm64',
     os: 'win32',
     cpu: 'arm64',
@@ -25,7 +25,7 @@ const EXPECTED = [
     binaryPath: 'vendor/cli-proxy-api.exe',
   },
   {
-    packageName: '@wha1echai/dsh-gateway-platform-darwin-x64',
+    packageName: '@dshapps/dsh-gateway-platform-darwin-x64',
     directory: 'packages/platform/darwin-x64',
     os: 'darwin',
     cpu: 'x64',
@@ -34,7 +34,7 @@ const EXPECTED = [
     binaryPath: 'vendor/cli-proxy-api',
   },
   {
-    packageName: '@wha1echai/dsh-gateway-platform-darwin-arm64',
+    packageName: '@dshapps/dsh-gateway-platform-darwin-arm64',
     directory: 'packages/platform/darwin-arm64',
     os: 'darwin',
     cpu: 'arm64',
@@ -43,7 +43,7 @@ const EXPECTED = [
     binaryPath: 'vendor/cli-proxy-api',
   },
   {
-    packageName: '@wha1echai/dsh-gateway-platform-linux-x64',
+    packageName: '@dshapps/dsh-gateway-platform-linux-x64',
     directory: 'packages/platform/linux-x64',
     os: 'linux',
     cpu: 'x64',
@@ -52,7 +52,7 @@ const EXPECTED = [
     binaryPath: 'vendor/cli-proxy-api',
   },
   {
-    packageName: '@wha1echai/dsh-gateway-platform-linux-arm64',
+    packageName: '@dshapps/dsh-gateway-platform-linux-arm64',
     directory: 'packages/platform/linux-arm64',
     os: 'linux',
     cpu: 'arm64',
@@ -131,10 +131,10 @@ async function verifyAsset(root, asset, checksums) {
   assert(packageJson.private === true, `package must be private: ${asset.packageName}`);
   assert(sameArray(packageJson.os, [asset.os]), `os filter mismatch: ${asset.packageName}`);
   assert(sameArray(packageJson.cpu, [asset.cpu]), `cpu filter mismatch: ${asset.packageName}`);
-  assert(packageJson.wha1echaiPlatform?.binary === asset.binaryPath, `platform binary mapping mismatch: ${asset.packageName}`);
-  assert(packageJson.wha1echaiPlatform?.provenance === 'provenance/cli-proxy-api.json', `platform provenance mapping mismatch: ${asset.packageName}`);
-  assert(packageJson.wha1echaiPlatform?.managedConfig === 'config/managed.yaml', `platform config mapping mismatch: ${asset.packageName}`);
-  assert(packageJson.wha1echaiPlatform?.upstreamAsset === asset.asset, `platform upstream asset mapping mismatch: ${asset.packageName}`);
+  assert(packageJson.dshappsPlatform?.binary === asset.binaryPath, `platform binary mapping mismatch: ${asset.packageName}`);
+  assert(packageJson.dshappsPlatform?.provenance === 'provenance/cli-proxy-api.json', `platform provenance mapping mismatch: ${asset.packageName}`);
+  assert(packageJson.dshappsPlatform?.managedConfig === 'config/managed.yaml', `platform config mapping mismatch: ${asset.packageName}`);
+  assert(packageJson.dshappsPlatform?.upstreamAsset === asset.asset, `platform upstream asset mapping mismatch: ${asset.packageName}`);
   assert(Array.isArray(packageJson.files), `files allowlist missing: ${asset.packageName}`);
   assert(
     sameArray(packageJson.files, [asset.binaryPath, 'provenance/cli-proxy-api.json', 'config/managed.yaml', 'README.md', 'LICENSE']),

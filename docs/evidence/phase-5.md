@@ -7,7 +7,7 @@
 
 ## Delivered behavior
 
-- `wha1echai.gateway` contributes Dashboard, Accounts, Models, Requests,
+- `dshapps.gateway` contributes Dashboard, Accounts, Models, Requests,
   Playground, and Settings through the existing `webpage.app` slot.
 - Eighteen generated `gateway.*` Remotes expose only runtime control, model
   configuration, device OAuth, bounded analytics reads, image attachment

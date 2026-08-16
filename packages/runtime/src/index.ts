@@ -254,7 +254,7 @@ export async function readBundledPlatformAsset(packageRoot: string): Promise<Bun
   } catch {
     throw new RuntimeError('asset_metadata_invalid', 'installed platform package metadata is unreadable')
   }
-  const platformMetadata = manifest.wha1echaiPlatform
+  const platformMetadata = manifest.dshappsPlatform
   if (!isRecord(platformMetadata)) throw new RuntimeError('asset_metadata_invalid', 'installed platform package has no asset metadata')
   const packageName = requiredString(manifest, 'name')
   const packageVersion = requiredString(manifest, 'version')
@@ -306,12 +306,12 @@ export async function readBundledPlatformAsset(packageRoot: string): Promise<Bun
 }
 
 const PLATFORM_PACKAGES: Readonly<Record<string, string>> = {
-  'win32-x64': '@wha1echai/dsh-gateway-platform-win32-x64',
-  'win32-arm64': '@wha1echai/dsh-gateway-platform-win32-arm64',
-  'darwin-x64': '@wha1echai/dsh-gateway-platform-darwin-x64',
-  'darwin-arm64': '@wha1echai/dsh-gateway-platform-darwin-arm64',
-  'linux-x64': '@wha1echai/dsh-gateway-platform-linux-x64',
-  'linux-arm64': '@wha1echai/dsh-gateway-platform-linux-arm64',
+  'win32-x64': '@dshapps/dsh-gateway-platform-win32-x64',
+  'win32-arm64': '@dshapps/dsh-gateway-platform-win32-arm64',
+  'darwin-x64': '@dshapps/dsh-gateway-platform-darwin-x64',
+  'darwin-arm64': '@dshapps/dsh-gateway-platform-darwin-arm64',
+  'linux-x64': '@dshapps/dsh-gateway-platform-linux-x64',
+  'linux-arm64': '@dshapps/dsh-gateway-platform-linux-arm64',
 }
 
 export interface PlatformDiscoveryOptions {

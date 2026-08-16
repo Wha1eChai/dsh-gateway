@@ -1,5 +1,5 @@
 {
-  "name": "@wha1echai/dsh-gateway-workspace",
+  "name": "@dshapps/dsh-gateway-workspace",
   "version": "0.1.0",
   "private": true,
   "type": "module",
@@ -10,10 +10,10 @@
   "scripts": {
     "build": "corepack pnpm@11.7.0 -r --if-present --sort run build",
     "typecheck": "corepack pnpm@11.7.0 -r --if-present --sort run typecheck",
-    "lint": "node scripts/verify-repository.mjs lint",
+    "lint": "node scripts/verify-repository.mjs lint && node scripts/check.mjs --lint",
     "test:unit": "corepack pnpm@11.7.0 --filter @dsh-gateway/fake-cpa test && vitest run --config vitest.config.ts",
     "test:integration": "node scripts/verify-phase3.mjs && node scripts/verify-real-cpa.mjs",
-    "test:analytics": "vitest run packages/analytics/src --config vitest.config.ts && corepack pnpm@11.7.0 --filter @wha1echai/dsh-gateway-analytics run build && node scripts/verify-analytics.mjs",
+    "test:analytics": "vitest run packages/analytics/src --config vitest.config.ts && corepack pnpm@11.7.0 --filter @dshapps/dsh-gateway-analytics run build && node scripts/verify-analytics.mjs",
     "test:browser": "node scripts/phase6-browser.mjs",
     "test:hmr": "node scripts/phase6-hmr.mjs",
     "test:public-api": "node scripts/verify-public-api.mjs && tsc -p tests/public-api/tsconfig.json --noEmit",
@@ -24,7 +24,7 @@
     "test:quota": "vitest run packages/gateway/src/host/cpa-client/cpa-client.test.ts packages/analytics/src/pipeline/pipeline.test.ts packages/analytics/src/service.test.ts --config vitest.config.ts",
     "test:security": "node scripts/verify-security.mjs",
     "pack:build": "node scripts/release/build-release.mjs",
-    "pack:verify": "node scripts/verify-pack.mjs",
+    "pack:verify": "node scripts/verify-pack.mjs && node scripts/check.mjs --pack",
     "verify": "node scripts/verify-all.mjs"
   },
   "devDependencies": {
@@ -71,6 +71,7 @@
     "tsdown": "0.22.2",
     "typescript": "6.0.3",
     "vitest": "4.1.8",
-    "zod": "4.4.3"
+    "zod": "4.4.3",
+    "@dshapps/app-check": "file:../dsh-app-check"
   }
 }

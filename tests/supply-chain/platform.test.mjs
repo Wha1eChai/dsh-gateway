@@ -8,12 +8,12 @@ assert.equal(report.verified, 6);
 assert.deepEqual(
   report.assets.map(({ packageName }) => packageName),
   [
-    '@wha1echai/dsh-gateway-platform-win32-x64',
-    '@wha1echai/dsh-gateway-platform-win32-arm64',
-    '@wha1echai/dsh-gateway-platform-darwin-x64',
-    '@wha1echai/dsh-gateway-platform-darwin-arm64',
-    '@wha1echai/dsh-gateway-platform-linux-x64',
-    '@wha1echai/dsh-gateway-platform-linux-arm64',
+    '@dshapps/dsh-gateway-platform-win32-x64',
+    '@dshapps/dsh-gateway-platform-win32-arm64',
+    '@dshapps/dsh-gateway-platform-darwin-x64',
+    '@dshapps/dsh-gateway-platform-darwin-arm64',
+    '@dshapps/dsh-gateway-platform-linux-x64',
+    '@dshapps/dsh-gateway-platform-linux-arm64',
   ],
 );
 

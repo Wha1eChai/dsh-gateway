@@ -8,8 +8,8 @@
 CLIProxyAPI's Management API can mutate provider configuration, auth files,
 API keys, routing, usage controls, and OAuth state. A management key is
 administrator authority. The dsh-webpage App is a single-user UI contribution,
-not a multi-user ACL boundary. Its exact App ID is `wha1echai.gateway`,
-mounted under `/apps/wha1echai.gateway`, with routes `/`, `/accounts`,
+not a multi-user ACL boundary. Its exact App ID is `dshapps.gateway`,
+mounted under `/apps/dshapps.gateway`, with routes `/`, `/accounts`,
 `/models`, `/requests`, `/playground`, and `/settings` contributed through
 Webpage slots.
 
@@ -96,7 +96,7 @@ claiming multi-user administration security.
 ## Verification gate
 
 Client compilation and runtime tests must show that only the exact selected
-Typert contribution is mounted, under `wha1echai.gateway` Webpage slots, and
+Typert contribution is mounted, under `dshapps.gateway` Webpage slots, and
 that a Client Origin is not trusted. Forbidden paths, arbitrary URLs, secrets,
 and raw CPA payloads must be rejected before a Management request. Contract
 tests must enumerate every method above, reject unknown fields and methods,

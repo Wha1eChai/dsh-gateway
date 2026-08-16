@@ -32,27 +32,27 @@ const READY_PATTERN = /dsh web: (http:\/\/[^\s]+)/u
 const READY_TIMEOUT_MS = 120_000
 const STOP_TIMEOUT_MS = 15_000
 const PACKAGE_FILES = Object.freeze({
-  webpage: 'wha1echai-dsh-webpage-0.1.0.tgz',
-  gateway: 'wha1echai-dsh-gateway-0.1.0.tgz',
-  runtime: 'wha1echai-dsh-gateway-runtime-0.1.0.tgz',
-  analytics: 'wha1echai-dsh-gateway-analytics-0.1.0.tgz',
-  pack: 'wha1echai-dsh-gateway-pack-0.1.0.tgz',
+  webpage: 'dshapps-webpage-0.2.0.tgz',
+  gateway: 'dshapps-dsh-gateway-0.1.0.tgz',
+  runtime: 'dshapps-dsh-gateway-runtime-0.1.0.tgz',
+  analytics: 'dshapps-dsh-gateway-analytics-0.1.0.tgz',
+  pack: 'dshapps-dsh-gateway-pack-0.1.0.tgz',
   zod: 'zod-4.4.3.tgz',
   platform: {
-    'win32-x64': 'wha1echai-dsh-gateway-platform-win32-x64-0.1.0.tgz',
-    'win32-arm64': 'wha1echai-dsh-gateway-platform-win32-arm64-0.1.0.tgz',
-    'darwin-x64': 'wha1echai-dsh-gateway-platform-darwin-x64-0.1.0.tgz',
-    'darwin-arm64': 'wha1echai-dsh-gateway-platform-darwin-arm64-0.1.0.tgz',
-    'linux-x64': 'wha1echai-dsh-gateway-platform-linux-x64-0.1.0.tgz',
-    'linux-arm64': 'wha1echai-dsh-gateway-platform-linux-arm64-0.1.0.tgz',
+    'win32-x64': 'dshapps-dsh-gateway-platform-win32-x64-0.1.0.tgz',
+    'win32-arm64': 'dshapps-dsh-gateway-platform-win32-arm64-0.1.0.tgz',
+    'darwin-x64': 'dshapps-dsh-gateway-platform-darwin-x64-0.1.0.tgz',
+    'darwin-arm64': 'dshapps-dsh-gateway-platform-darwin-arm64-0.1.0.tgz',
+    'linux-x64': 'dshapps-dsh-gateway-platform-linux-x64-0.1.0.tgz',
+    'linux-arm64': 'dshapps-dsh-gateway-platform-linux-arm64-0.1.0.tgz',
   },
 })
 const PACKAGE_NAMES = Object.freeze({
-  webpage: '@wha1echai/dsh-webpage',
-  gateway: '@wha1echai/dsh-gateway',
-  runtime: '@wha1echai/dsh-gateway-runtime',
-  analytics: '@wha1echai/dsh-gateway-analytics',
-  pack: '@wha1echai/dsh-gateway-pack',
+  webpage: '@dshapps/webpage',
+  gateway: '@dshapps/dsh-gateway',
+  runtime: '@dshapps/dsh-gateway-runtime',
+  analytics: '@dshapps/dsh-gateway-analytics',
+  pack: '@dshapps/dsh-gateway-pack',
 })
 const ONE_BY_ONE_PNG = Buffer.from(
   'iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNk+A8AAQUBAScY42YAAAAASUVORK5CYII=',
@@ -305,7 +305,7 @@ async function createPackedGatewayProfile(tempRoot, release, endpoint, dsh) {
   await writeFile(join(profileDirectory, 'cordis.patch.yml'), profilePatch(endpoint), 'utf8')
 
   const manifest = JSON.parse(await readFile(join(profileDirectory, 'package.json'), 'utf8'))
-  const topLevelWhaDependencies = Object.keys(manifest.dependencies ?? {}).filter((name) => name.startsWith('@wha1echai/'))
+  const topLevelWhaDependencies = Object.keys(manifest.dependencies ?? {}).filter((name) => name.startsWith('@dshapps/'))
   assert(JSON.stringify(topLevelWhaDependencies) === JSON.stringify([PACKAGE_NAMES.pack]), `web profile top-level dependencies drifted: ${JSON.stringify(topLevelWhaDependencies)}`)
 
   const packageRoots = {}

@@ -10,7 +10,7 @@ import type {
   GatewayProbeRequest,
   GatewayProbeResult,
   GatewayProbeTool,
-} from '@wha1echai/dsh-gateway/contracts'
+} from '@dshapps/dsh-gateway/contracts'
 
 import styles from './PlaygroundView.module.css'
 

@@ -30,7 +30,7 @@ and four regression cases cover success, denied, expired, and cancelled.
 
 ## Generated Remote allowlist
 
-The built `@wha1echai/dsh-gateway` Remote contribution contains exactly these
+The built `@dshapps/dsh-gateway` Remote contribution contains exactly these
 11 strict endpoints:
 
 1. `gateway.status`
@@ -46,7 +46,7 @@ The built `@wha1echai/dsh-gateway` Remote contribution contains exactly these
 11. `gateway.probe`
 
 The Client mounts this generated contribution through `ctx.remote.$mount()`.
-The current App is the minimal `wha1echai.gateway` foundation: descriptor,
+The current App is the minimal `dshapps.gateway` foundation: descriptor,
 locale, Webpage slot registration, sanitized runtime status, loading and
 unavailable states, and clean disposal. Full dashboard routes, Playground,
 browser, and HMR acceptance remain planned Phase 5/6 work.

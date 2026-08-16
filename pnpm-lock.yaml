@@ -4,6 +4,9 @@ settings:
   autoInstallPeers: false
   excludeLinksFromLockfile: false
 
+overrides:
+  '@dshapps/webpage': file:../dsh-webpage/packages/webpage
+
 patchedDependencies:
   '@deepseek-ai/dsh-typert-generator@0.1.0-rc.6': d38638db928db788c823eb0dfa62ffb514a748d25dcddf02b15c00c8c6090820
 
@@ -104,6 +107,9 @@ importers:
       '@deepseek-ai/schemastery':
         specifier: 3.18.1
         version: 3.18.1
+      '@dshapps/app-check':
+        specifier: file:../dsh-app-check
+        version: file:../dsh-app-check
       '@types/node':
         specifier: 22.20.0
         version: 22.20.0
@@ -146,40 +152,40 @@ importers:
 
   packages/analytics:
     dependencies:
-      '@wha1echai/dsh-gateway':
+      '@dshapps/dsh-gateway':
         specifier: workspace:*
         version: link:../gateway
 
   packages/gateway:
     dependencies:
+      '@dshapps/webpage':
+        specifier: file:../../../dsh-webpage/packages/webpage
+        version: file:../dsh-webpage/packages/webpage(cddcd8d21259c5e99f4fbd400a3ac7cb)
       zod:
         specifier: 4.4.3
         version: 4.4.3
     devDependencies:
-      '@wha1echai/dsh-gateway-runtime':
+      '@dshapps/dsh-gateway-runtime':
         specifier: workspace:*
         version: link:../runtime
-      '@wha1echai/dsh-webpage':
-        specifier: https://github.com/Wha1eChai/dsh-webpage/releases/download/v0.1.0/wha1echai-dsh-webpage-0.1.0.tgz
-        version: https://github.com/Wha1eChai/dsh-webpage/releases/download/v0.1.0/wha1echai-dsh-webpage-0.1.0.tgz(114a3ff679905a9a08540a54ec9b9fde)
       echarts:
         specifier: 6.1.0
         version: 6.1.0
 
   packages/pack:
     dependencies:
-      '@wha1echai/dsh-gateway':
+      '@dshapps/dsh-gateway':
         specifier: workspace:*
         version: link:../gateway
-      '@wha1echai/dsh-gateway-analytics':
+      '@dshapps/dsh-gateway-analytics':
         specifier: workspace:*
         version: link:../analytics
-      '@wha1echai/dsh-gateway-runtime':
+      '@dshapps/dsh-gateway-runtime':
         specifier: workspace:*
         version: link:../runtime
-      '@wha1echai/dsh-webpage':
-        specifier: https://github.com/Wha1eChai/dsh-webpage/releases/download/v0.1.0/wha1echai-dsh-webpage-0.1.0.tgz
-        version: https://github.com/Wha1eChai/dsh-webpage/releases/download/v0.1.0/wha1echai-dsh-webpage-0.1.0.tgz(114a3ff679905a9a08540a54ec9b9fde)
+      '@dshapps/webpage':
+        specifier: file:../../../dsh-webpage/packages/webpage
+        version: file:../dsh-webpage/packages/webpage(cddcd8d21259c5e99f4fbd400a3ac7cb)
 
   packages/platform/darwin-arm64: {}
 
@@ -195,22 +201,22 @@ importers:
 
   packages/runtime:
     optionalDependencies:
-      '@wha1echai/dsh-gateway-platform-darwin-arm64':
+      '@dshapps/dsh-gateway-platform-darwin-arm64':
         specifier: workspace:*
         version: link:../platform/darwin-arm64
-      '@wha1echai/dsh-gateway-platform-darwin-x64':
+      '@dshapps/dsh-gateway-platform-darwin-x64':
         specifier: workspace:*
         version: link:../platform/darwin-x64
-      '@wha1echai/dsh-gateway-platform-linux-arm64':
+      '@dshapps/dsh-gateway-platform-linux-arm64':
         specifier: workspace:*
         version: link:../platform/linux-arm64
-      '@wha1echai/dsh-gateway-platform-linux-x64':
+      '@dshapps/dsh-gateway-platform-linux-x64':
         specifier: workspace:*
         version: link:../platform/linux-x64
-      '@wha1echai/dsh-gateway-platform-win32-arm64':
+      '@dshapps/dsh-gateway-platform-win32-arm64':
         specifier: workspace:*
         version: link:../platform/win32-arm64
-      '@wha1echai/dsh-gateway-platform-win32-x64':
+      '@dshapps/dsh-gateway-platform-win32-x64':
         specifier: workspace:*
         version: link:../platform/win32-x64
 
@@ -863,6 +869,32 @@ packages:
   '@deepseek-ai/schemastery@3.18.1':
     resolution: {integrity: sha512-Qn0FCSwCQnpnj6SB31I6i2sIKgKWnkbJM8O0EU91Gv2UsYVvtZTl6IA0sCwk2e2MZf5S8w5hpq9QkeVvK9qwxg==}
 
+  '@dshapps/app-check@file:../dsh-app-check':
+    resolution: {directory: ../dsh-app-check, type: directory}
+    engines: {node: ^22.19.0 || >=24.0.0}
+    hasBin: true
+
+  '@dshapps/webpage@file:../dsh-webpage/packages/webpage':
+    resolution: {directory: ../dsh-webpage/packages/webpage, type: directory}
+    peerDependencies:
+      '@deepseek-ai/cordis': 4.0.1
+      '@deepseek-ai/dsh-client-locale': 0.1.0-rc.6
+      '@deepseek-ai/dsh-client-runtime': 0.1.0-rc.6
+      '@deepseek-ai/dsh-client-schema-form': 0.1.0-rc.6
+      '@deepseek-ai/dsh-client-ui-attachment': 0.1.0-rc.6
+      '@deepseek-ai/dsh-client-ui-layout': 0.1.0-rc.6
+      '@deepseek-ai/dsh-client-ui-primitives': 0.1.0-rc.6
+      '@deepseek-ai/dsh-client-ui-sidebar': 0.1.0-rc.6
+      '@deepseek-ai/dsh-client-ui-slots': 0.1.0-rc.6
+      '@deepseek-ai/dsh-client-web-react': 0.1.0-rc.6
+      '@deepseek-ai/dsh-invariants': 0.1.0-rc.6
+      '@deepseek-ai/dsh-tools': 0.1.0-rc.6
+      react: 18.3.1
+      react-dom: 18.3.1
+    peerDependenciesMeta:
+      '@deepseek-ai/dsh-tools':
+        optional: true
+
   '@earendil-works/pi-ai@0.82.1':
     resolution: {integrity: sha512-3WFYRhEp3lQB3444EhPMBcM7zSaEUE3eJgHOR7s4081NLqbw/FsWilIKWXSua0Gv3sRr7m9xMidR3pPDE7jI/A==}
     engines: {node: '>=22.19.0'}
@@ -1470,24 +1502,6 @@ packages:
 
   '@vitest/utils@4.1.8':
     resolution: {integrity: sha512-uOJamYALNhfJ6iolExyQM40yIQwDqYnkKtQ5VCiSe17E33H0aQ/u+1GlRuz4LZBk6Mm3sg90G9hEbmEt37C1Zg==}
-
-  '@wha1echai/dsh-webpage@https://github.com/Wha1eChai/dsh-webpage/releases/download/v0.1.0/wha1echai-dsh-webpage-0.1.0.tgz':
-    resolution: {integrity: sha512-14PnvU0zN/Nisjlfs1GRJ1xsmV+EtVr7MsrFndjXdE/N4VO3ajLG6hIiP87FbedxWBLnYD/ExgHJcW782c9Jzg==, tarball: https://github.com/Wha1eChai/dsh-webpage/releases/download/v0.1.0/wha1echai-dsh-webpage-0.1.0.tgz}
-    version: 0.1.0
-    peerDependencies:
-      '@deepseek-ai/cordis': 4.0.1
-      '@deepseek-ai/dsh-client-locale': 0.1.0-rc.6
-      '@deepseek-ai/dsh-client-runtime': 0.1.0-rc.6
-      '@deepseek-ai/dsh-client-schema-form': 0.1.0-rc.6
-      '@deepseek-ai/dsh-client-ui-attachment': 0.1.0-rc.6
-      '@deepseek-ai/dsh-client-ui-layout': 0.1.0-rc.6
-      '@deepseek-ai/dsh-client-ui-primitives': 0.1.0-rc.6
-      '@deepseek-ai/dsh-client-ui-sidebar': 0.1.0-rc.6
-      '@deepseek-ai/dsh-client-ui-slots': 0.1.0-rc.6
-      '@deepseek-ai/dsh-client-web-react': 0.1.0-rc.6
-      '@deepseek-ai/dsh-invariants': 0.1.0-rc.6
-      react: 18.3.1
-      react-dom: 18.3.1
 
   agent-base@7.1.4:
     resolution: {integrity: sha512-MnA+YT8fwfJPgBx3m60MNqakm30XOkyIoH1y6huTQvC0PwZG7ki8NacLBcrPbNoo8vEZy7Jpuk7+jMO+CUovTQ==}
@@ -3323,6 +3337,23 @@ snapshots:
       '@deepseek-ai/cosmokit': 1.8.2
       '@standard-schema/spec': 1.1.0
 
+  '@dshapps/app-check@file:../dsh-app-check': {}
+
+  '@dshapps/webpage@file:../dsh-webpage/packages/webpage(cddcd8d21259c5e99f4fbd400a3ac7cb)':
+    dependencies:
+      '@deepseek-ai/cordis': 4.0.1(@deepseek-ai/cordis-plugin-loader@1.0.2)
+      '@deepseek-ai/dsh-client-locale': 0.1.0-rc.6(611f5d661ce130b51c25dfa5cb709a91)
+      '@deepseek-ai/dsh-client-runtime': 0.1.0-rc.6(@deepseek-ai/cordis@4.0.1)(@deepseek-ai/dsh-api-gateway@0.1.0-rc.6)(@deepseek-ai/dsh-api-remotes@0.1.0-rc.6(cfc2cee4f679013ea6f8e458bfabb914))(@deepseek-ai/dsh-brand@0.1.0-rc.6(@deepseek-ai/cordis@4.0.1)(@deepseek-ai/dsh-invariants@0.1.0-rc.6(@deepseek-ai/cordis@4.0.1)))(@deepseek-ai/dsh-host-webserver@0.1.0-rc.6(@deepseek-ai/cordis@4.0.1)(@deepseek-ai/dsh-invariants@0.1.0-rc.6(@deepseek-ai/cordis@4.0.1)))(@deepseek-ai/dsh-invariants@0.1.0-rc.6(@deepseek-ai/cordis@4.0.1))(@deepseek-ai/dsh-timeout@0.1.0-rc.6(@deepseek-ai/cordis@4.0.1)(@deepseek-ai/dsh-invariants@0.1.0-rc.6(@deepseek-ai/cordis@4.0.1)))(@deepseek-ai/dsh-typert-protocol@0.1.0-rc.6(@deepseek-ai/cordis@4.0.1)(@deepseek-ai/dsh-invariants@0.1.0-rc.6(@deepseek-ai/cordis@4.0.1)))(@deepseek-ai/dsh-user-approval@0.1.0-rc.6(a5cd07455511daf6d6a360cda975410d))(@types/react@18.3.1)
+      '@deepseek-ai/dsh-client-ui-attachment': 0.1.0-rc.6(@deepseek-ai/cordis@4.0.1)(@deepseek-ai/dsh-brand@0.1.0-rc.6(@deepseek-ai/cordis@4.0.1)(@deepseek-ai/dsh-invariants@0.1.0-rc.6(@deepseek-ai/cordis@4.0.1)))(@deepseek-ai/dsh-invariants@0.1.0-rc.6(@deepseek-ai/cordis@4.0.1))
+      '@deepseek-ai/dsh-client-ui-primitives': 0.1.0-rc.6(@deepseek-ai/cordis@4.0.1)(@deepseek-ai/dsh-invariants@0.1.0-rc.6(@deepseek-ai/cordis@4.0.1))
+      '@deepseek-ai/dsh-client-ui-slots': 0.1.0-rc.6(@deepseek-ai/cordis@4.0.1)(@deepseek-ai/dsh-invariants@0.1.0-rc.6(@deepseek-ai/cordis@4.0.1))
+      '@deepseek-ai/dsh-client-web-react': 0.1.0-rc.6(@deepseek-ai/cordis@4.0.1)(@deepseek-ai/dsh-invariants@0.1.0-rc.6(@deepseek-ai/cordis@4.0.1))
+      '@deepseek-ai/dsh-invariants': 0.1.0-rc.6(@deepseek-ai/cordis@4.0.1)
+      react: 18.3.1
+      react-dom: 18.3.1(react@18.3.1)
+    optionalDependencies:
+      '@deepseek-ai/dsh-tools': 0.1.0-rc.6(ec6e7344d5019546025a4ed55c89ddc9)
+
   '@earendil-works/pi-ai@0.82.1(ws@8.21.3)(zod@4.4.3)':
     dependencies:
       '@anthropic-ai/sdk': 0.91.1(zod@4.4.3)
@@ -3837,19 +3868,6 @@ snapshots:
       '@vitest/pretty-format': 4.1.8
       convert-source-map: 2.0.0
       tinyrainbow: 3.1.1
-
-  '@wha1echai/dsh-webpage@https://github.com/Wha1eChai/dsh-webpage/releases/download/v0.1.0/wha1echai-dsh-webpage-0.1.0.tgz(114a3ff679905a9a08540a54ec9b9fde)':
-    dependencies:
-      '@deepseek-ai/cordis': 4.0.1(@deepseek-ai/cordis-plugin-loader@1.0.2)
-      '@deepseek-ai/dsh-client-locale': 0.1.0-rc.6(611f5d661ce130b51c25dfa5cb709a91)
-      '@deepseek-ai/dsh-client-runtime': 0.1.0-rc.6(@deepseek-ai/cordis@4.0.1)(@deepseek-ai/dsh-api-gateway@0.1.0-rc.6)(@deepseek-ai/dsh-api-remotes@0.1.0-rc.6(cfc2cee4f679013ea6f8e458bfabb914))(@deepseek-ai/dsh-brand@0.1.0-rc.6(@deepseek-ai/cordis@4.0.1)(@deepseek-ai/dsh-invariants@0.1.0-rc.6(@deepseek-ai/cordis@4.0.1)))(@deepseek-ai/dsh-host-webserver@0.1.0-rc.6(@deepseek-ai/cordis@4.0.1)(@deepseek-ai/dsh-invariants@0.1.0-rc.6(@deepseek-ai/cordis@4.0.1)))(@deepseek-ai/dsh-invariants@0.1.0-rc.6(@deepseek-ai/cordis@4.0.1))(@deepseek-ai/dsh-timeout@0.1.0-rc.6(@deepseek-ai/cordis@4.0.1)(@deepseek-ai/dsh-invariants@0.1.0-rc.6(@deepseek-ai/cordis@4.0.1)))(@deepseek-ai/dsh-typert-protocol@0.1.0-rc.6(@deepseek-ai/cordis@4.0.1)(@deepseek-ai/dsh-invariants@0.1.0-rc.6(@deepseek-ai/cordis@4.0.1)))(@deepseek-ai/dsh-user-approval@0.1.0-rc.6(a5cd07455511daf6d6a360cda975410d))(@types/react@18.3.1)
-      '@deepseek-ai/dsh-client-ui-attachment': 0.1.0-rc.6(@deepseek-ai/cordis@4.0.1)(@deepseek-ai/dsh-brand@0.1.0-rc.6(@deepseek-ai/cordis@4.0.1)(@deepseek-ai/dsh-invariants@0.1.0-rc.6(@deepseek-ai/cordis@4.0.1)))(@deepseek-ai/dsh-invariants@0.1.0-rc.6(@deepseek-ai/cordis@4.0.1))
-      '@deepseek-ai/dsh-client-ui-primitives': 0.1.0-rc.6(@deepseek-ai/cordis@4.0.1)(@deepseek-ai/dsh-invariants@0.1.0-rc.6(@deepseek-ai/cordis@4.0.1))
-      '@deepseek-ai/dsh-client-ui-slots': 0.1.0-rc.6(@deepseek-ai/cordis@4.0.1)(@deepseek-ai/dsh-invariants@0.1.0-rc.6(@deepseek-ai/cordis@4.0.1))
-      '@deepseek-ai/dsh-client-web-react': 0.1.0-rc.6(@deepseek-ai/cordis@4.0.1)(@deepseek-ai/dsh-invariants@0.1.0-rc.6(@deepseek-ai/cordis@4.0.1))
-      '@deepseek-ai/dsh-invariants': 0.1.0-rc.6(@deepseek-ai/cordis@4.0.1)
-      react: 18.3.1
-      react-dom: 18.3.1(react@18.3.1)
 
   agent-base@7.1.4: {}
 

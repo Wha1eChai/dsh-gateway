@@ -6,7 +6,7 @@ import { BlockAssembler, createUserMessage } from '@deepseek-ai/dsh-llm'
 import type { ContentBlock, FinishReason, ToolSchema } from '@deepseek-ai/dsh-llm'
 import type { SettingsDescriptor } from '@deepseek-ai/dsh-settings'
 import { Remote, TypertRemoteService } from '@deepseek-ai/dsh-typert-protocol'
-import type { DeviceLoginLaunchTarget, GatewayRuntime, RuntimeSnapshot } from '@wha1echai/dsh-gateway-runtime'
+import type { DeviceLoginLaunchTarget, GatewayRuntime, RuntimeSnapshot } from '@dshapps/dsh-gateway-runtime'
 
 import type { Config } from '../config.js'
 import { createCpaClientForOperation } from './cpa-client/index.js'

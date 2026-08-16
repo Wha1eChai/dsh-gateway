@@ -40,7 +40,7 @@ does not claim multi-user ACL security.
   either companion.
 - No npm package is published during the preview phase.
 
-The native App is addressable at `/apps/wha1echai.gateway` with Accounts,
+The native App is addressable at `/apps/dshapps.gateway` with Accounts,
 Models, Requests, Playground, and Settings subroutes.
 
 ## Preview installation
@@ -49,7 +49,7 @@ After the `v0.1.0` GitHub prerelease is available, install the ordinary Pack
 into a dedicated DSH profile:
 
 ```text
-dsh plugin --profile gateway-preview add https://github.com/Wha1eChai/dsh-gateway/releases/download/v0.1.0/wha1echai-dsh-gateway-pack-0.1.0.tgz --ignore-scripts --config.block-exotic-subdeps=false
+dsh plugin --profile gateway-preview add https://github.com/Wha1eChai/dsh-gateway/releases/download/v0.1.0/dshapps-dsh-gateway-pack-0.1.0.tgz --ignore-scripts --config.block-exotic-subdeps=false
 dsh --profile gateway-preview web
 ```
 
@@ -59,7 +59,7 @@ Release tarballs as URL subdependencies. Their exact URLs and SHA-256 values
 are listed in the attached `release-manifest.json`; no install scripts run.
 
 The first preview supports root-path deployment only, such as
-`https://host/apps/wha1echai.gateway`; reverse-proxy subpaths such as
+`https://host/apps/dshapps.gateway`; reverse-proxy subpaths such as
 `/dsh/apps/...` are not supported. Keep the DSH Web endpoint loopback-only or
 behind a trusted tunnel because v0.1 inherits DSH rc.6's single-user trust
 model.

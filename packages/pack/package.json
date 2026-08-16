@@ -1,5 +1,5 @@
 {
-  "name": "@wha1echai/dsh-gateway-pack",
+  "name": "@dshapps/dsh-gateway-pack",
   "description": "One-install DSH Bundle for dsh-gateway",
   "version": "0.1.0",
   "type": "module",
@@ -33,10 +33,10 @@
     "directory": "packages/pack"
   },
   "dependencies": {
-    "@wha1echai/dsh-webpage": "https://github.com/Wha1eChai/dsh-webpage/releases/download/v0.1.0/wha1echai-dsh-webpage-0.1.0.tgz",
-    "@wha1echai/dsh-gateway": "workspace:*",
-    "@wha1echai/dsh-gateway-runtime": "workspace:*",
-    "@wha1echai/dsh-gateway-analytics": "workspace:*"
+    "@dshapps/webpage": "https://github.com/Wha1eChai/dsh-webpage/releases/download/v0.2.0/dshapps-webpage-0.2.0.tgz",
+    "@dshapps/dsh-gateway": "workspace:*",
+    "@dshapps/dsh-gateway-runtime": "workspace:*",
+    "@dshapps/dsh-gateway-analytics": "workspace:*"
   },
   "scripts": {
     "build": "tsc -b tsconfig.json && tsdown",

@@ -1,15 +1,15 @@
 import type { ClientContext } from '@deepseek-ai/dsh-client-runtime/client'
 import type {} from '@deepseek-ai/dsh-client-locale/client'
-import type { AppDescriptor } from '@wha1echai/dsh-webpage/client'
-import gatewayRemote from '@wha1echai/dsh-gateway/remote'
-import type {} from '@wha1echai/dsh-gateway/remote'
+import type { AppDescriptor } from '@dshapps/webpage/client'
+import gatewayRemote from '@dshapps/dsh-gateway/remote'
+import type {} from '@dshapps/dsh-gateway/remote'
 
 import { GatewayApp } from './GatewayApp.js'
 import { en, zh } from './locales.js'
 import type { GatewayRemote } from './view-types.js'
 
 const descriptor = Object.freeze({
-  id: 'wha1echai.gateway',
+  id: 'dshapps.gateway',
   label: 'AI Gateway',
   description: 'Manage CLIProxyAPI connectivity and DSH provider integration.',
   order: 20,
@@ -17,7 +17,7 @@ const descriptor = Object.freeze({
 }) satisfies AppDescriptor
 
 /** Stable client fiber name for HMR and diagnostics. */
-export const name = '@wha1echai/dsh-gateway'
+export const name = '@dshapps/dsh-gateway'
 export const inject = ['remote', 'pages', 'slots', 'locale']
 
 /** Mount the generated Gateway Remote contribution for this client fiber. */

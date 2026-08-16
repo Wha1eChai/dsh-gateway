@@ -8,11 +8,11 @@ import { createGatewayWebHarness } from '../tests/browser/support.mjs'
 
 const PROJECT_ROOT = resolve(fileURLToPath(new URL('..', import.meta.url)))
 const GATEWAY_PACKAGE_ROOT = join(PROJECT_ROOT, 'packages', 'gateway')
-const APP_ID = '@wha1echai/dsh-gateway'
-const APP_DESCRIPTOR_ID = 'wha1echai.gateway'
-const APP_PATH = '/apps/wha1echai.gateway/playground'
+const APP_ID = '@dshapps/dsh-gateway'
+const APP_DESCRIPTOR_ID = 'dshapps.gateway'
+const APP_PATH = '/apps/dshapps.gateway/playground'
 const APP_LABEL = 'AI Gateway'
-const REFERENCE_ID = 'wha1echai.webpage'
+const REFERENCE_ID = 'dshapps.webpage'
 const ORIGINAL_MARKER = 'Gateway console'
 const REPLACEMENT_MARKER = 'Phase 6 Gateway HMR replacement is live.'
 const CRASH_ERROR_MESSAGE = 'Phase 6 deterministic Gateway render crash.'
@@ -132,7 +132,7 @@ async function linkFixtureNodeModules(profile, fixtureNodeModules) {
     await symlink(source, destinationPath, sourceStats.isDirectory() ? 'junction' : 'file')
   }
   for (const entry of await readdir(repositoryNodeModules, { withFileTypes: true })) {
-    if (entry.name === '@wha1echai' || entry.name === '.pnpm' || entry.name === '.modules.yaml') continue
+    if (entry.name === '@dshapps' || entry.name === '.pnpm' || entry.name === '.modules.yaml') continue
     const sourcePath = join(repositoryNodeModules, entry.name)
     const destination = assertProfilePath(profile, join(fixtureNodeModules, entry.name), 'linked Gateway fixture dependency')
     if (!entry.name.startsWith('@')) {
@@ -147,12 +147,12 @@ async function linkFixtureNodeModules(profile, fixtureNodeModules) {
       await linkOne(scopedSource, scopedDestination)
     }
   }
-  const wha1echaiScope = assertProfilePath(profile, join(fixtureNodeModules, '@wha1echai'), 'Gateway fixture package scope')
-  await mkdir(wha1echaiScope, { recursive: false })
+  const dshappsScope = assertProfilePath(profile, join(fixtureNodeModules, '@dshapps'), 'Gateway fixture package scope')
+  await mkdir(dshappsScope, { recursive: false })
   const runtime = await realpath(join(PROJECT_ROOT, 'packages', 'runtime'))
-  const webpage = await realpath(join(GATEWAY_PACKAGE_ROOT, 'node_modules', '@wha1echai', 'dsh-webpage'))
-  await symlink(runtime, assertProfilePath(profile, join(wha1echaiScope, 'dsh-gateway-runtime'), 'Gateway fixture runtime dependency'), 'junction')
-  await symlink(webpage, assertProfilePath(profile, join(wha1echaiScope, 'dsh-webpage'), 'Gateway fixture Webpage dependency'), 'junction')
+  const webpage = await realpath(join(GATEWAY_PACKAGE_ROOT, 'node_modules', '@dshapps', 'webpage'))
+  await symlink(runtime, assertProfilePath(profile, join(dshappsScope, 'dsh-gateway-runtime'), 'Gateway fixture runtime dependency'), 'junction')
+  await symlink(webpage, assertProfilePath(profile, join(dshappsScope, 'webpage'), 'Gateway fixture Webpage dependency'), 'junction')
 }
 
 async function createHmrFixture(profile, kind) {

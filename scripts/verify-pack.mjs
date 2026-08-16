@@ -194,7 +194,7 @@ function inspectManifest(spec, flavor) {
           assert(value === '4.4.3', `${spec.name}: unexpected zod version ${value}`)
           continue
         }
-        assert(name.startsWith('@wha1echai/'), `${spec.name}: registry dependency is forbidden: ${name}@${value}`)
+        assert(name.startsWith('@dshapps/'), `${spec.name}: registry dependency is forbidden: ${name}@${value}`)
         const expected = name === webpage.name ? webpage.url : packageUrl(name)
         assert(value === expected, `${spec.name}: unexpected public URL for ${name}`)
       }
@@ -202,7 +202,7 @@ function inspectManifest(spec, flavor) {
   } else {
     for (const group of ['dependencies', 'optionalDependencies']) {
       for (const [name, value] of Object.entries(manifest[group] ?? {})) {
-        if (name.startsWith('@wha1echai/')) {
+        if (name.startsWith('@dshapps/')) {
           assert(value.startsWith('file:'), `${spec.name}: local override missing for ${name}`)
         }
       }
@@ -218,13 +218,13 @@ function expectedDependencyNames(spec) {
     ].sort()
   }
   if (spec.key === 'gateway') return ['zod']
-  if (spec.key === 'analytics') return ['@wha1echai/dsh-gateway']
+  if (spec.key === 'analytics') return ['@dshapps/dsh-gateway']
   if (spec.key === 'pack') {
     return [
       webpage.name,
-      '@wha1echai/dsh-gateway',
-      '@wha1echai/dsh-gateway-runtime',
-      '@wha1echai/dsh-gateway-analytics',
+      '@dshapps/dsh-gateway',
+      '@dshapps/dsh-gateway-runtime',
+      '@dshapps/dsh-gateway-analytics',
     ].sort()
   }
   return []
@@ -241,7 +241,7 @@ function normalizeDependencyRewrite(manifest) {
   const copy = structuredClone(manifest)
   for (const group of ['dependencies', 'optionalDependencies']) {
     for (const name of Object.keys(copy[group] ?? {})) {
-      if (name.startsWith('@wha1echai/')) copy[group][name] = `<artifact:${name}>`
+      if (name.startsWith('@dshapps/')) copy[group][name] = `<artifact:${name}>`
       if (name === 'zod') copy[group][name] = '<artifact:zod>'
     }
   }
@@ -289,7 +289,7 @@ async function loadPackedGatewayClient(profileRequire) {
     assert(typeof moduleExports.ClientModuleSystem === 'function', 'rc.6 ClientModuleSystem is unavailable')
     delete globalThis.__ModuleLoader__
 
-    const id = '@wha1echai/dsh-gateway'
+    const id = '@dshapps/dsh-gateway'
     const clientPath = profileRequire.resolve(`${id}/client`)
     const clientUrl = pathToFileURL(clientPath).href
     const [React, ReactJsxRuntime] = await Promise.all([
@@ -330,10 +330,10 @@ async function verifyPackedHostLifecycle(profileDirectory) {
   const baseUrl = pathToFileURL(path.join(profileDirectory, 'package.json')).href
   await ctx.plugin(loaderModule.Loader, { baseUrl })
   const rows = [
-    ['webpage', '@wha1echai/dsh-webpage'],
-    ['gateway', '@wha1echai/dsh-gateway'],
-    ['gateway-runtime', '@wha1echai/dsh-gateway-runtime'],
-    ['gateway-analytics', '@wha1echai/dsh-gateway-analytics', {
+    ['webpage', '@dshapps/webpage'],
+    ['gateway', '@dshapps/dsh-gateway'],
+    ['gateway-runtime', '@dshapps/dsh-gateway-runtime'],
+    ['gateway-analytics', '@dshapps/dsh-gateway-analytics', {
       stateDir: path.join(profileDirectory, 'packed-analytics'),
       pollIntervalMs: 1_000,
     }],
@@ -429,7 +429,7 @@ const isolatedEnvironment = {
   PNPM_CONFIG_OFFLINE: 'true',
   PNPM_CONFIG_REGISTRY: 'http://127.0.0.1:9',
 }
-const packTarball = path.join(localDirectory, packageFilename('@wha1echai/dsh-gateway-pack'))
+const packTarball = path.join(localDirectory, packageFilename('@dshapps/dsh-gateway-pack'))
 const log = []
 log.push(`verificationRoot=${verificationRoot}`)
 log.push(`dsh=${dsh.command} ${dsh.prefix.join(' ')}`)
@@ -467,12 +467,12 @@ for (const spec of packageSpecs.filter((entry) => !entry.key.startsWith('platfor
   assert(!Object.hasOwn(loaded, 'default'), `${spec.name}: installed Node entry has a default export`)
 }
 const platformByHost = {
-  'win32-x64': '@wha1echai/dsh-gateway-platform-win32-x64',
-  'win32-arm64': '@wha1echai/dsh-gateway-platform-win32-arm64',
-  'darwin-x64': '@wha1echai/dsh-gateway-platform-darwin-x64',
-  'darwin-arm64': '@wha1echai/dsh-gateway-platform-darwin-arm64',
-  'linux-x64': '@wha1echai/dsh-gateway-platform-linux-x64',
-  'linux-arm64': '@wha1echai/dsh-gateway-platform-linux-arm64',
+  'win32-x64': '@dshapps/dsh-gateway-platform-win32-x64',
+  'win32-arm64': '@dshapps/dsh-gateway-platform-win32-arm64',
+  'darwin-x64': '@dshapps/dsh-gateway-platform-darwin-x64',
+  'darwin-arm64': '@dshapps/dsh-gateway-platform-darwin-arm64',
+  'linux-x64': '@dshapps/dsh-gateway-platform-linux-x64',
+  'linux-arm64': '@dshapps/dsh-gateway-platform-linux-arm64',
 }
 const selectedPlatform = platformByHost[`${process.platform}-${process.arch}`]
 assert(selectedPlatform, `unsupported verification host ${process.platform}-${process.arch}`)
@@ -492,15 +492,15 @@ const selectedManifest = JSON.parse(await fs.readFile(selectedManifestPath, 'utf
 assert(selectedManifest.os.includes(process.platform), 'installed platform os selection drift')
 assert(selectedManifest.cpu.includes(process.arch), 'installed platform cpu selection drift')
 const selectedRoot = path.dirname(selectedManifestPath)
-const selectedProvenance = JSON.parse(await fs.readFile(path.join(selectedRoot, selectedManifest.wha1echaiPlatform.provenance), 'utf8'))
-const selectedBinary = path.join(selectedRoot, selectedManifest.wha1echaiPlatform.binary)
+const selectedProvenance = JSON.parse(await fs.readFile(path.join(selectedRoot, selectedManifest.dshappsPlatform.provenance), 'utf8'))
+const selectedBinary = path.join(selectedRoot, selectedManifest.dshappsPlatform.binary)
 assert(await sha256(selectedBinary) === selectedProvenance.executable.sha256, 'installed platform executable digest drift')
 assert(selectedProvenance.target.os === process.platform && selectedProvenance.target.cpu === process.arch, 'installed platform provenance target drift')
 const selectedLicense = await fs.readFile(path.join(selectedRoot, 'LICENSE'), 'utf8')
 assert(/permission is hereby granted/iu.test(selectedLicense), 'installed platform upstream MIT license is missing')
 log.push(`selectedPlatform=${selectedPlatform}`)
 log.push(`selectedPlatformBinarySha256=${selectedProvenance.executable.sha256}`)
-const webpageClient = profileRequire.resolve('@wha1echai/dsh-webpage/client')
+const webpageClient = profileRequire.resolve('@dshapps/webpage/client')
 assert(webpageClient.startsWith(profileDirectory), `dsh-webpage/client resolved outside disposable profile: ${webpageClient}`)
 const gatewayClient = await loadPackedGatewayClient(profileRequire)
 assert(gatewayClient.startsWith(profileDirectory), `dsh-gateway/client resolved outside disposable profile: ${gatewayClient}`)

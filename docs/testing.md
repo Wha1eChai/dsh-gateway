@@ -322,8 +322,8 @@ Required scenarios:
 
 - App and optional companion Plugins load through the existing dsh-webpage
   composition and route/slot contract;
-- the App identity is exactly `wha1echai.gateway`, its base route is
-  `/apps/wha1echai.gateway`, and its subroutes are `/accounts`, `/models`,
+- the App identity is exactly `dshapps.gateway`, its base route is
+  `/apps/dshapps.gateway`, and its subroutes are `/accounts`, `/models`,
   `/requests`, `/playground`, and `/settings`;
 - the packed gateway `./package.json` export map resolves the built `./client`
   entry from a clean profile. A source path, deep import, or missing export is
@@ -392,7 +392,7 @@ this lane green.
 | T-10 | Probe and Typert Remote boundary | unit, integration, browser, security | Generated allowlist mounts through `ctx.remote.$mount()`; prompt/attachment/result use only requesting typed `gateway.probe`; unknown action, arbitrary proxy, and operational-content leakage are rejected | COMPLETED / GO for the generated 18-endpoint Host boundary |
 | T-11 | Destructive usage queue semantics | analytics, integration, security | Pop/no-ack at-most-once, crash-after-pop loss window, degraded/completeness state, competition warning, and post-DB-receipt-only dedupe | COMPLETE / GO for Phase 4 |
 | T-12 | Analytics, pricing, and quota correctness | quota, analytics, integration, security | Immutable bundled pricing; fixed internal Codex quota payload and strict projection; raw response absent; unsupported/unavailable valid; no generic `/api-call` | COMPLETE / GO for Phase 4 Host/storage contract |
-| T-13 | Native App identity and client export | integration, browser, public-api | `wha1echai.gateway`, `/apps/wha1echai.gateway` plus frozen subroutes, and packed `./package.json` `./client` export resolve; no route takeover | COMPLETED / GO for Phase 5 |
+| T-13 | Native App identity and client export | integration, browser, public-api | `dshapps.gateway`, `/apps/dshapps.gateway` plus frozen subroutes, and packed `./package.json` `./client` export resolve; no route takeover | COMPLETED / GO for Phase 5 |
 | T-14 | Browser boundary and HMR | browser, HMR, security | No secret DOM/storage/URL, safe navigation/callback, direct/reload/error cases, one replacement, no stale/duplicate remotes, bounded crash | COMPLETED / GO |
 | T-15 | Packed public preview | pack, integration, browser, security | Repository-external rc.6 profile loads exact Pack and passes platform plugin policy, runtime/App/HMR/security checks | COMPLETED / GO |
 

@@ -92,16 +92,16 @@ export function remotesContract(ctx: Context): Promise<unknown> {
 /** Compile-only proof for the Cordis Loader and public client handoff types. */
 export function loaderAndClientContract(ctx: Context): ClientModuleLoader {
   const loader = new Loader(ctx)
-  void loader.create({ name: '@wha1echai/dsh-gateway' })
+  void loader.create({ name: '@dshapps/dsh-gateway' })
 
   const handoff: ClientPluginHandoff = {
-    id: '@wha1echai/dsh-gateway',
+    id: '@dshapps/dsh-gateway',
     factory: () => ({ apply: (_clientContext: ClientContext) => undefined }),
   }
   void handoff
 
   const modules = new ClientModuleSystem({
-    modules: [{ id: handoff.id, url: '/plugins/wha1echai.gateway/client.js', rev: 'probe' }],
+    modules: [{ id: handoff.id, url: '/plugins/dshapps.gateway/client.js', rev: 'probe' }],
     staticModules: {},
   })
   const publicLoader: ClientModuleLoader = modules

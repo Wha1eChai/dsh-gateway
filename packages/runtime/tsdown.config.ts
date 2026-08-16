@@ -2,7 +2,7 @@ import { clientBundle } from '../../tsdown.client.ts'
 import { typertPlugin } from '@deepseek-ai/dsh-typert-generator/tsdown'
 
 const bundle = clientBundle(
-  '@wha1echai/dsh-gateway-runtime',
+  '@dshapps/dsh-gateway-runtime',
   ['lib/types/index.js'],
   { client: false },
 )

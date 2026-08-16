@@ -52,7 +52,7 @@ for (const manifestPath of packageManifestPaths) {
         assert(value === '4.4.3', `${manifest.name} has non-exact generated-Remote dependency zod@${value}`)
         continue
       }
-      assert(name.startsWith('@wha1echai/'), `${manifest.name} has unexpected ${group} registry edge ${name}@${value}`)
+      assert(name.startsWith('@dshapps/'), `${manifest.name} has unexpected ${group} registry edge ${name}@${value}`)
       assert(value === 'workspace:*' || /^https:\/\/github[.]com\/[^\s]+[.]tgz$/u.test(value), `${manifest.name} has unsafe ${group} edge ${name}@${value}`)
     }
   }

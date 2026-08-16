@@ -56,7 +56,7 @@ async function createPlatformPackage(options: { expectedSha256?: string; binaryT
     version: '0.1.0',
     os: ['win32'],
     cpu: ['x64'],
-    wha1echaiPlatform: {
+    dshappsPlatform: {
       binary: 'vendor/fake-cpa',
       provenance: 'provenance/cli-proxy-api.json',
       managedConfig: 'config/managed.yaml',

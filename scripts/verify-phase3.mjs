@@ -85,7 +85,7 @@ async function main() {
 
     const hostTypert = await import(pathToFileURL(join(root, 'packages', 'gateway', 'lib', 'typert.host.js')).href)
     const remoteTypert = await import(pathToFileURL(join(root, 'packages', 'gateway', 'lib', 'typert.remote-client.js')).href)
-    expect(hostTypert.TYPERT?.package === '@wha1echai/dsh-gateway', 'Host Typert contribution is missing')
+    expect(hostTypert.TYPERT?.package === '@dshapps/dsh-gateway', 'Host Typert contribution is missing')
     expect(remoteTypert.TYPERT_REMOTE?.descriptors?.length === 18, 'Remote endpoint count drifted')
 
     await ctx.loader.remove('gateway')

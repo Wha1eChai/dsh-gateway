@@ -19,7 +19,7 @@ export * from './pricing-snapshot.js'
 export * from './service.js'
 export * from './storage/index.js'
 
-export const name = '@wha1echai/dsh-gateway-analytics'
+export const name = '@dshapps/dsh-gateway-analytics'
 export const inject = ['dshGateway', 'credentials']
 
 /** Provide one optional, failure-isolated analytics service per plugin fiber. */

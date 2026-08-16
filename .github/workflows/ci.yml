@@ -1,0 +1,84 @@
+# Sibling checkout: file:../dsh-app-check and pnpm overrides for
+# file:../dsh-webpage/packages/webpage require dsh-app-check and dsh-webpage
+# as peers under $GITHUB_WORKSPACE. Both repositories must be public for
+# anonymous cross-repo checkout to succeed until npm publication replaces the
+# file: pins.
+#
+# Local-only gates omitted: test:integration (real CLIProxyAPI binary),
+# test:browser, test:hmr, test:analytics integration scripts needing vendor
+# binaries or network access to upstream CPA releases.
+
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+concurrency:
+  group: ci-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  verify:
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, windows-latest]
+
+    steps:
+      - name: Checkout app
+        uses: actions/checkout@v4
+        with:
+          path: dsh-gateway
+
+      - name: Checkout dsh-webpage
+        uses: actions/checkout@v4
+        with:
+          repository: Wha1eChai/dsh-webpage
+          path: dsh-webpage
+
+      - name: Checkout dsh-app-check
+        uses: actions/checkout@v4
+        with:
+          repository: Wha1eChai/dsh-app-check
+          path: dsh-app-check
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 24
+
+      - name: Enable Corepack
+        run: corepack enable
+
+      - name: Build webpage dependency
+        working-directory: dsh-webpage
+        run: |
+          pnpm install --frozen-lockfile
+          pnpm run build
+
+      - name: Install
+        working-directory: dsh-gateway
+        run: pnpm install --frozen-lockfile
+
+      - name: Typecheck
+        working-directory: dsh-gateway
+        run: pnpm run typecheck
+
+      - name: Unit tests
+        working-directory: dsh-gateway
+        run: pnpm run test:unit
+
+      - name: Lint
+        working-directory: dsh-gateway
+        run: pnpm run lint
+
+      - name: Build
+        working-directory: dsh-gateway
+        run: pnpm run build
+
+      - name: Pack verify
+        working-directory: dsh-gateway
+        run: pnpm run pack:verify

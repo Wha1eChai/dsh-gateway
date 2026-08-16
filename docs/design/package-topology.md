@@ -5,7 +5,7 @@ Status: Phase 0 design freeze.
 This repository is a private, docs-first design for an out-of-tree DSH gateway
 distribution. The implementation target is DSH `0.1.0-rc.6`, Node
 `^22.19.0 || >=24.0.0`, and pnpm `11.7.0`. The reference artifacts are
-`@wha1echai/dsh-webpage@0.1.0`, CLIProxyAPI `v7.2.131`, and CPAMP
+`@dshapps/webpage@0.1.0`, CLIProxyAPI `v7.2.131`, and CPAMP
 `v1.12.0-rc.2`.
 
 The product boundary is an ordinary DSH host plugin that owns a CPA provider
@@ -21,10 +21,10 @@ making the baseline gateway unusable.
 ```text
 dsh-gateway/
 ├── packages/
-│   ├── gateway/                         # @wha1echai/dsh-gateway
-│   ├── runtime/                         # @wha1echai/dsh-gateway-runtime
-│   ├── analytics/                       # @wha1echai/dsh-gateway-analytics
-│   ├── pack/                            # @wha1echai/dsh-gateway-pack
+│   ├── gateway/                         # @dshapps/dsh-gateway
+│   ├── runtime/                         # @dshapps/dsh-gateway-runtime
+│   ├── analytics/                       # @dshapps/dsh-gateway-analytics
+│   ├── pack/                            # @dshapps/dsh-gateway-pack
 │   └── platform/
 │       ├── win32-x64/                   # pinned CPA asset
 │       ├── win32-arm64/                 # pinned CPA asset
@@ -106,7 +106,7 @@ depend only on the public rc.6 surfaces needed by the package:
 - `analytics`: `gateway` event and Host-only collector contracts plus Node
   built-ins for HTTP, worker threads, `node:sqlite`, HMAC/SHA-256, and UTC time;
 - the browser half: the exact rc.6 client runtime, slots, web React, and
-  schema-form surfaces, plus `@wha1echai/dsh-webpage@0.1.0` as the Pack-level
+  schema-form surfaces, plus `@dshapps/webpage@0.1.0` as the Pack-level
   Web composition dependency.
 
 No package embeds a second Cordis, DSH client runtime, React runtime, or Go
@@ -123,8 +123,8 @@ that the official adapter consumes.
 Every DSH client package exports both `./client` and `./package.json` from its
 package root. The rc.6 `clientModules` discovery path must resolve the
 `./package.json` export rather than a source checkout. The Gateway App uses the
-stable ID `wha1echai.gateway` and the root-scoped routes
-`/apps/wha1echai.gateway/*` (Accounts, Models, Requests, Playground, and
+stable ID `dshapps.gateway` and the root-scoped routes
+`/apps/dshapps.gateway/*` (Accounts, Models, Requests, Playground, and
 Settings); it does not claim a second route namespace or call CPA directly.
 
 ## Host OAuth, quota, and account-health scope
@@ -240,12 +240,12 @@ rewrites them to the URLs frozen below; neither form permits a registry range.
 
 | Package | `os` | `cpu` | Payload |
 | --- | --- | --- | --- |
-| `@wha1echai/dsh-gateway-platform-win32-x64` | `win32` | `x64` | `CLIProxyAPI_7.2.131_windows_amd64.zip`; managed config disables dynamic plugins |
-| `@wha1echai/dsh-gateway-platform-win32-arm64` | `win32` | `arm64` | `CLIProxyAPI_7.2.131_windows_aarch64.zip`; managed config disables dynamic plugins |
-| `@wha1echai/dsh-gateway-platform-darwin-x64` | `darwin` | `x64` | `CLIProxyAPI_7.2.131_darwin_amd64.tar.gz`; managed config disables dynamic plugins |
-| `@wha1echai/dsh-gateway-platform-darwin-arm64` | `darwin` | `arm64` | `CLIProxyAPI_7.2.131_darwin_aarch64.tar.gz`; managed config disables dynamic plugins |
-| `@wha1echai/dsh-gateway-platform-linux-x64` | `linux` | `x64` | `CLIProxyAPI_7.2.131_linux_amd64_no-plugin.tar.gz` only |
-| `@wha1echai/dsh-gateway-platform-linux-arm64` | `linux` | `arm64` | `CLIProxyAPI_7.2.131_linux_aarch64_no-plugin.tar.gz` only |
+| `@dshapps/dsh-gateway-platform-win32-x64` | `win32` | `x64` | `CLIProxyAPI_7.2.131_windows_amd64.zip`; managed config disables dynamic plugins |
+| `@dshapps/dsh-gateway-platform-win32-arm64` | `win32` | `arm64` | `CLIProxyAPI_7.2.131_windows_aarch64.zip`; managed config disables dynamic plugins |
+| `@dshapps/dsh-gateway-platform-darwin-x64` | `darwin` | `x64` | `CLIProxyAPI_7.2.131_darwin_amd64.tar.gz`; managed config disables dynamic plugins |
+| `@dshapps/dsh-gateway-platform-darwin-arm64` | `darwin` | `arm64` | `CLIProxyAPI_7.2.131_darwin_aarch64.tar.gz`; managed config disables dynamic plugins |
+| `@dshapps/dsh-gateway-platform-linux-x64` | `linux` | `x64` | `CLIProxyAPI_7.2.131_linux_amd64_no-plugin.tar.gz` only |
+| `@dshapps/dsh-gateway-platform-linux-arm64` | `linux` | `arm64` | `CLIProxyAPI_7.2.131_linux_aarch64_no-plugin.tar.gz` only |
 
 The frozen v7.2.131 digest evidence comes from the upstream release asset
 [`checksums.txt`](https://github.com/router-for-me/CLIProxyAPI/releases/download/v7.2.131/checksums.txt).
@@ -308,8 +308,8 @@ The release gate also checks the client package manifests: each package that
 contributes `dsh.client` has a built `exports["./client"]` entry and an exact
 `exports["./package.json"]` entry. The rc.6 Loader/client-module discovery
 must resolve those exports from the packed package. The Gateway client entry
-registers the `wha1echai.gateway` App and its
-`/apps/wha1echai.gateway/*` route contribution; it does not take over the
+registers the `dshapps.gateway` App and its
+`/apps/dshapps.gateway/*` route contribution; it does not take over the
 shell root or create an independent browser transport.
 
 The following package scripts are forbidden in every manifest: `preinstall`,
@@ -324,7 +324,7 @@ and an auditable version identity.
 The public preview Pack is installed with exactly:
 
 ```text
-dsh plugin --profile <name> add https://github.com/Wha1eChai/dsh-gateway/releases/download/v0.1.0/wha1echai-dsh-gateway-pack-0.1.0.tgz --ignore-scripts --config.block-exotic-subdeps=false
+dsh plugin --profile <name> add https://github.com/Wha1eChai/dsh-gateway/releases/download/v0.1.0/dshapps-dsh-gateway-pack-0.1.0.tgz --ignore-scripts --config.block-exotic-subdeps=false
 ```
 
 DSH Plugin profiles enable pnpm's `blockExoticSubdeps` safeguard. The explicit
@@ -340,10 +340,10 @@ follows; the release manifest additionally records the SHA-256 for every URL:
 ```json
 {
   "dependencies": {
-    "@wha1echai/dsh-webpage": "https://github.com/Wha1eChai/dsh-webpage/releases/download/v0.1.0/wha1echai-dsh-webpage-0.1.0.tgz",
-    "@wha1echai/dsh-gateway": "https://github.com/Wha1eChai/dsh-gateway/releases/download/v0.1.0/wha1echai-dsh-gateway-0.1.0.tgz",
-    "@wha1echai/dsh-gateway-runtime": "https://github.com/Wha1eChai/dsh-gateway/releases/download/v0.1.0/wha1echai-dsh-gateway-runtime-0.1.0.tgz",
-    "@wha1echai/dsh-gateway-analytics": "https://github.com/Wha1eChai/dsh-gateway/releases/download/v0.1.0/wha1echai-dsh-gateway-analytics-0.1.0.tgz"
+    "@dshapps/webpage": "https://github.com/Wha1eChai/dsh-webpage/releases/download/v0.1.0/dshapps-webpage-0.2.0.tgz",
+    "@dshapps/dsh-gateway": "https://github.com/Wha1eChai/dsh-gateway/releases/download/v0.1.0/dshapps-dsh-gateway-0.1.0.tgz",
+    "@dshapps/dsh-gateway-runtime": "https://github.com/Wha1eChai/dsh-gateway/releases/download/v0.1.0/dshapps-dsh-gateway-runtime-0.1.0.tgz",
+    "@dshapps/dsh-gateway-analytics": "https://github.com/Wha1eChai/dsh-gateway/releases/download/v0.1.0/dshapps-dsh-gateway-analytics-0.1.0.tgz"
   }
 }
 ```
@@ -353,12 +353,12 @@ The packed runtime manifest owns platform selection transitively:
 ```json
 {
   "optionalDependencies": {
-    "@wha1echai/dsh-gateway-platform-win32-x64": "https://github.com/Wha1eChai/dsh-gateway/releases/download/v0.1.0/wha1echai-dsh-gateway-platform-win32-x64-0.1.0.tgz",
-    "@wha1echai/dsh-gateway-platform-win32-arm64": "https://github.com/Wha1eChai/dsh-gateway/releases/download/v0.1.0/wha1echai-dsh-gateway-platform-win32-arm64-0.1.0.tgz",
-    "@wha1echai/dsh-gateway-platform-darwin-x64": "https://github.com/Wha1eChai/dsh-gateway/releases/download/v0.1.0/wha1echai-dsh-gateway-platform-darwin-x64-0.1.0.tgz",
-    "@wha1echai/dsh-gateway-platform-darwin-arm64": "https://github.com/Wha1eChai/dsh-gateway/releases/download/v0.1.0/wha1echai-dsh-gateway-platform-darwin-arm64-0.1.0.tgz",
-    "@wha1echai/dsh-gateway-platform-linux-x64": "https://github.com/Wha1eChai/dsh-gateway/releases/download/v0.1.0/wha1echai-dsh-gateway-platform-linux-x64-0.1.0.tgz",
-    "@wha1echai/dsh-gateway-platform-linux-arm64": "https://github.com/Wha1eChai/dsh-gateway/releases/download/v0.1.0/wha1echai-dsh-gateway-platform-linux-arm64-0.1.0.tgz"
+    "@dshapps/dsh-gateway-platform-win32-x64": "https://github.com/Wha1eChai/dsh-gateway/releases/download/v0.1.0/dshapps-dsh-gateway-platform-win32-x64-0.1.0.tgz",
+    "@dshapps/dsh-gateway-platform-win32-arm64": "https://github.com/Wha1eChai/dsh-gateway/releases/download/v0.1.0/dshapps-dsh-gateway-platform-win32-arm64-0.1.0.tgz",
+    "@dshapps/dsh-gateway-platform-darwin-x64": "https://github.com/Wha1eChai/dsh-gateway/releases/download/v0.1.0/dshapps-dsh-gateway-platform-darwin-x64-0.1.0.tgz",
+    "@dshapps/dsh-gateway-platform-darwin-arm64": "https://github.com/Wha1eChai/dsh-gateway/releases/download/v0.1.0/dshapps-dsh-gateway-platform-darwin-arm64-0.1.0.tgz",
+    "@dshapps/dsh-gateway-platform-linux-x64": "https://github.com/Wha1eChai/dsh-gateway/releases/download/v0.1.0/dshapps-dsh-gateway-platform-linux-x64-0.1.0.tgz",
+    "@dshapps/dsh-gateway-platform-linux-arm64": "https://github.com/Wha1eChai/dsh-gateway/releases/download/v0.1.0/dshapps-dsh-gateway-platform-linux-arm64-0.1.0.tgz"
   }
 }
 ```
@@ -375,15 +375,15 @@ stores package name, URL, version, source release, and SHA-256 for
 
 ## Pack composition
 
-`@wha1echai/dsh-gateway-pack` is an ordinary `dsh.bundle` package. Its patch
+`@dshapps/dsh-gateway-pack` is an ordinary `dsh.bundle` package. Its patch
 uses existing DSH profile/bundle composition in this order:
 
 ```text
 DSH base / host services
-  -> @wha1echai/dsh-webpage@0.1.0
-  -> @wha1echai/dsh-gateway@0.1.0
-  -> @wha1echai/dsh-gateway-runtime@0.1.0
-  -> @wha1echai/dsh-gateway-analytics@0.1.0
+  -> @dshapps/webpage@0.1.0
+  -> @dshapps/dsh-gateway@0.1.0
+  -> @dshapps/dsh-gateway-runtime@0.1.0
+  -> @dshapps/dsh-gateway-analytics@0.1.0
 ```
 
 The Pack has no loader, resolver, installer, supervisor, registry, or

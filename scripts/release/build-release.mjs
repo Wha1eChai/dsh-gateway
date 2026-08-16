@@ -1,5 +1,6 @@
 import { createHash } from 'node:crypto'
-import { spawnSync } from 'node:child_process'
+import { execFileSync, spawnSync } from 'node:child_process'
+import { existsSync } from 'node:fs'
 import { promises as fs } from 'node:fs'
 import path from 'node:path'
 import { fileURLToPath } from 'node:url'
@@ -24,6 +25,38 @@ const localWebpageTarball = path.join(localDirectory, webpage.filename)
 const localZodTarball = path.join(localDirectory, 'zod-4.4.3.tgz')
 const pnpmCli = process.env.npm_execpath
 assert(pnpmCli, 'release build must be launched through pnpm')
+
+/** @returns {{ cli: string, prefix: string[] } | null} */
+function tryCorepackPnpm() {
+  const prefix = ['pnpm@11.7.0']
+  const nodeDir = path.dirname(process.execPath)
+  const candidates = [
+    path.join(nodeDir, '..', 'lib', 'node_modules', 'corepack', 'dist', 'corepack.js'),
+    path.join(nodeDir, 'node_modules', 'corepack', 'dist', 'corepack.js'),
+  ]
+  for (const corepackCli of candidates) {
+    if (!existsSync(corepackCli)) continue
+    try {
+      const version = execFileSync(process.execPath, [corepackCli, ...prefix, '--version'], {
+        encoding: 'utf8',
+        stdio: ['ignore', 'pipe', 'pipe'],
+      }).trim()
+      if (version === '11.7.0') return { cli: path.resolve(corepackCli), prefix }
+    } catch {
+      // try the next Corepack install layout
+    }
+  }
+  return null
+}
+
+/** Invoke pnpm 11.7.0 explicitly; npm_execpath under corepack may resolve 11.0.9. */
+function runPnpm(args, options = {}) {
+  const corepack = tryCorepackPnpm()
+  if (corepack) {
+    return run(process.execPath, [corepack.cli, ...corepack.prefix, ...args], options)
+  }
+  return run(process.execPath, [pnpmCli, ...args], options)
+}
 
 function assert(condition, message) {
   if (!condition) throw new Error(message)
@@ -56,14 +89,32 @@ async function ensureWebpageTarball() {
   } catch (error) {
     if (error.code !== 'ENOENT') throw error
   }
-  if (!valid) {
-    const response = await fetch(webpage.url, { redirect: 'follow' })
-    assert(response.ok, `cannot download pinned dsh-webpage artifact: HTTP ${response.status}`)
-    const temporary = `${webpageTarball}.part`
-    await fs.writeFile(temporary, Buffer.from(await response.arrayBuffer()))
-    assert(await sha256(temporary) === webpage.sha256, 'dsh-webpage SHA-256 mismatch')
-    await fs.rename(temporary, webpageTarball)
+  if (valid) return
+
+  const siblingWebpage = path.join(root, '..', 'dsh-webpage', 'packages', 'webpage')
+  try {
+    await fs.access(siblingWebpage)
+    runPnpm(['--dir', siblingWebpage, 'pack', '--pack-destination', cacheDirectory], { capture: true })
+    const entries = await fs.readdir(cacheDirectory)
+    const packed = entries.find((entry) => entry.startsWith('dshapps-webpage-') && entry.endsWith('.tgz'))
+    assert(packed, 'sibling dsh-webpage pack did not emit a tarball')
+    const packedPath = path.join(cacheDirectory, packed)
+    if (packedPath !== webpageTarball) {
+      await fs.rm(webpageTarball, { force: true })
+      await fs.rename(packedPath, webpageTarball)
+    }
+    assert(await sha256(webpageTarball) === webpage.sha256, 'sibling dsh-webpage SHA-256 drift; update release-contract.mjs webpage.sha256')
+    return
+  } catch (error) {
+    if (error.code !== 'ENOENT') throw error
   }
+
+  const response = await fetch(webpage.url, { redirect: 'follow' })
+  assert(response.ok, `cannot download pinned dsh-webpage artifact: HTTP ${response.status}`)
+  const temporary = `${webpageTarball}.part`
+  await fs.writeFile(temporary, Buffer.from(await response.arrayBuffer()))
+  assert(await sha256(temporary) === webpage.sha256, 'dsh-webpage SHA-256 mismatch')
+  await fs.rename(temporary, webpageTarball)
 }
 
 function isExcluded(entryPath) {
@@ -95,15 +146,15 @@ async function stageSource(spec, flavor, dependencyFiles) {
       manifest.optionalDependencies[name] = own(name)
     }
   } else if (spec.key === 'analytics') {
-    manifest.dependencies['@wha1echai/dsh-gateway'] = own('@wha1echai/dsh-gateway')
+    manifest.dependencies['@dshapps/dsh-gateway'] = own('@dshapps/dsh-gateway')
   } else if (spec.key === 'pack') {
-    manifest.dependencies['@wha1echai/dsh-webpage'] = flavor === 'github'
+    manifest.dependencies['@dshapps/webpage'] = flavor === 'github'
       ? webpage.url
       : portableFileSpecifier(localWebpageTarball)
     for (const name of [
-      '@wha1echai/dsh-gateway',
-      '@wha1echai/dsh-gateway-runtime',
-      '@wha1echai/dsh-gateway-analytics',
+      '@dshapps/dsh-gateway',
+      '@dshapps/dsh-gateway-runtime',
+      '@dshapps/dsh-gateway-analytics',
     ]) manifest.dependencies[name] = own(name)
   }
   if (spec.key === 'gateway' && flavor === 'local') {
@@ -122,8 +173,7 @@ async function stageSource(spec, flavor, dependencyFiles) {
 async function packSource(spec, flavor, dependencyFiles) {
   const outputDirectory = flavor === 'github' ? githubDirectory : localDirectory
   const staged = await stageSource(spec, flavor, dependencyFiles)
-  const report = JSON.parse(run(process.execPath, [
-    pnpmCli,
+  const report = JSON.parse(runPnpm([
     'pack',
     '--json',
     '--pack-destination',
@@ -165,7 +215,7 @@ async function buildFlavor(flavor) {
   if (flavor === 'local') {
     await fs.cp(webpageTarball, localWebpageTarball)
     const zodRoot = path.dirname(fileURLToPath(import.meta.resolve('zod/package.json')))
-    run(process.execPath, [pnpmCli, 'pack', '--pack-destination', localDirectory], { cwd: zodRoot, capture: true })
+    runPnpm(['pack', '--pack-destination', localDirectory], { cwd: zodRoot, capture: true })
     assert(await fs.stat(localZodTarball).then(() => true, () => false), 'local zod tarball was not created')
   }
   const dependencyFiles = new Map()
@@ -211,12 +261,21 @@ async function sourceIdentity() {
 const releaseSource = await sourceIdentity()
 
 run(process.execPath, ['scripts/platform/build-platform-packages.mjs'])
-run(process.execPath, [process.env.npm_execpath, 'run', 'build'])
+runPnpm(['run', 'build'])
 await ensureWebpageTarball()
 await fs.rm(sourceDirectory, { recursive: true, force: true })
 const githubPackages = await buildFlavor('github')
 const localPackages = await buildFlavor('local')
-const pnpmVersion = currentToolVersion(process.execPath, [pnpmCli, '--version'])
+const pnpmVersion = (() => {
+  const corepack = tryCorepackPnpm()
+  if (corepack) {
+    return execFileSync(process.execPath, [corepack.cli, ...corepack.prefix, '--version'], {
+      encoding: 'utf8',
+      stdio: ['ignore', 'pipe', 'pipe'],
+    }).trim()
+  }
+  return currentToolVersion(process.execPath, [pnpmCli, '--version'])
+})()
 assert(pnpmVersion === '11.7.0', `release build used pnpm ${pnpmVersion}`)
 const [nodeMajor, nodeMinor] = process.versions.node.split('.').map(Number)
 assert(nodeMajor >= 24 || (nodeMajor === 22 && nodeMinor >= 19), `unsupported Node ${process.version}`)

@@ -5,6 +5,9 @@ packages:
 
 autoInstallPeers: false
 
+overrides:
+  '@dshapps/webpage': 'file:../dsh-webpage/packages/webpage'
+
 patchedDependencies:
   '@deepseek-ai/dsh-typert-generator@0.1.0-rc.6': patches/dsh-typert-generator-0.1.0-rc.6.patch
 

@@ -1,5 +1,5 @@
 {
-  "name": "@wha1echai/dsh-gateway-runtime",
+  "name": "@dshapps/dsh-gateway-runtime",
   "description": "Managed CLIProxyAPI runtime lifecycle for dsh-gateway",
   "version": "0.1.0",
   "type": "module",
@@ -38,12 +38,12 @@
     "@deepseek-ai/dsh-subprocess": "0.1.0-rc.6"
   },
   "optionalDependencies": {
-    "@wha1echai/dsh-gateway-platform-win32-x64": "workspace:*",
-    "@wha1echai/dsh-gateway-platform-win32-arm64": "workspace:*",
-    "@wha1echai/dsh-gateway-platform-darwin-x64": "workspace:*",
-    "@wha1echai/dsh-gateway-platform-darwin-arm64": "workspace:*",
-    "@wha1echai/dsh-gateway-platform-linux-x64": "workspace:*",
-    "@wha1echai/dsh-gateway-platform-linux-arm64": "workspace:*"
+    "@dshapps/dsh-gateway-platform-win32-x64": "workspace:*",
+    "@dshapps/dsh-gateway-platform-win32-arm64": "workspace:*",
+    "@dshapps/dsh-gateway-platform-darwin-x64": "workspace:*",
+    "@dshapps/dsh-gateway-platform-darwin-arm64": "workspace:*",
+    "@dshapps/dsh-gateway-platform-linux-x64": "workspace:*",
+    "@dshapps/dsh-gateway-platform-linux-arm64": "workspace:*"
   },
   "scripts": {
     "build": "tsc -b tsconfig.json && tsdown",
