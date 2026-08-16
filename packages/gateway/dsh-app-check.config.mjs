@@ -63,6 +63,7 @@ export default {
     localeZhEn: true,
     bundlePatch: false, // cordis.patch.yml and dsh.bundle live in packages/pack, not the App package
     loaderPreset: false, // tsdown.client.ts is a shared workspace preset at the repository root
+    applyOnlyExport: false, // Host package publishes CpaClient / GatewayHostService / provider helpers alongside apply
     invariantExport: false, // no lib/invariant.js; Host service App without a separate invariant module
     clientExport: true,
     noNodeDefaultExport: true,
