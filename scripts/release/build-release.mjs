@@ -283,7 +283,7 @@ assert(nodeMajor >= 24 || (nodeMajor === 22 && nodeMinor >= 19), `unsupported No
 const manifest = {
   schemaVersion: 1,
   release: {
-    repository: 'https://github.com/Wha1eChai/dsh-gateway',
+    repository: 'https://github.com/dshapps/dsh-gateway',
     tag: releaseTag,
     version,
   },

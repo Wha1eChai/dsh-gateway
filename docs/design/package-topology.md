@@ -324,7 +324,7 @@ and an auditable version identity.
 The public preview Pack is installed with exactly:
 
 ```text
-dsh plugin --profile <name> add https://github.com/Wha1eChai/dsh-gateway/releases/download/v0.1.0/dshapps-dsh-gateway-pack-0.1.0.tgz --ignore-scripts --config.block-exotic-subdeps=false
+dsh plugin --profile <name> add https://github.com/dshapps/dsh-gateway/releases/download/v0.1.0/dshapps-dsh-gateway-pack-0.1.0.tgz --ignore-scripts --config.block-exotic-subdeps=false
 ```
 
 DSH Plugin profiles enable pnpm's `blockExoticSubdeps` safeguard. The explicit
@@ -340,10 +340,10 @@ follows; the release manifest additionally records the SHA-256 for every URL:
 ```json
 {
   "dependencies": {
-    "@dshapps/webpage": "https://github.com/Wha1eChai/dsh-webpage/releases/download/v0.1.0/dshapps-webpage-0.2.0.tgz",
-    "@dshapps/dsh-gateway": "https://github.com/Wha1eChai/dsh-gateway/releases/download/v0.1.0/dshapps-dsh-gateway-0.1.0.tgz",
-    "@dshapps/dsh-gateway-runtime": "https://github.com/Wha1eChai/dsh-gateway/releases/download/v0.1.0/dshapps-dsh-gateway-runtime-0.1.0.tgz",
-    "@dshapps/dsh-gateway-analytics": "https://github.com/Wha1eChai/dsh-gateway/releases/download/v0.1.0/dshapps-dsh-gateway-analytics-0.1.0.tgz"
+    "@dshapps/webpage": "https://github.com/dshapps/dsh-webpage/releases/download/v0.1.0/dshapps-webpage-0.2.0.tgz",
+    "@dshapps/dsh-gateway": "https://github.com/dshapps/dsh-gateway/releases/download/v0.1.0/dshapps-dsh-gateway-0.1.0.tgz",
+    "@dshapps/dsh-gateway-runtime": "https://github.com/dshapps/dsh-gateway/releases/download/v0.1.0/dshapps-dsh-gateway-runtime-0.1.0.tgz",
+    "@dshapps/dsh-gateway-analytics": "https://github.com/dshapps/dsh-gateway/releases/download/v0.1.0/dshapps-dsh-gateway-analytics-0.1.0.tgz"
   }
 }
 ```
@@ -353,12 +353,12 @@ The packed runtime manifest owns platform selection transitively:
 ```json
 {
   "optionalDependencies": {
-    "@dshapps/dsh-gateway-platform-win32-x64": "https://github.com/Wha1eChai/dsh-gateway/releases/download/v0.1.0/dshapps-dsh-gateway-platform-win32-x64-0.1.0.tgz",
-    "@dshapps/dsh-gateway-platform-win32-arm64": "https://github.com/Wha1eChai/dsh-gateway/releases/download/v0.1.0/dshapps-dsh-gateway-platform-win32-arm64-0.1.0.tgz",
-    "@dshapps/dsh-gateway-platform-darwin-x64": "https://github.com/Wha1eChai/dsh-gateway/releases/download/v0.1.0/dshapps-dsh-gateway-platform-darwin-x64-0.1.0.tgz",
-    "@dshapps/dsh-gateway-platform-darwin-arm64": "https://github.com/Wha1eChai/dsh-gateway/releases/download/v0.1.0/dshapps-dsh-gateway-platform-darwin-arm64-0.1.0.tgz",
-    "@dshapps/dsh-gateway-platform-linux-x64": "https://github.com/Wha1eChai/dsh-gateway/releases/download/v0.1.0/dshapps-dsh-gateway-platform-linux-x64-0.1.0.tgz",
-    "@dshapps/dsh-gateway-platform-linux-arm64": "https://github.com/Wha1eChai/dsh-gateway/releases/download/v0.1.0/dshapps-dsh-gateway-platform-linux-arm64-0.1.0.tgz"
+    "@dshapps/dsh-gateway-platform-win32-x64": "https://github.com/dshapps/dsh-gateway/releases/download/v0.1.0/dshapps-dsh-gateway-platform-win32-x64-0.1.0.tgz",
+    "@dshapps/dsh-gateway-platform-win32-arm64": "https://github.com/dshapps/dsh-gateway/releases/download/v0.1.0/dshapps-dsh-gateway-platform-win32-arm64-0.1.0.tgz",
+    "@dshapps/dsh-gateway-platform-darwin-x64": "https://github.com/dshapps/dsh-gateway/releases/download/v0.1.0/dshapps-dsh-gateway-platform-darwin-x64-0.1.0.tgz",
+    "@dshapps/dsh-gateway-platform-darwin-arm64": "https://github.com/dshapps/dsh-gateway/releases/download/v0.1.0/dshapps-dsh-gateway-platform-darwin-arm64-0.1.0.tgz",
+    "@dshapps/dsh-gateway-platform-linux-x64": "https://github.com/dshapps/dsh-gateway/releases/download/v0.1.0/dshapps-dsh-gateway-platform-linux-x64-0.1.0.tgz",
+    "@dshapps/dsh-gateway-platform-linux-arm64": "https://github.com/dshapps/dsh-gateway/releases/download/v0.1.0/dshapps-dsh-gateway-platform-linux-arm64-0.1.0.tgz"
   }
 }
 ```

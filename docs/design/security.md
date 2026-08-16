@@ -343,7 +343,7 @@ The following are explicit non-decisions:
 
 ## References
 
-- [CLIProxyAPI integration research](https://github.com/Wha1eChai/dsh-webpage/blob/main/docs/research/cliproxyapi-dsh-integration.md)
+- [CLIProxyAPI integration research](https://github.com/dshapps/dsh-webpage/blob/main/docs/research/cliproxyapi-dsh-integration.md)
 - [CLIProxyAPI Management API](https://help.router-for.me/management/api)
 - [CLIProxyAPI v7.2.131 release](https://github.com/router-for-me/CLIProxyAPI/releases/tag/v7.2.131)
 - [DeepSeek Harness credentials seam](https://github.com/deepseek-ai/deepseek-harness/tree/main/packages/credentials/credentials)

@@ -302,7 +302,7 @@ constraints, not optional implementation details.
 
 ## References
 
-- [CLIProxyAPI integration research](https://github.com/Wha1eChai/dsh-webpage/blob/main/docs/research/cliproxyapi-dsh-integration.md)
+- [CLIProxyAPI integration research](https://github.com/dshapps/dsh-webpage/blob/main/docs/research/cliproxyapi-dsh-integration.md)
 - [CLIProxyAPI v7.2.131 release](https://github.com/router-for-me/CLIProxyAPI/releases/tag/v7.2.131)
 - [CLIProxyAPI Management API](https://help.router-for.me/management/api)
 - [DeepSeek Harness `dsh-llm-pi-ai`](https://github.com/deepseek-ai/deepseek-harness/tree/main/packages/llm/llm-pi-ai)
@@ -312,4 +312,4 @@ constraints, not optional implementation details.
 - [DeepSeek Harness home-path seam](https://github.com/deepseek-ai/deepseek-harness/tree/main/packages/util/home-paths)
 - [DeepSeek Harness Typert protocol](https://github.com/deepseek-ai/deepseek-harness/tree/main/packages/typert/protocol)
 - [DeepSeek Harness API Remotes](https://github.com/deepseek-ai/deepseek-harness/tree/main/packages/api/remotes)
-- [dsh-webpage Webpage package](https://github.com/Wha1eChai/dsh-webpage/tree/main/packages/webpage)
+- [dsh-webpage Webpage package](https://github.com/dshapps/dsh-webpage/tree/main/packages/webpage)

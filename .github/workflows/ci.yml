@@ -36,13 +36,13 @@ jobs:
       - name: Checkout dsh-webpage
         uses: actions/checkout@v4
         with:
-          repository: Wha1eChai/dsh-webpage
+          repository: dshapps/dsh-webpage
           path: dsh-webpage
 
       - name: Checkout dsh-app-check
         uses: actions/checkout@v4
         with:
-          repository: Wha1eChai/dsh-app-check
+          repository: dshapps/dsh-app-check
           path: dsh-app-check
 
       - name: Setup Node.js

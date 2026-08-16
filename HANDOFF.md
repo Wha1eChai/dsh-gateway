@@ -21,7 +21,7 @@ and upstream DeepSeek Harness Discussions are public.
 - Phase 0 architecture, security, analytics, topology, plan, testing, and ADR
   documents were frozen; the final focused Sol re-review returned GO.
 - Docs-only root commit `27090af` is pushed to the public repository:
-  `https://github.com/Wha1eChai/dsh-gateway`.
+  `https://github.com/dshapps/dsh-gateway`.
 - The pnpm workspace now contains Gateway, Runtime, Analytics, Pack, six
   platform packages, and a deterministic fake CPA fixture.
 - Public and local-verification release generators rewrite every workspace
@@ -145,7 +145,7 @@ Monitor the public feedback threads:
 
 ```text
 cd D:\coding\programs\dsh\dsh-gateway
-https://github.com/Wha1eChai/dsh-gateway/discussions/1
+https://github.com/dshapps/dsh-gateway/discussions/1
 https://github.com/deepseek-ai/deepseek-harness/discussions/1480
 ```
 

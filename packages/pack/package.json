@@ -29,11 +29,11 @@
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/Wha1eChai/dsh-gateway.git",
+    "url": "git+https://github.com/dshapps/dsh-gateway.git",
     "directory": "packages/pack"
   },
   "dependencies": {
-    "@dshapps/webpage": "https://github.com/Wha1eChai/dsh-webpage/releases/download/v0.2.0/dshapps-webpage-0.2.0.tgz",
+    "@dshapps/webpage": "https://github.com/dshapps/dsh-webpage/releases/download/v0.2.0/dshapps-webpage-0.2.0.tgz",
     "@dshapps/dsh-gateway": "workspace:*",
     "@dshapps/dsh-gateway-runtime": "workspace:*",
     "@dshapps/dsh-gateway-analytics": "workspace:*"

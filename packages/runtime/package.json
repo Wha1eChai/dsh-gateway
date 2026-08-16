@@ -28,7 +28,7 @@
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/Wha1eChai/dsh-gateway.git",
+    "url": "git+https://github.com/dshapps/dsh-gateway.git",
     "directory": "packages/runtime"
   },
   "peerDependencies": {

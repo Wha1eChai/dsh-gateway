@@ -2,13 +2,13 @@ import path from 'node:path'
 
 export const version = '0.1.0'
 export const releaseTag = `v${version}`
-export const releaseBaseUrl = `https://github.com/Wha1eChai/dsh-gateway/releases/download/${releaseTag}`
+export const releaseBaseUrl = `https://github.com/dshapps/dsh-gateway/releases/download/${releaseTag}`
 
 export const webpage = Object.freeze({
   name: '@dshapps/webpage',
   version: '0.2.0',
   filename: 'dshapps-webpage-0.2.0.tgz',
-  url: 'https://github.com/Wha1eChai/dsh-webpage/releases/download/v0.2.0/dshapps-webpage-0.2.0.tgz',
+  url: 'https://github.com/dshapps/dsh-webpage/releases/download/v0.2.0/dshapps-webpage-0.2.0.tgz',
   sha256: '7567c0c984dccaa334de0a06d87ee2fa4fb5adde96eb5b0c578dc7bf2c1e4433',
 })
 

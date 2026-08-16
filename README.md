@@ -5,7 +5,7 @@ A DSH-native AI gateway and operations App built around CLIProxyAPI.
 `dsh-gateway` is an ordinary out-of-tree DeepSeek Harness Bundle. It connects
 the existing DSH `llm-pi-ai` provider to a managed or external CLIProxyAPI,
 keeps credentials and administration on the Host side, and contributes a
-native App through [dsh-webpage](https://github.com/Wha1eChai/dsh-webpage).
+native App through [dsh-webpage](https://github.com/dshapps/dsh-webpage).
 
 ## v0.1 goal
 
@@ -50,7 +50,7 @@ After the `v0.1.0` GitHub prerelease is available, install the ordinary Pack
 into a dedicated DSH profile:
 
 ```text
-dsh plugin --profile gateway-preview add https://github.com/Wha1eChai/dsh-gateway/releases/download/v0.1.0/dshapps-dsh-gateway-pack-0.1.0.tgz --ignore-scripts --config.block-exotic-subdeps=false
+dsh plugin --profile gateway-preview add https://github.com/dshapps/dsh-gateway/releases/download/v0.1.0/dshapps-dsh-gateway-pack-0.1.0.tgz --ignore-scripts --config.block-exotic-subdeps=false
 dsh --profile gateway-preview web
 ```
 
@@ -100,9 +100,9 @@ Phases 0–6 are complete / GO. The official rc.6 `llm-pi-ai` path,
 managed/external runtime, provider bridge, device OAuth, optional
 failure-isolated SQLite analytics, native six-route App, packed Browser, HMR,
 security, real CPA, clean-checkout, and public-URL install gates have passed.
-The [v0.1.0 preview](https://github.com/Wha1eChai/dsh-gateway/releases/tag/v0.1.0)
+The [v0.1.0 preview](https://github.com/dshapps/dsh-gateway/releases/tag/v0.1.0)
 is public; feedback is tracked in the
-[project Discussion](https://github.com/Wha1eChai/dsh-gateway/discussions/1)
+[project Discussion](https://github.com/dshapps/dsh-gateway/discussions/1)
 and the [DeepSeek Harness showcase](https://github.com/deepseek-ai/deepseek-harness/discussions/1480).
 npm publication remains out of scope.
 
