@@ -83,6 +83,7 @@ function assertPackagePayload(spec, tarball) {
       'lib/types/client/GatewayApp.d.ts',
       'lib/types/client/PlaygroundView.d.ts',
       'lib/types/client/RequestsView.d.ts',
+      'lib/types/client/SetupView.d.ts',
       'lib/types/client/index.d.ts',
       'lib/types/client/locales.d.ts',
       'lib/types/client/view-types.d.ts',

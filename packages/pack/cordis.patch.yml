@@ -5,6 +5,10 @@
       name: '@dshapps/dsh-gateway'
     - id: gateway-runtime
       name: '@dshapps/dsh-gateway-runtime'
+      config:
+        mode: managed
+        credentialRefs:
+          proxyCredentialRef: DSH_GATEWAY_PROXY_KEY
+          managementCredentialRef: DSH_GATEWAY_MANAGEMENT_KEY
     - id: gateway-analytics
       name: '@dshapps/dsh-gateway-analytics'
-

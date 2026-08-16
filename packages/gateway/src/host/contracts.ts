@@ -28,6 +28,8 @@ export interface GatewayStatusView {
   readonly runtime: GatewayRuntimeView
   readonly proxyCredential: GatewayCredentialView
   readonly managementCredential: GatewayCredentialView
+  readonly codexAccount: 'connected' | 'not_connected' | 'unavailable'
+  readonly cpaProviderConfigured: boolean
   readonly localCallbackAvailable: false
 }
 

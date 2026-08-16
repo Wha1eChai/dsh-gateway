@@ -76,6 +76,74 @@ describe('Gateway analytics Remotes', () => {
     ])
   })
 
+  it('provisions missing managed credentials before the first runtime start without overwriting existing values', async () => {
+    const values = new Map<string, string>([['DSH_GATEWAY_PROXY_KEY', 'existing-proxy-key']])
+    const set = vi.fn(async (ref: string, value: string) => { values.set(ref, value) })
+    const runtime = {
+      snapshot: vi.fn(() => ({ mode: 'managed', state: 'stopped', endpoint: 'http://127.0.0.1:8317' })),
+      start: vi.fn(async () => ({ mode: 'managed', state: 'ready', endpoint: 'http://127.0.0.1:8317' })),
+    }
+    const ctx = {
+      get: vi.fn((key: string) => key === 'cpaRuntime' ? runtime : undefined),
+      reflect: { provide: vi.fn() },
+      effect: vi.fn(),
+      credentials: {
+        describe: vi.fn(async (ref: string) => ({ configured: values.has(ref), writable: true })),
+        set,
+      },
+    } as unknown as Context
+    const host = new GatewayHostService(ctx, config)
+
+    await expect(host.runtimeStart()).resolves.toMatchObject({ mode: 'managed', state: 'ready' })
+    expect(values.get('DSH_GATEWAY_PROXY_KEY')).toBe('existing-proxy-key')
+    expect(values.get('DSH_GATEWAY_MANAGEMENT_KEY')).toMatch(/^[A-Za-z0-9_-]{43}$/)
+    expect(set).toHaveBeenCalledTimes(1)
+    expect(runtime.start).toHaveBeenCalledOnce()
+  })
+
+  it('does not provision credentials for an external runtime', async () => {
+    const set = vi.fn()
+    const runtime = {
+      snapshot: vi.fn(() => ({ mode: 'external', state: 'ready', endpoint: 'http://127.0.0.1:8317' })),
+      restart: vi.fn(async () => ({ mode: 'external', state: 'ready', endpoint: 'http://127.0.0.1:8317' })),
+    }
+    const ctx = {
+      get: vi.fn((key: string) => key === 'cpaRuntime' ? runtime : undefined),
+      reflect: { provide: vi.fn() },
+      effect: vi.fn(),
+      credentials: { describe: vi.fn(), set },
+    } as unknown as Context
+    const host = new GatewayHostService(ctx, config)
+
+    await expect(host.runtimeRestart()).resolves.toMatchObject({ mode: 'external', state: 'ready' })
+    expect(set).not.toHaveBeenCalled()
+  })
+
+  it('reports a connected Codex account only from the safe CPA auth-status projection', async () => {
+    vi.stubGlobal('fetch', vi.fn(async () => new Response(JSON.stringify({
+      files: [{ provider: 'openai-codex', status: 'ready' }],
+    }), { status: 200, headers: { 'content-type': 'application/json' } })))
+    const runtime = {
+      snapshot: vi.fn(() => ({ mode: 'managed', state: 'ready', endpoint: 'http://127.0.0.1:8317' })),
+    }
+    const ctx = {
+      get: vi.fn((key: string) => key === 'cpaRuntime' ? runtime : undefined),
+      reflect: { provide: vi.fn() },
+      effect: vi.fn(),
+      credentials: {
+        describe: vi.fn(async () => ({ configured: true, writable: true, source: 'file' })),
+        resolve: vi.fn(async () => ({ value: 'private-fixture-key', source: 'file' })),
+      },
+    } as unknown as Context
+    const host = new GatewayHostService(ctx, config)
+
+    try {
+      await expect(host.status()).resolves.toMatchObject({ codexAccount: 'connected' })
+    } finally {
+      vi.unstubAllGlobals()
+    }
+  })
+
   it('persists a bounded canonical image through the Host attachment seam', async () => {
     const png = 'iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNk+A8AAQUBAScY42YAAAAASUVORK5CYII='
     const saveImage = vi.fn(async () => ({

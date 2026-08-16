@@ -1,3 +1,5 @@
+import { randomBytes } from 'node:crypto'
+
 import type { Context } from '@deepseek-ai/cordis'
 import type {} from '@deepseek-ai/dsh-subprocess'
 import { credentialRef } from '@deepseek-ai/dsh-credentials'
@@ -6,6 +8,7 @@ import { BlockAssembler, createUserMessage } from '@deepseek-ai/dsh-llm'
 import type { ContentBlock, FinishReason, ToolSchema } from '@deepseek-ai/dsh-llm'
 import type { SettingsDescriptor } from '@deepseek-ai/dsh-settings'
 import { Remote, TypertRemoteService } from '@deepseek-ai/dsh-typert-protocol'
+import { RuntimeError } from '@dshapps/dsh-gateway-runtime'
 import type { DeviceLoginLaunchTarget, GatewayRuntime, RuntimeSnapshot } from '@dshapps/dsh-gateway-runtime'
 
 import type { Config } from '../config.js'
@@ -151,6 +154,8 @@ export class GatewayHostService extends TypertRemoteService {
       runtime: this.runtimeView(this.runtime()?.snapshot()),
       proxyCredential,
       managementCredential,
+      codexAccount: await this.codexAccountState(managementCredential.configured),
+      cpaProviderConfigured: this.cpaProviderConfigured(),
       localCallbackAvailable: false,
     }
   }
@@ -229,23 +234,43 @@ export class GatewayHostService extends TypertRemoteService {
   @Remote('runtimeInstall')
   async runtimeInstall(): Promise<GatewayRuntimeView> {
     const runtime = this.requireRuntime()
-    await runtime.install()
-    return this.runtimeView(runtime.snapshot())
+    try {
+      await runtime.install()
+      return this.runtimeView(runtime.snapshot())
+    } catch (error) {
+      throwRuntimeFailure(error)
+    }
   }
 
   @Remote('runtimeStart')
   async runtimeStart(): Promise<GatewayRuntimeView> {
-    return this.runtimeView(await this.requireRuntime().start())
+    const runtime = this.requireRuntime()
+    try {
+      await this.ensureManagedCredentials(runtime)
+      return this.runtimeView(await runtime.start())
+    } catch (error) {
+      throwRuntimeFailure(error)
+    }
   }
 
   @Remote('runtimeStop')
   async runtimeStop(): Promise<GatewayRuntimeView> {
-    return this.runtimeView(await this.requireRuntime().stop())
+    try {
+      return this.runtimeView(await this.requireRuntime().stop())
+    } catch (error) {
+      throwRuntimeFailure(error)
+    }
   }
 
   @Remote('runtimeRestart')
   async runtimeRestart(): Promise<GatewayRuntimeView> {
-    return this.runtimeView(await this.requireRuntime().restart())
+    const runtime = this.requireRuntime()
+    try {
+      await this.ensureManagedCredentials(runtime)
+      return this.runtimeView(await runtime.restart())
+    } catch (error) {
+      throwRuntimeFailure(error)
+    }
   }
 
   @Remote('models')
@@ -453,6 +478,52 @@ export class GatewayHostService extends TypertRemoteService {
     }
   }
 
+  /** Provision private loopback credentials on first managed start. */
+  private async ensureManagedCredentials(runtime: GatewayRuntime): Promise<void> {
+    if (runtime.snapshot().mode !== 'managed') return
+    for (const rawRef of [this.config.proxyCredentialRef, this.config.managementCredentialRef]) {
+      const ref = credentialRef(rawRef)
+      const info = await this.ctx.credentials.describe(ref)
+      if (info.configured) continue
+      if (!info.writable) {
+        throw new GatewayHostError('credential_not_writable', `Managed credential ${rawRef} is not writable`)
+      }
+      await this.ctx.credentials.set(ref, randomBytes(32).toString('base64url'))
+    }
+  }
+
+  private async codexAccountState(managementCredentialConfigured: boolean): Promise<GatewayStatusView['codexAccount']> {
+    if (!managementCredentialConfigured || this.runtime()?.snapshot().state !== 'ready') return 'unavailable'
+    try {
+      const client = await createCpaClientForOperation(
+        'accountStatus',
+        this.ctx.credentials,
+        this.credentialRefs(),
+        this.clientOptions(),
+      )
+      const accounts = await client.accountStatus()
+      return accounts.some((account) => account.providerId === 'openai-codex' && account.healthStatus === 'healthy')
+        ? 'connected'
+        : 'not_connected'
+    } catch {
+      return 'unavailable'
+    }
+  }
+
+  private cpaProviderConfigured(): boolean {
+    try {
+      const descriptor = this.requireLlmSettingsDescriptor()
+      const user = valueObject(descriptor.user)
+      const providers = valueObject(user?.providers)
+      const route = valueObject(providers?.cpa)
+      if (route === undefined || route.api !== CPA_PROVIDER_API || route.apiKeyEnv !== this.config.proxyCredentialRef
+        || typeof route.baseURL !== 'string' || !Array.isArray(route.models) || route.models.length === 0) return false
+      return normalizeCpaProviderBaseURL(route.baseURL) === normalizeCpaProviderBaseURL(this.endpoint())
+    } catch {
+      return false
+    }
+  }
+
   private requireLlmSettingsDescriptor(): SettingsDescriptor {
     const descriptor = this.ctx.settings.describe({ redactSecrets: true })
       .find((candidate) => candidate.ns === LLM_PI_AI_SETTINGS_NAMESPACE)
@@ -508,6 +579,13 @@ function configuredImageModels(descriptor: SettingsDescriptor, endpoint: string,
       && Array.isArray(item.input) && item.input.includes('image')) ids.add(item.id)
   }
   return ids
+}
+
+function throwRuntimeFailure(error: unknown): never {
+  if (error instanceof RuntimeError) {
+    throw new GatewayHostError(error.code, `Gateway Runtime operation failed: ${error.code}`)
+  }
+  throw error
 }
 
 function parseImageUploadRequest(value: unknown, maxBytes: number): {

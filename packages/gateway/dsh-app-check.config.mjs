@@ -19,6 +19,7 @@ export default {
     'package/lib/types/client/GatewayApp.d.ts',
     'package/lib/types/client/PlaygroundView.d.ts',
     'package/lib/types/client/RequestsView.d.ts',
+    'package/lib/types/client/SetupView.d.ts',
     'package/lib/types/client/index.d.ts',
     'package/lib/types/client/locales.d.ts',
     'package/lib/types/client/view-types.d.ts',

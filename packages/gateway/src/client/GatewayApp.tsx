@@ -9,6 +9,7 @@ import { PlaygroundView } from './PlaygroundView.js'
 import type { PlaygroundImageUpload, PlaygroundLabels } from './PlaygroundView.js'
 import { RequestsView } from './RequestsView.js'
 import type { RequestsViewLabels } from './RequestsView.js'
+import { SetupView } from './SetupView.js'
 import { AccountsView } from './views/AccountsView.js'
 import { DashboardView } from './views/DashboardView.js'
 import { ModelsView } from './views/ModelsView.js'
@@ -61,7 +62,12 @@ export function GatewayApp({ appPath, close, navigate, remote, t }: GatewayAppPr
 
       {route === undefined && <p className={styles.routeNotice} role="status">{t('unknownRoute')}</p>}
       <main className={styles.content}>
-        {currentRoute === '/' && <DashboardView remote={remote} t={t} />}
+        {currentRoute === '/' && (
+          <>
+            <SetupView remote={remote} t={t} navigate={viewNavigation} />
+            <DashboardView remote={remote} t={t} />
+          </>
+        )}
         {currentRoute === '/accounts' && <AccountsView remote={remote} t={t} />}
         {currentRoute === '/models' && <ModelsView remote={remote} t={t} />}
         {currentRoute === '/requests' && <RequestsView labels={requestLabels(t)} loadRequests={remote.analyticsRequests} />}

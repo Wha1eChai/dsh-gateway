@@ -12,7 +12,7 @@
     "typecheck": "corepack pnpm@11.7.0 -r --if-present --sort run typecheck",
     "lint": "node scripts/verify-repository.mjs lint && node scripts/check.mjs --lint",
     "test:unit": "corepack pnpm@11.7.0 --filter @dsh-gateway/fake-cpa test && vitest run --config vitest.config.ts",
-    "test:integration": "node scripts/verify-phase3.mjs && node scripts/verify-real-cpa.mjs",
+    "test:integration": "node scripts/verify-phase3.mjs && node scripts/verify-real-cpa.mjs && node scripts/verify-managed-first-run.mjs",
     "test:analytics": "vitest run packages/analytics/src --config vitest.config.ts && corepack pnpm@11.7.0 --filter @dshapps/dsh-gateway-analytics run build && node scripts/verify-analytics.mjs",
     "test:browser": "node scripts/phase6-browser.mjs",
     "test:hmr": "node scripts/phase6-hmr.mjs",
