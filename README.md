@@ -40,8 +40,9 @@ does not claim multi-user ACL security.
   either companion.
 - No npm package is published during the preview phase.
 
-The native App is addressable at `/apps/dshapps.gateway` with Accounts,
-Models, Requests, Playground, and Settings subroutes.
+The native App is addressable at `/apps/dshapps.gateway`. The overview hosts
+the managed first-run setup plus the dashboard; Accounts, Models, Requests,
+Playground, and Settings are the remaining subroutes.
 
 ## Preview installation
 
@@ -69,7 +70,7 @@ model.
 | Component | Version |
 | --- | --- |
 | DeepSeek Harness | `0.1.0-rc.6` |
-| dsh-webpage | `0.1.0` |
+| `@dshapps/webpage` | `0.2.0` |
 | CLIProxyAPI | `7.2.131` |
 | CPA-Manager-Plus reference | `1.12.0-rc.2` |
 | Node.js | `^22.19.0 || >=24.0.0` |
