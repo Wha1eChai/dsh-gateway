@@ -1,5 +1,7 @@
 # dsh-gateway
 
+English | [中文](README.zh.md)
+
 A DSH-native AI gateway and operations App built around CLIProxyAPI.
 
 `dsh-gateway` is an ordinary out-of-tree DeepSeek Harness Bundle. It connects
@@ -112,3 +114,5 @@ Federation, multi-user ACLs, CRDT collaboration, account rotation policies,
 automatic cooldown/reset actions, RESP usage ingestion, dynamic upstream
 plugins, upstream panel auto-update, remote callback OAuth, and npm publication
 are outside v0.1.
+
+Licensed under the [MIT License](LICENSE).
